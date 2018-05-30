@@ -1,0 +1,8 @@
+{
+  "name": "carbon-addons-cloud-react",
+  "license": "Apache-2.0",
+  "repository": "git@github.com:carbon-design-system/carbon-addons-cloud-react.git",
+  "scripts": {
+    "ci-check": ""
+  }
+}
