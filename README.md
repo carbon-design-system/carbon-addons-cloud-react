@@ -9,13 +9,13 @@
 Run the following command using [npm](https://www.npmjs.com/):
 
 ```bash
-npm install -S carbon-addons-cloud-react
+npm install -S carbon-components carbon-components-react carbon-addons-cloud carbon-addons-cloud-react carbon-icons
 ```
 
 If you prefer [Yarn](https://yarnpkg.com/en/), use the following command instead:
 
 ```bash
-yarn add carbon-addons-cloud-react
+yarn add carbon-components carbon-components-react carbon-addons-cloud carbon-addons-cloud-react carbon-icons
 ```
 
 You can then import any component that you need by doing the following in your project:
