@@ -45,7 +45,11 @@ storiesOf('Tag', module)
     () => (
       <div>
         <div>
-          <Tag type="functional" maxCharacters="10" children={'long tag over 10 characters'} />
+          <Tag
+            type="functional"
+            maxCharacters="10"
+            children={'long tag over 10 characters'}
+          />
         </div>
       </div>
     )
