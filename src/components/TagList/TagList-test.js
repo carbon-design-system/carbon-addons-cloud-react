@@ -1,6 +1,6 @@
 import React from 'react';
 import TagList from '../TagList';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { Icon } from 'carbon-components-react';
 import Tag from '../Tag';
 
@@ -66,5 +66,37 @@ describe('TagList', () => {
     expect(wrapper.find(Icon)).toHaveLength(1);
     wrapper.find(Icon).simulate('click');
     expect(onIconClickMock).toHaveBeenCalled;
+  });
+
+  it('should limit characters when passing maxCharacters through otherProps', () => {
+    mockProps = {
+      tags: [
+        {
+          name: 'super long tag',
+          type: 'functional',
+          otherProps: { maxCharacters: 3 },
+        },
+      ],
+    };
+
+    const wrapper = mount(<TagList {...mockProps} />);
+    expect(wrapper.find(Tag).text()).toEqual('sup...');
+    expect(
+      wrapper
+        .find(Tag)
+        .text()
+        .replace('...', '').length
+    ).toEqual(3);
+  });
+
+  it('should apply classes for tag counter when specified', () => {
+    mockProps = {
+      ...mockProps,
+      condense: 1,
+      counterTagClassName: 'bx--tag--functional__hovered',
+    };
+
+    const wrapper = mount(<TagList {...mockProps} />);
+    expect(wrapper.find('Tag.bx--tag--functional__hovered')).toHaveLength(1);
   });
 });
