@@ -11,6 +11,46 @@ const tagListEvents = {
     { name: 'tag', type: 'functional' },
   ],
 };
+
+const tagListEventsWithTagProps = {
+  className: 'some-class',
+  tags: [
+    { name: 'test:tag', type: 'functional', otherProps: { maxCharacters: 3 } },
+    {
+      name: 'tag:test',
+      type: 'functional',
+      otherProps: { className: 'bx--tag--functional__hovered' },
+    },
+    {
+      name: 'really long tag',
+      type: 'functional',
+      otherProps: { maxCharacters: 5, isRemovable: true },
+    },
+  ],
+};
+
+const tagListEventsWithTagClassName = {
+  className: 'some-class',
+  tags: [
+    {
+      name: 'test:tag',
+      type: 'functional',
+      otherProps: { className: 'bx--tag--functional__hovered' },
+    },
+    {
+      name: 'tag:test',
+      type: 'functional',
+      otherProps: { className: 'bx--tag--functional__hovered' },
+    },
+    {
+      name: 'tag',
+      type: 'functional',
+      otherProps: { className: 'bx--tag--functional__hovered' },
+    },
+  ],
+  counterTagClassName: 'bx--tag--functional__hovered',
+};
+
 storiesOf('TagList', module)
   .addWithInfo(
     'Default',
@@ -39,4 +79,19 @@ storiesOf('TagList', module)
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in a fully condensed state.
   `,
     () => <TagList {...tagListEvents} condense={3} />
+  )
+  .addWithInfo(
+    'Condense 1 Editable with Tag Properties Applied',
+    `
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.
+    Custom Tag properties have also been applied.
+  `,
+    () => <TagList {...tagListEventsWithTagProps} />
+  )
+  .addWithInfo(
+    'Default with Class Applied to all Tags',
+    `
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component is displayed in a default state with a class applied to all tags.
+  `,
+    () => <TagList {...tagListEventsWithTagClassName} condense={1} />
   );
