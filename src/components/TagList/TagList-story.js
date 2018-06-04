@@ -19,7 +19,9 @@ const tagListEventsWithTagProps = {
     {
       name: 'tag:test',
       type: 'functional',
-      otherProps: { className: 'bx--tag--functional__hovered' },
+      otherProps: {
+        className: 'bx--tag--functional__hovered bx--tag-list--tag',
+      },
     },
     {
       name: 'really long tag',
@@ -35,17 +37,23 @@ const tagListEventsWithTagClassName = {
     {
       name: 'test:tag',
       type: 'functional',
-      otherProps: { className: 'bx--tag--functional__hovered' },
+      otherProps: {
+        className: 'bx--tag--functional__hovered bx--tag-list--tag',
+      },
     },
     {
       name: 'tag:test',
       type: 'functional',
-      otherProps: { className: 'bx--tag--functional__hovered' },
+      otherProps: {
+        className: 'bx--tag--functional__hovered bx--tag-list--tag',
+      },
     },
     {
       name: 'tag',
       type: 'functional',
-      otherProps: { className: 'bx--tag--functional__hovered' },
+      otherProps: {
+        className: 'bx--tag--functional__hovered bx--tag-list--tag',
+      },
     },
   ],
   counterTagClassName: 'bx--tag--functional__hovered',
