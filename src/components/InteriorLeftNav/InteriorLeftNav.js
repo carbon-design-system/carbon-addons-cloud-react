@@ -66,7 +66,6 @@ export default class InteriorLeftNav extends Component {
         {...child.props}
         key={key}
         ref={key}
-        id={key}
         onListClick={this.handleListClick}
         onItemClick={this.handleItemClick}
         activeHref={this.state.activeHref}

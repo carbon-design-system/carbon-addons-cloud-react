@@ -67,6 +67,7 @@ export default class InteriorLeftNavList extends Component {
       children,
       className,
       iconDescription,
+      id,
       onListClick, // eslint-disable-line no-unused-vars
       onItemClick, // eslint-disable-line no-unused-vars
       activeHref, // eslint-disable-line no-unused-vars
@@ -92,7 +93,7 @@ export default class InteriorLeftNavList extends Component {
         onClick={this.toggle}
         onKeyPress={this.toggle}
         role="menuitem">
-        <div className="left-nav-list__item-link">
+        <div className="left-nav-list__item-link" id={id}>
           {title}
           <div className="left-nav-list__item-icon">
             <Icon
