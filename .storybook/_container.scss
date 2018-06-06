@@ -7,7 +7,7 @@ $css--typography: true !default;
 $css--plex: true !default;
 
 @import '~carbon-components/scss/globals/scss/styles';
-@import '~carbon-addons-cloud/scss/index';
+@import '~carbon-addons-cloud/scss/styles';
 
 .storybook-container > div {
   width: 100%;
