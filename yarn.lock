@@ -2208,13 +2208,9 @@ capture-exit@^1.2.0:
   dependencies:
     rsvp "^3.3.3"
 
-carbon-addons-cloud@^1.6.3:
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/carbon-addons-cloud/-/carbon-addons-cloud-1.6.3.tgz#0330c3ad37d4820c925b054295bc63e14a7cef10"
-  dependencies:
-    classnames "^2.2.5"
-    prop-types "^15.6.0"
-    window-or-global "^1.0.1"
+carbon-addons-cloud@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/carbon-addons-cloud/-/carbon-addons-cloud-2.0.1.tgz#d5a1a4350fd176da109312fefc3b6de5c4a0c97b"
 
 carbon-components-react@^5.51.9:
   version "5.51.9"
