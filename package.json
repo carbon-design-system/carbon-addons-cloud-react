@@ -15,12 +15,13 @@
     "precommit": "lint-staged",
     "prepublish": "yarn build",
     "semantic-release": "semantic-release",
-    "storybook": "start-storybook -p 3000",
+    "storybook": "start-storybook -p 8080",
     "test": "jest"
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "prop-types": "^15.6.0"
+    "prop-types": "^15.6.0",
+    "react-lottie": "^1.2.3"
   },
   "peerDependencies": {
     "carbon-addons-cloud": "^1.6.3 || ^2.x",
@@ -52,6 +53,7 @@
     "enzyme": "^3.1.1",
     "enzyme-adapter-react-16": "^1.0.4",
     "enzyme-to-json": "^3.2.2",
+    "file-loader": "^1.1.11",
     "husky": "^0.14.3",
     "jest": "^23.1.0",
     "lint-staged": "^7.1.2",
