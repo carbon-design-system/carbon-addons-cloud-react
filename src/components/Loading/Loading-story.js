@@ -8,7 +8,7 @@ storiesOf('Loading', module).addWithInfo(
   This loading pattern should be used in context and not tied to an overlay. For dynamic data loading use carbon skeleton components.`,
   () => (
     <div>
-      <Loading style={{ margin: '200px auto' }} />
+      <Loading />
     </div>
   )
 );
