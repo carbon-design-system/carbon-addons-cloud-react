@@ -7,7 +7,7 @@ import Tag from '../Tag';
 
 export default class TagList extends Component {
   static propTypes = {
-    condense: PropTypes.number.isRequired,
+    numTagsDisplayed: PropTypes.number.isRequired,
     tags: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string.isRequired,
@@ -26,33 +26,31 @@ export default class TagList extends Component {
     className: PropTypes.string,
     isEditable: PropTypes.bool,
     onIconClick: PropTypes.func,
-    sort: PropTypes.func,
     counterTagClassName: PropTypes.string,
   };
 
   static defaultProps = {
-    sort: () => {},
     isEditable: false,
-    condense: 0,
+    numTagsDisplayed: 3,
   };
 
   render() {
     const {
       className,
-      condense,
+      numTagsDisplayed,
       isEditable,
       onIconClick,
-      sort,
       tags,
       counterTagClassName,
       ...rest
     } = this.props;
 
-    const sortedTags = tags.sort(sort);
+    const limit =
+      numTagsDisplayed > tags.length ? tags.length : numTagsDisplayed;
 
-    const limit = condense > sortedTags.length ? sortedTags.length : condense;
+    const displayList = tags.slice(0, limit);
 
-    const displayList = sortedTags.slice(0, sortedTags.length - limit);
+    const overflowCount = tags.length - numTagsDisplayed;
 
     const tagListClassNames = classNames('bx--tag-list', className);
 
@@ -68,24 +66,32 @@ export default class TagList extends Component {
             key={tag.name}
             className="bx--tag-list--tag"
             type={tag.type}
+            title={tag.name}
             {...tag.otherProps}>
             {tag.name}
           </Tag>
         ))}
-        {condense > 0 &&
-          condense < sortedTags.length && (
-            <Tag type="functional" className={counterTagClassNames}>
+        {numTagsDisplayed > 0 &&
+          numTagsDisplayed < tags.length && (
+            <Tag
+              type="functional"
+              className={counterTagClassNames}
+              description="overflow"
+              title={`overflow ${overflowCount}`}>
               <Icon
                 name="add"
                 className="bx--tag-list--tag-counter--icon"
                 title="add icon"
-                description="add icon used to indicate additional condensed tags"
+                description="add icon used to indicate additional tags"
               />
-              {condense}
+              {overflowCount}
             </Tag>
           )}
-        {condense >= tags.length && (
-          <Tag type="functional" className={counterTagClassNames}>
+        {numTagsDisplayed === 0 && (
+          <Tag
+            type="functional"
+            className={counterTagClassNames}
+            title={`overflow ${overflowCount}`}>
             {tags.length}
           </Tag>
         )}

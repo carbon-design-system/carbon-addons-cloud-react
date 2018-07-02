@@ -72,34 +72,34 @@ storiesOf('TagList', module)
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in an editable state.
   `,
-    () => <TagList {...tagListEvents} condense={0} isEditable />
+    () => <TagList {...tagListEvents} numTagsDisplayed={3} isEditable />
   )
   .addWithInfo(
-    'Condense 1 Editable',
+    'Display 1 Editable',
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.
   `,
-    () => <TagList {...tagListEvents} condense={1} isEditable />
+    () => <TagList {...tagListEvents} numTagsDisplayed={1} isEditable />
   )
   .addWithInfo(
     'Fully Condensed',
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in a fully condensed state.
   `,
-    () => <TagList {...tagListEvents} condense={3} />
+    () => <TagList {...tagListEvents} numTagsDisplayed={0} />
   )
   .addWithInfo(
-    'Condense 1 Editable with Tag Properties Applied',
+    'Display 2 Editable with Tag Properties Applied',
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.
     Custom Tag properties have also been applied.
   `,
-    () => <TagList {...tagListEventsWithTagProps} />
+    () => <TagList {...tagListEventsWithTagProps} numTagsDisplayed={2} />
   )
   .addWithInfo(
     'Default with Class Applied to all Tags',
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component is displayed in a default state with a class applied to all tags.
   `,
-    () => <TagList {...tagListEventsWithTagClassName} condense={1} />
+    () => <TagList {...tagListEventsWithTagClassName} />
   );
