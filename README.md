@@ -21,7 +21,7 @@ yarn add carbon-components carbon-components-react carbon-addons-cloud carbon-ad
 You can then import any component that you need by doing the following in your project:
 
 ```js
-import { OrderSummary } from 'carbona-addons-cloud-react';
+import { OrderSummary } from 'carbon-addons-cloud-react';
 ```
 
 For styling and other information, make sure to check out [`carbon-addons-cloud`](https://github.com/carbon-design-system/carbon-addons-cloud).
