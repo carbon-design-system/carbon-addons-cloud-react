@@ -35,7 +35,7 @@ describe('TagList', () => {
   it('should display condensed state', () => {
     mockProps = {
       ...mockProps,
-      maxTagsDisplayed: 0,
+      numTagsDisplayed: 0,
     };
     const wrapper = shallow(<TagList {...mockProps} />);
     expect(wrapper).toHaveLength(1);
@@ -45,7 +45,7 @@ describe('TagList', () => {
   it('should display 1 tag and 1 condensed tag', () => {
     mockProps = {
       ...mockProps,
-      maxTagsDisplayed: 1,
+      numTagsDisplayed: 1,
     };
 
     const wrapper = shallow(<TagList {...mockProps} />);
@@ -91,7 +91,7 @@ describe('TagList', () => {
   it('should apply classes for tag counter when specified', () => {
     mockProps = {
       ...mockProps,
-      maxTagsDisplayed: 1,
+      numTagsDisplayed: 1,
       counterTagClassName: 'bx--tag--functional__hovered',
     };
 

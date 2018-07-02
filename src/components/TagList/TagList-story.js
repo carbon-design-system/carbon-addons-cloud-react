@@ -72,29 +72,29 @@ storiesOf('TagList', module)
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in an editable state.
   `,
-    () => <TagList {...tagListEvents} maxTagsDisplayed={3} isEditable />
+    () => <TagList {...tagListEvents} numTagsDisplayed={3} isEditable />
   )
   .addWithInfo(
     'Display 1 Editable',
     `
-    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to maxTagsDisplayed a list.
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.
   `,
-    () => <TagList {...tagListEvents} maxTagsDisplayed={1} isEditable />
+    () => <TagList {...tagListEvents} numTagsDisplayed={1} isEditable />
   )
   .addWithInfo(
     'Fully Condensed',
     `
-    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in a fully maxTagsDisplayedd state.
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in a fully condensed state.
   `,
-    () => <TagList {...tagListEvents} maxTagsDisplayed={0} />
+    () => <TagList {...tagListEvents} numTagsDisplayed={0} />
   )
   .addWithInfo(
     'Display 2 Editable with Tag Properties Applied',
     `
-    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to maxTagsDisplayed a list.
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.
     Custom Tag properties have also been applied.
   `,
-    () => <TagList {...tagListEventsWithTagProps} maxTagsDisplayed={2} />
+    () => <TagList {...tagListEventsWithTagProps} numTagsDisplayed={2} />
   )
   .addWithInfo(
     'Default with Class Applied to all Tags',

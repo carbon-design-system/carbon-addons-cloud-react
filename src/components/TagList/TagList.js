@@ -7,7 +7,7 @@ import Tag from '../Tag';
 
 export default class TagList extends Component {
   static propTypes = {
-    maxTagsDisplayed: PropTypes.number.isRequired,
+    numTagsDisplayed: PropTypes.number.isRequired,
     tags: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string.isRequired,
@@ -31,13 +31,13 @@ export default class TagList extends Component {
 
   static defaultProps = {
     isEditable: false,
-    maxTagsDisplayed: 3,
+    numTagsDisplayed: 3,
   };
 
   render() {
     const {
       className,
-      maxTagsDisplayed,
+      numTagsDisplayed,
       isEditable,
       onIconClick,
       tags,
@@ -46,11 +46,11 @@ export default class TagList extends Component {
     } = this.props;
 
     const limit =
-      maxTagsDisplayed > tags.length ? tags.length : maxTagsDisplayed;
+      numTagsDisplayed > tags.length ? tags.length : numTagsDisplayed;
 
     const displayList = tags.slice(0, limit);
 
-    const overflowCount = tags.length - maxTagsDisplayed;
+    const overflowCount = tags.length - numTagsDisplayed;
 
     const tagListClassNames = classNames('bx--tag-list', className);
 
@@ -71,8 +71,8 @@ export default class TagList extends Component {
             {tag.name}
           </Tag>
         ))}
-        {maxTagsDisplayed > 0 &&
-          maxTagsDisplayed < tags.length && (
+        {numTagsDisplayed > 0 &&
+          numTagsDisplayed < tags.length && (
             <Tag
               type="functional"
               className={counterTagClassNames}
@@ -87,8 +87,11 @@ export default class TagList extends Component {
               {overflowCount}
             </Tag>
           )}
-        {maxTagsDisplayed === 0 && (
-          <Tag type="functional" className={counterTagClassNames}>
+        {numTagsDisplayed === 0 && (
+          <Tag
+            type="functional"
+            className={counterTagClassNames}
+            title={`overflow ${overflowCount}`}>
             {tags.length}
           </Tag>
         )}
