@@ -15,6 +15,8 @@ export InteriorLeftNavItem from './components/InteriorLeftNavItem';
 export InteriorLeftNavList from './components/InteriorLeftNavList';
 export InteriorLeftNavHeader from './components/InteriorLeftNavHeader';
 
+export Loading from './components/Loading';
+
 export { Module, ModuleBody, ModuleHeader } from './components/Module';
 
 export {
