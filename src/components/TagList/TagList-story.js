@@ -72,34 +72,34 @@ storiesOf('TagList', module)
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in an editable state.
   `,
-    () => <TagList {...tagListEvents} condense={0} isEditable />
+    () => <TagList {...tagListEvents} maxTagsDisplayed={3} isEditable />
   )
   .addWithInfo(
-    'Condense 1 Editable',
+    'Display 1 Editable',
     `
-    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to maxTagsDisplayed a list.
   `,
-    () => <TagList {...tagListEvents} condense={1} isEditable />
+    () => <TagList {...tagListEvents} maxTagsDisplayed={1} isEditable />
   )
   .addWithInfo(
     'Fully Condensed',
     `
-    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in a fully condensed state.
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in a fully maxTagsDisplayedd state.
   `,
-    () => <TagList {...tagListEvents} condense={3} />
+    () => <TagList {...tagListEvents} maxTagsDisplayed={0} />
   )
   .addWithInfo(
-    'Condense 1 Editable with Tag Properties Applied',
+    'Display 2 Editable with Tag Properties Applied',
     `
-    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to maxTagsDisplayed a list.
     Custom Tag properties have also been applied.
   `,
-    () => <TagList {...tagListEventsWithTagProps} />
+    () => <TagList {...tagListEventsWithTagProps} maxTagsDisplayed={2} />
   )
   .addWithInfo(
     'Default with Class Applied to all Tags',
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component is displayed in a default state with a class applied to all tags.
   `,
-    () => <TagList {...tagListEventsWithTagClassName} condense={1} />
+    () => <TagList {...tagListEventsWithTagClassName} />
   );

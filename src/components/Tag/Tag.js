@@ -97,7 +97,7 @@ export default class Tag extends Component {
     );
 
     return (
-      <span {...tagProps} title={children}>
+      <span {...tagProps}>
         {shortenedName || TYPES[type]}
         {isRemovable && closeIcon}
       </span>
