@@ -67,10 +67,10 @@ describe('TagList', () => {
     expect(onIconClickMock).toHaveBeenCalled;
   });
 
-  it('should display edit state only on hover when isEditable is onHover', () => {
+  it('should display edit state only on hover when isEditable is on-hover', () => {
     mockProps = {
       ...mockProps,
-      isEditable: 'onHover',
+      isEditable: 'on-hover',
       onIconClick: onIconClickMock,
     };
 

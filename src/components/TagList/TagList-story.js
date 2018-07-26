@@ -82,7 +82,7 @@ storiesOf('TagList', module)
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used in an editable state, only when the TagList is hovered.
   `,
     () => (
-      <TagList {...tagListEvents} numTagsDisplayed={3} isEditable="onHover" />
+      <TagList {...tagListEvents} numTagsDisplayed={3} isEditable="on-hover" />
     )
   )
   .addWithInfo(

@@ -28,7 +28,7 @@ export default class TagList extends Component {
       })
     ).isRequired,
     className: PropTypes.string,
-    isEditable: PropTypes.oneOf(['always', 'never', 'onHover']),
+    isEditable: PropTypes.oneOf(['always', 'never', 'on-hover']),
     onIconClick: PropTypes.func,
     counterTagClassName: PropTypes.string,
   };
@@ -85,10 +85,10 @@ export default class TagList extends Component {
         className={tagListClassNames}
         {...rest}
         onMouseEnter={
-          isEditable === 'onHover' ? this.toggleEditIconShow : undefined
+          isEditable === 'on-hover' ? this.toggleEditIconShow : undefined
         }
         onMouseLeave={
-          isEditable === 'onHover' ? this.toggleEditIconHide : undefined
+          isEditable === 'on-hover' ? this.toggleEditIconHide : undefined
         }>
         {displayList.map(tag => (
           <Tag
@@ -136,7 +136,7 @@ export default class TagList extends Component {
             />
           </button>
         )}
-        {isEditable === 'onHover' &&
+        {isEditable === 'on-hover' &&
           this.state.showEditIcon && (
             <button
               className="bx--tag-list--edit--button"
