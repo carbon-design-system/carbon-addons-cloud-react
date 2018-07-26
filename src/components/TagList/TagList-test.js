@@ -54,14 +54,29 @@ describe('TagList', () => {
     expect(wrapper.find(Icon)).toHaveLength(1);
   });
 
-  it('should display edit state when isEditable is true', () => {
+  it('should display edit state when isEditable is always', () => {
     mockProps = {
       ...mockProps,
-      isEditable: true,
+      isEditable: 'always',
       onIconClick: onIconClickMock,
     };
 
     const wrapper = shallow(<TagList {...mockProps} />);
+    expect(wrapper.find(Icon)).toHaveLength(1);
+    wrapper.find(Icon).simulate('click');
+    expect(onIconClickMock).toHaveBeenCalled;
+  });
+
+  it('should display edit state only on hover when isEditable is onHover', () => {
+    mockProps = {
+      ...mockProps,
+      isEditable: 'onHover',
+      onIconClick: onIconClickMock,
+    };
+
+    const wrapper = shallow(<TagList {...mockProps} />);
+    expect(wrapper.find(Icon)).toHaveLength(0);
+    wrapper.find('div').simulate('mouseenter');
     expect(wrapper.find(Icon)).toHaveLength(1);
     wrapper.find(Icon).simulate('click');
     expect(onIconClickMock).toHaveBeenCalled;
