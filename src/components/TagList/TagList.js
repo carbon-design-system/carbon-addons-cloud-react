@@ -6,6 +6,10 @@ import { Icon } from 'carbon-components-react';
 import Tag from '../Tag';
 
 export default class TagList extends Component {
+  state = {
+    showEditIcon: false,
+  };
+
   static propTypes = {
     numTagsDisplayed: PropTypes.number.isRequired,
     tags: PropTypes.arrayOf(
@@ -24,14 +28,31 @@ export default class TagList extends Component {
       })
     ).isRequired,
     className: PropTypes.string,
-    isEditable: PropTypes.bool,
+    isEditable: PropTypes.oneOf(['always', 'never', 'on-hover']),
     onIconClick: PropTypes.func,
     counterTagClassName: PropTypes.string,
   };
 
   static defaultProps = {
-    isEditable: false,
+    isEditable: 'never',
     numTagsDisplayed: 3,
+  };
+
+  toggleEditIconShow = () => {
+    this.setState({
+      showEditIcon: true,
+    });
+  };
+
+  toggleEditIconHide = () => {
+    this.setState({
+      showEditIcon: false,
+    });
+  };
+
+  handleOnIconClick = evt => {
+    evt.stopPropagation();
+    if (this.props.onIconClick) this.props.onIconClick();
   };
 
   render() {
@@ -60,7 +81,15 @@ export default class TagList extends Component {
     );
 
     return (
-      <div className={tagListClassNames} {...rest}>
+      <div
+        className={tagListClassNames}
+        {...rest}
+        onMouseEnter={
+          isEditable === 'on-hover' ? this.toggleEditIconShow : undefined
+        }
+        onMouseLeave={
+          isEditable === 'on-hover' ? this.toggleEditIconHide : undefined
+        }>
         {displayList.map(tag => (
           <Tag
             key={tag.name}
@@ -95,8 +124,10 @@ export default class TagList extends Component {
             {tags.length}
           </Tag>
         )}
-        {isEditable && (
-          <button className="bx--tag-list--edit--button" onClick={onIconClick}>
+        {isEditable === 'always' && (
+          <button
+            className="bx--tag-list--edit--button"
+            onClick={this.handleOnIconClick}>
             <Icon
               name="edit--glyph"
               className="bx--tag-list--edit--icon"
@@ -105,6 +136,19 @@ export default class TagList extends Component {
             />
           </button>
         )}
+        {isEditable === 'on-hover' &&
+          this.state.showEditIcon && (
+            <button
+              className="bx--tag-list--edit--button"
+              onClick={this.handleOnIconClick}>
+              <Icon
+                name="edit--glyph"
+                className="bx--tag-list--edit--icon"
+                title="edit icon"
+                description="edit icon that can trigger an editable state for the tags in list"
+              />
+            </button>
+          )}
       </div>
     );
   }
