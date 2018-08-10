@@ -23,7 +23,8 @@ const CloudHeaderLogo = props => {
         <div className="bx--cloud-header-brand__icon">{children}</div>
       ) : null}
       <h4 className="bx--cloud-header-brand__text">
-        {companyName}&nbsp;
+        {companyName}
+        &nbsp;
         <span>{productName}</span>
       </h4>
     </a>

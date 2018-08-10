@@ -98,8 +98,8 @@ export default class TagList extends Component {
             className="bx--tag-list--tag"
             type={tag.type}
             title={tag.name}
-            {...tag.otherProps}
-            {...(maxCharacters ? { maxCharacters } : {})}>
+            maxCharacters={maxCharacters}
+            {...tag.otherProps}>
             {tag.name}
           </Tag>
         ))}
