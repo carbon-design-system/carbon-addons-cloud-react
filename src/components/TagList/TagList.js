@@ -99,7 +99,7 @@ export default class TagList extends Component {
             type={tag.type}
             title={tag.name}
             {...tag.otherProps}
-            {...{ maxCharacters }}>
+            {...(maxCharacters ? { maxCharacters } : {})}>
             {tag.name}
           </Tag>
         ))}
