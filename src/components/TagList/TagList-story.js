@@ -102,6 +102,13 @@ storiesOf('TagList', module)
     () => <TagList {...tagListEvents} numTagsDisplayed={0} />
   )
   .addWithInfo(
+    'Display all tags with a maximum of 5 characters',
+    `
+    A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used with a maximum number of characters per tag.
+  `,
+    () => <TagList {...tagListEvents} numTagsDisplayed={3} maxCharacters={5} />
+  )
+  .addWithInfo(
     'Display 2 Editable with Tag Properties Applied',
     `
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.

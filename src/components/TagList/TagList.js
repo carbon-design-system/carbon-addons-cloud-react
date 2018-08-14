@@ -31,6 +31,7 @@ export default class TagList extends Component {
     isEditable: PropTypes.oneOf(['always', 'never', 'on-hover']),
     onIconClick: PropTypes.func,
     counterTagClassName: PropTypes.string,
+    maxCharacters: PropTypes.number,
   };
 
   static defaultProps = {
@@ -63,6 +64,7 @@ export default class TagList extends Component {
       onIconClick,
       tags,
       counterTagClassName,
+      maxCharacters,
       ...rest
     } = this.props;
 
@@ -96,6 +98,7 @@ export default class TagList extends Component {
             className="bx--tag-list--tag"
             type={tag.type}
             title={tag.name}
+            maxCharacters={maxCharacters}
             {...tag.otherProps}>
             {tag.name}
           </Tag>
