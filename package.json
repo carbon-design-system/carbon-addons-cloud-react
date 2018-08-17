@@ -1,6 +1,7 @@
 {
   "name": "carbon-addons-cloud-react",
   "main": "lib/index.js",
+  "sideEffects": false,
   "license": "Apache-2",
   "files": [
     "lib"
