@@ -234,13 +234,12 @@ export default class ComboBox extends React.Component {
                   onKeyDown: this.handleOnInputKeyDown,
                 })}
               />
-              {inputValue &&
-                isOpen && (
-                  <ListBox.Selection
-                    clearSelection={clearSelection}
-                    translateWithId={translateWithId}
-                  />
-                )}
+              {inputValue && isOpen && (
+                <ListBox.Selection
+                  clearSelection={clearSelection}
+                  translateWithId={translateWithId}
+                />
+              )}
               <ListBox.MenuIcon
                 isOpen={isOpen}
                 translateWithId={translateWithId}

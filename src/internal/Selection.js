@@ -35,16 +35,19 @@ export default class Selection extends React.Component {
   };
 
   handleSelectItem = item => {
-    this.internalSetState(state => ({
-      selectedItems: state.selectedItems.concat(item),
+    this.internalSetState(prevState => ({
+      selectedItems: [...prevState.selectedItems, item],
     }));
   };
 
-  handleRemoveItem = index => {
-    this.internalSetState(state => ({
-      selectedItems: removeAtIndex(state.selectedItems, index),
+  handleRemoveItem = item => {
+    this.internalSetState(prevState => ({
+      selectedItems: prevState.selectedItems.filter(
+        itemOnState => itemOnState !== item
+      ),
     }));
   };
+
   handleOnItemChange = item => {
     const { selectedItems } = this.state;
 
@@ -59,7 +62,7 @@ export default class Selection extends React.Component {
       this.handleSelectItem(item);
       return;
     }
-    this.handleRemoveItem(selectedIndex);
+    this.handleRemoveItem(item);
   };
 
   render() {
@@ -82,11 +85,3 @@ export default class Selection extends React.Component {
     return null;
   }
 }
-
-// Generic utility for safely removing an element at a given index from an
-// array.
-const removeAtIndex = (array, index) => {
-  const result = array.slice();
-  result.splice(index, 1);
-  return result;
-};

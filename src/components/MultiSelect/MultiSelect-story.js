@@ -1,11 +1,11 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-
+import { withInfo } from '@storybook/addon-info';
 import { withKnobs, boolean, select, text } from '@storybook/addon-knobs';
 import MultiSelect from '../MultiSelect';
 
-const items = [
+/*const items = [
   {
     id: 'item-1',
     text: 'Item 1',
@@ -14,14 +14,61 @@ const items = [
     id: 'item-2',
     text: 'Item 2',
   },
-];
+];*/
 
+const items = [
+  {
+    id: 'item-1',
+    text: 'Item 1',
+    category: 'Category 1',
+    options: [
+      {
+        id: 'opt-1',
+        text: 'Option 1',
+      },
+      {
+        id: 'opt-2',
+        text: 'Option 2',
+      },
+    ],
+  },
+  {
+    id: 'item-2',
+    text: 'Item 2',
+    category: 'Category 2',
+    options: [
+      {
+        id: 'opt-3',
+        text: 'Option 3',
+      },
+      {
+        id: 'opt-4',
+        text: 'Option 4',
+      },
+    ],
+  },
+  {
+    id: 'item-3',
+    text: 'Item 3',
+    category: 'Category 3',
+    options: [
+      {
+        id: 'opt-5',
+        text: 'Option 5',
+      },
+      {
+        id: 'opt-6',
+        text: 'Option 6',
+      },
+    ],
+  },
+];
 const defaultLabel = 'MultiSelect Label';
 const defaultPlaceholder = 'Filter';
 
 const types = {
-  'Default (default)': 'default',
-  'Inline (inline)': 'inline',
+  default: 'Default (default)',
+  inline: 'Inline (inline)',
 };
 
 const props = () => ({
@@ -46,32 +93,33 @@ storiesOf('MultiSelect', module)
   .addDecorator(withKnobs)
   .add(
     'default',
-    () => {
+    withInfo({
+      text: `
+        MultiSelect
+      `,
+    })(() => {
       const { filterable, ...multiSelectProps } = props();
       const ComponentToUse = !filterable ? MultiSelect : MultiSelect.Filterable;
       const placeholder = !filterable ? undefined : defaultPlaceholder;
       return (
         <div style={{ width: 300 }}>
-          <ComponentToUse
+          <MultiSelect.Filterable
             {...multiSelectProps}
             items={items}
             itemToString={item => (item ? item.text : '')}
-            placeholder={placeholder}
+            placeholder={defaultPlaceholder}
           />
         </div>
       );
-    },
-    {
-      info: {
-        text: `
-            MultiSelect
-          `,
-      },
-    }
+    })
   )
   .add(
     'with initial selected items',
-    () => {
+    withInfo({
+      text: `
+        Provide a set of items to initially select in the control
+      `,
+    })(() => {
       const { filterable, ...multiSelectProps } = props();
       const ComponentToUse = !filterable ? MultiSelect : MultiSelect.Filterable;
       const placeholder = !filterable ? undefined : defaultPlaceholder;
@@ -86,12 +134,5 @@ storiesOf('MultiSelect', module)
           />
         </div>
       );
-    },
-    {
-      info: {
-        text: `
-            Provide a set of items to initially select in the control
-          `,
-      },
-    }
+    })
   );
