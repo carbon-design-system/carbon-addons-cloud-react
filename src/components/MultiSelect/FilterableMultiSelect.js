@@ -1,15 +1,13 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import Downshift from 'downshift';
 import isEqual from 'lodash.isequal';
 import ListBox from '../ListBox';
 import Checkbox from '../Checkbox';
-import GroupLabel from '../GroupLabel';
 import Selection from '../../internal/Selection';
 import { sortingPropTypes } from './MultiSelectPropTypes';
 import { defaultItemToString } from './tools/itemToString';
-import { groupedByCategory } from './tools/groupedByCategory';
 import { defaultSortItems, defaultCompareItems } from './tools/sorting';
 import { defaultFilterItems } from '../ComboBox/tools/filter';
 
@@ -82,9 +80,6 @@ export default class FilterableMultiSelect extends React.Component {
       highlightedIndex: null,
       isOpen: false,
       inputValue: '',
-      openSections: [],
-      checkedSuboptions: [],
-      unCheckedSuboptions: [],
     };
   }
 
@@ -92,31 +87,6 @@ export default class FilterableMultiSelect extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(changes);
     }
-  };
-
-  handleOnChangeSubOptions = option => {
-    if (!option.checked) {
-      this.setState(prevState => ({
-        checkedSuboptions: [...prevState.checkedSuboptions, option],
-      }));
-    } else {
-      this.setState(prevState => ({
-        checkedSuboptions: prevState.checkedSuboptions.filter(
-          selectedOption => selectedOption !== option
-        ),
-      }));
-    }
-    option.checked = !option.checked;
-  };
-
-  onToggle = item => {
-    !this.state.openSections.includes(item)
-      ? this.setState({ openSections: [...this.state.openSections, item] })
-      : this.setState(prevState => ({
-          openSections: prevState.openSections.filter(
-            itemOnState => itemOnState !== item
-          ),
-        }));
   };
 
   handleOnToggleMenu = () => {
@@ -192,14 +162,7 @@ export default class FilterableMultiSelect extends React.Component {
   };
 
   render() {
-    const {
-      highlightedIndex,
-      isOpen,
-      inputValue,
-      checkedSuboptions,
-      unCheckedSuboptions,
-      openSections,
-    } = this.state;
+    const { highlightedIndex, isOpen, inputValue } = this.state;
     const {
       className: containerClassName,
       disabled,
@@ -232,6 +195,7 @@ export default class FilterableMultiSelect extends React.Component {
             isOpen={isOpen}
             inputValue={inputValue}
             onInputValueChange={this.handleOnInputValueChange}
+            onChange={onItemChange}
             itemToString={itemToString}
             onStateChange={this.handleOnStateChange}
             onOuterClick={this.handleOnOuterClick}
@@ -246,18 +210,13 @@ export default class FilterableMultiSelect extends React.Component {
               selectedItem,
             }) => (
               <ListBox
-                style={{ outline: 'none' }}
                 className={className}
                 disabled={disabled}
                 {...getRootProps({ refKey: 'innerRef' })}>
                 <ListBox.Field {...getButtonProps({ disabled })}>
                   {selectedItem.length > 0 && (
                     <ListBox.Selection
-                      clearSelection={e => {
-                        {
-                          clearSelection(e);
-                        }
-                      }}
+                      clearSelection={clearSelection}
                       selectionCount={selectedItem.length}
                     />
                   )}
@@ -271,141 +230,42 @@ export default class FilterableMultiSelect extends React.Component {
                       onKeyDown: this.handleOnInputKeyDown,
                     })}
                   />
-                  {inputValue &&
-                    isOpen && (
-                      <ListBox.Selection
-                        clearSelection={this.clearInputValue}
-                      />
-                    )}
+                  {inputValue && isOpen && (
+                    <ListBox.Selection clearSelection={this.clearInputValue} />
+                  )}
                   <ListBox.MenuIcon isOpen={isOpen} />
                 </ListBox.Field>
                 {isOpen && (
-                  <ListBox.Menu style={{ maxHeight: '424px' }}>
-                    {groupedByCategory(items).map(group => {
-                      const hasGroups = group[0] !== 'undefined' ? true : false;
-                      let categoryName = '';
-                      hasGroups
-                        ? (categoryName = group[0].toUpperCase())
-                        : null;
+                  <ListBox.Menu>
+                    {sortItems(
+                      filterItems(items, { itemToString, inputValue }),
+                      {
+                        selectedItems,
+                        itemToString,
+                        compareItems,
+                        locale,
+                      }
+                    ).map((item, index) => {
+                      const itemProps = getItemProps({ item });
+                      const itemText = itemToString(item);
+                      const isChecked =
+                        selectedItem.filter(selected => isEqual(selected, item))
+                          .length > 0;
                       return (
-                        <Fragment>
-                          {hasGroups && (
-                            <div>
-                              <GroupLabel>{categoryName}</GroupLabel>
-                            </div>
-                          )}
-                          {sortItems(
-                            filterItems(group[1], { itemToString, inputValue }),
-                            {
-                              selectedItems,
-                              itemToString,
-                              compareItems,
-                              locale,
-                            }
-                          ).map(item => {
-                            const itemProps = getItemProps({ item });
-                            const itemText = itemToString(item);
-                            const isChecked =
-                              selectedItem.filter(selected =>
-                                isEqual(selected, item)
-                              ).length > 0;
-                            const subOptions = item.options;
-                            const groupIsOpen =
-                              openSections.filter(groupOpen =>
-                                isEqual(groupOpen, item)
-                              ).length > 0;
-                            const checkedOptions = item.options.filter(
-                              subOption => subOption.checked == true
-                            );
-                            const uncheckedOptions = item.options.filter(
-                              subOption => subOption.checked != true
-                            );
-                            return (
-                              <Fragment>
-                                <ListBox.MenuItem
-                                  key={itemProps.id}
-                                  isActive={isChecked}
-                                  onClick={e => {
-                                    {
-                                      if (e.target.localName != 'label') {
-                                        this.onToggle(item);
-                                      } else {
-                                        onItemChange(item);
-                                        if (
-                                          checkedSuboptions.length == 0 &&
-                                          !item.checked
-                                        ) {
-                                          !groupIsOpen
-                                            ? this.onToggle(item)
-                                            : null;
-                                          uncheckedOptions.map(
-                                            (option, index) => {
-                                              this.handleOnChangeSubOptions(
-                                                option
-                                              );
-                                            }
-                                          );
-                                        } else {
-                                          checkedSuboptions.map(
-                                            (option, index) => {
-                                              this.handleOnChangeSubOptions(
-                                                option
-                                              );
-                                            }
-                                          );
-                                        }
-                                        item.checked = !item.checked;
-                                      }
-                                    }
-                                  }}>
-                                  <Checkbox
-                                    id={itemProps.id}
-                                    name={itemText}
-                                    checked={isChecked}
-                                    readOnly={true}
-                                    tabIndex="-1"
-                                    labelText={itemText}
-                                    hasGroups={hasGroups}
-                                    isExpanded={groupIsOpen}
-                                  />
-                                </ListBox.MenuItem>
-
-                                {groupIsOpen &&
-                                  subOptions != undefined &&
-                                  subOptions.map((item, index) => {
-                                    const optionsProps = getItemProps({ item });
-                                    const isCheckedSub =
-                                      this.state.checkedSuboptions.filter(
-                                        selected => isEqual(selected, item)
-                                      ).length > 0;
-                                    const subOpText = itemToString(item);
-                                    const checkBoxIndex = index.toString();
-                                    return (
-                                      <ListBox.MenuItem
-                                        key={optionsProps.id}
-                                        style={{ paddingLeft: '35px' }}
-                                        isActive={isCheckedSub}
-                                        onClick={e => {
-                                          {
-                                            debugger;
-                                            this.handleOnChangeSubOptions(item);
-                                          }
-                                        }}>
-                                        <Checkbox
-                                          id={checkBoxIndex}
-                                          name={subOpText}
-                                          checked={isCheckedSub}
-                                          labelText={subOpText}
-                                          readOnly={true}
-                                          tabIndex="-1"
-                                        />
-                                      </ListBox.MenuItem>
-                                    );
-                                  })}
-                              </Fragment>
-                            );
-                          })}
-                        </Fragment>
+                        <ListBox.MenuItem
+                          key={itemProps.id}
+                          isActive={isChecked}
+                          isHighlighted={highlightedIndex === index}
+                          {...itemProps}>
+                          <Checkbox
+                            id={itemProps.id}
+                            name={itemText}
+                            checked={isChecked}
+                            readOnly={true}
+                            tabIndex="-1"
+                            labelText={itemText}
+                          />
+                        </ListBox.MenuItem>
                       );
                     })}
                   </ListBox.Menu>
