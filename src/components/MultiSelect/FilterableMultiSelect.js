@@ -119,10 +119,6 @@ export default class FilterableMultiSelect extends React.Component {
         }));
   };
 
-  checkParentState = item => {
-    debugger;
-  };
-
   handleOnToggleMenu = () => {
     this.setState(state => ({
       isOpen: !state.isOpen,
