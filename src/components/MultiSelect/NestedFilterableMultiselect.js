@@ -13,7 +13,7 @@ import { groupedByCategory } from './tools/groupedByCategory';
 import { defaultSortItems, defaultCompareItems } from './tools/sorting';
 import { defaultFilterItems } from '../ComboBox/tools/filter';
 
-export default class FilterableMultiSelect extends React.Component {
+export default class NestedFilterableMultiselect extends React.Component {
   static propTypes = {
     ...sortingPropTypes,
 
@@ -292,11 +292,6 @@ export default class FilterableMultiSelect extends React.Component {
                         : null;
                       return (
                         <Fragment>
-                          {hasGroups && (
-                            <div>
-                              <GroupLabel>{categoryName}</GroupLabel>
-                            </div>
-                          )}
                           {sortItems(
                             filterItems(group[1], { itemToString, inputValue }),
                             {
@@ -326,6 +321,11 @@ export default class FilterableMultiSelect extends React.Component {
                             const currentParent = item;
                             return (
                               <Fragment>
+                                {hasGroups && (
+                                  <div>
+                                    <GroupLabel>{categoryName}</GroupLabel>
+                                  </div>
+                                )}
                                 <ListBox.MenuItem
                                   key={itemProps.id}
                                   isActive={isChecked}
