@@ -103,22 +103,21 @@ export default class TagList extends Component {
             {tag.name}
           </Tag>
         ))}
-        {numTagsDisplayed > 0 &&
-          numTagsDisplayed < tags.length && (
-            <Tag
-              type="functional"
-              className={counterTagClassNames}
-              description="overflow"
-              title={`overflow ${overflowCount}`}>
-              <Icon
-                name="add"
-                className="bx--tag-list--tag-counter--icon"
-                title="add icon"
-                description="add icon used to indicate additional tags"
-              />
-              {overflowCount}
-            </Tag>
-          )}
+        {numTagsDisplayed > 0 && numTagsDisplayed < tags.length && (
+          <Tag
+            type="functional"
+            className={counterTagClassNames}
+            description="overflow"
+            title={`overflow ${overflowCount}`}>
+            <Icon
+              name="add"
+              className="bx--tag-list--tag-counter--icon"
+              title="add icon"
+              description="add icon used to indicate additional tags"
+            />
+            {overflowCount}
+          </Tag>
+        )}
         {numTagsDisplayed === 0 && (
           <Tag
             type="functional"
@@ -139,19 +138,18 @@ export default class TagList extends Component {
             />
           </button>
         )}
-        {isEditable === 'on-hover' &&
-          this.state.showEditIcon && (
-            <button
-              className="bx--tag-list--edit--button"
-              onClick={this.handleOnIconClick}>
-              <Icon
-                name="edit--glyph"
-                className="bx--tag-list--edit--icon"
-                title="edit icon"
-                description="edit icon that can trigger an editable state for the tags in list"
-              />
-            </button>
-          )}
+        {isEditable === 'on-hover' && this.state.showEditIcon && (
+          <button
+            className="bx--tag-list--edit--button"
+            onClick={this.handleOnIconClick}>
+            <Icon
+              name="edit--glyph"
+              className="bx--tag-list--edit--icon"
+              title="edit icon"
+              description="edit icon that can trigger an editable state for the tags in list"
+            />
+          </button>
+        )}
       </div>
     );
   }
