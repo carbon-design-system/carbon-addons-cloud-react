@@ -6,7 +6,6 @@ import { withKnobs, boolean, select, text } from '@storybook/addon-knobs';
 
 import NestedFilterableMultiselect from './NestedFilterableMultiselect';
 
-
 const items = [
   {
     id: 'item-1',
@@ -80,9 +79,7 @@ const props = () => ({
   onChange: action('onChange'),
 });
 
-
 storiesOf('NestedFilterableMultiselect', module)
-
   .addDecorator(withKnobs)
   .add(
     'default',
