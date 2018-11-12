@@ -19,6 +19,8 @@ export Loading from './components/Loading';
 
 export { Module, ModuleBody, ModuleHeader } from './components/Module';
 
+export MultiSelect from './components/MultiSelect';
+
 export {
   OrderSummary,
   OrderSummaryHeader,
