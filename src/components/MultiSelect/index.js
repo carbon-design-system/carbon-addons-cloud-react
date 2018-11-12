@@ -1,3 +1,1 @@
-import NestedFilterableMultiselect from './FilterableMultiSelect';
-
-export default NestedFilterableMultiselect;
+export default from './NestedFilterableMultiselect';
