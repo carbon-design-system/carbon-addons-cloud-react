@@ -33,4 +33,4 @@ export { default as ResourceHeader } from './components/ResourceHeader';
 
 export TagList from './components/TagList';
 export Tag from './components/Tag';
-export NestedFilterableMultiSelect from './components/NestedFilterableMultiSelect';
+export NestedFilterableMultiSelect from './components/MultiSelect';
