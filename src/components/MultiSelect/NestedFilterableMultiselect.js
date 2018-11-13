@@ -283,7 +283,8 @@ export default class NestedFilterableMultiselect extends React.Component {
                   <ListBox.MenuIcon isOpen={isOpen} />
                 </ListBox.Field>
                 {isOpen && (
-                  <ListBox.Menu style={{ maxHeight: '424px' }}>
+                  <ListBox.Menu
+                    style={{ maxHeight: '424px', overflowX: 'hidden' }}>
                     {groupedByCategory(items).map((group, index) => {
                       const hasGroups = group[0] !== 'undefined' ? true : false;
                       let categoryName = '';
@@ -340,6 +341,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                   onClick={e => {
                                     {
                                       const clickOutOfCheckBox =
+                                        subOptions &&
                                         e.target.localName != 'label';
                                       if (clickOutOfCheckBox) {
                                         this.onToggle(item);

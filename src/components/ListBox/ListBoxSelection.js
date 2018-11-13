@@ -47,7 +47,7 @@ const ListBoxSelection = ({
         icon={iconClose}
         description={description}
         focusable="false"
-        name={description}
+        name="icon--close"
       />
     </div>
   );

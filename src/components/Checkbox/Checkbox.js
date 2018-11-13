@@ -45,13 +45,12 @@ const Checkbox = ({
         }}
       />
 
-      <label className={labelClasses} title={title || null} />
-      <span
-        className={innerLabelClasses}
-        style={{ position: 'absolute', marginLeft: '26px', width: '80%' }}>
-        {labelText}
-        {hasGroups && <CheckBoxIcon isExpanded={isExpanded} />}
-      </span>
+      <label className={labelClasses} title={title || null}>
+        <span className={innerLabelClasses} style={{ width: '100%' }}>
+          {labelText}
+          {hasGroups && <CheckBoxIcon isExpanded={isExpanded} />}
+        </span>
+      </label>
     </div>
   );
 };
