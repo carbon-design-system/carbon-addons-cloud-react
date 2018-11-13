@@ -11,21 +11,11 @@ const items = [
     id: 'item-1',
     text: 'Item 1',
     category: 'Category 1',
-    options: [
-      {
-        id: 'opt-1',
-        text: 'Option 1',
-      },
-      {
-        id: 'opt-2',
-        text: 'Option 2',
-      },
-    ],
   },
   {
     id: 'item-2',
     text: 'Item 2',
-    category: 'Category 2',
+    category: 'Category 1',
     options: [
       {
         id: 'opt-3',
