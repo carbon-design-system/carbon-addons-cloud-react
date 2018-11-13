@@ -2,20 +2,24 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
-/*const categoryLabel = {
+const categoryLabel = {
   color: '#8897A2',
   fontSize: '12px',
   fontFamily: 'ibm plex Sans',
   fontWeight: '700',
   letterSpacing: '0.2px',
   margin: '8px',
-};*/
+};
 
 const GroupLabel = ({ className, children, id, ...other }) => {
   const classNames = classnames('bx--group-label', className);
 
   return (
-    <label htmlFor={id} className="bx--group-label" {...other}>
+    <label
+      htmlFor={id}
+      className="bx--group-label"
+      style={categoryLabel}
+      {...other}>
       {children}
     </label>
   );

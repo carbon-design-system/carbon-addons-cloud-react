@@ -284,7 +284,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                 </ListBox.Field>
                 {isOpen && (
                   <ListBox.Menu style={{ maxHeight: '424px' }}>
-                    {groupedByCategory(items).map(group => {
+                    {groupedByCategory(items).map((group, index) => {
                       const hasGroups = group[0] !== 'undefined' ? true : false;
                       let categoryName = '';
                       hasGroups
@@ -292,6 +292,13 @@ export default class NestedFilterableMultiselect extends React.Component {
                         : null;
                       return (
                         <Fragment>
+                          {hasGroups && (
+                            <div>
+                              <GroupLabel key={index}>
+                                {categoryName}
+                              </GroupLabel>
+                            </div>
+                          )}
                           {sortItems(
                             filterItems(group[1], { itemToString, inputValue }),
                             {
@@ -312,20 +319,21 @@ export default class NestedFilterableMultiselect extends React.Component {
                               openSections.filter(groupOpen =>
                                 isEqual(groupOpen, item)
                               ).length > 0;
-                            const myCheckedOptions = item.options.filter(
-                              subOption => subOption.checked == true
-                            );
-                            const myUncheckedOptions = item.options.filter(
-                              subOption => subOption.checked != true
-                            );
+
+                            const myCheckedOptions = subOptions
+                              ? item.options.filter(
+                                  subOption => subOption.checked == true
+                                )
+                              : null;
+                            const myUncheckedOptions = subOptions
+                              ? item.options.filter(
+                                  subOption => subOption.checked != true
+                                )
+                              : null;
+
                             const currentParent = item;
                             return (
                               <Fragment>
-                                {hasGroups && (
-                                  <div>
-                                    <GroupLabel>{categoryName}</GroupLabel>
-                                  </div>
-                                )}
                                 <ListBox.MenuItem
                                   key={itemProps.id}
                                   isActive={isChecked}
@@ -337,21 +345,22 @@ export default class NestedFilterableMultiselect extends React.Component {
                                         this.onToggle(item);
                                       } else {
                                         onItemChange(item);
-                                        debugger;
-                                        if (
-                                          myCheckedOptions.length == 0 &&
-                                          !selectedItems.includes(item)
-                                        ) {
-                                          !groupIsOpen
-                                            ? this.onToggle(item)
-                                            : null;
-                                          this.handleSelectSubOptions(
-                                            myUncheckedOptions
-                                          );
-                                        } else {
-                                          this.handleSelectSubOptions(
-                                            myCheckedOptions
-                                          );
+                                        if (subOptions) {
+                                          if (
+                                            myCheckedOptions.length == 0 &&
+                                            !selectedItems.includes(item)
+                                          ) {
+                                            !groupIsOpen
+                                              ? this.onToggle(item)
+                                              : null;
+                                            this.handleSelectSubOptions(
+                                              myUncheckedOptions
+                                            );
+                                          } else {
+                                            this.handleSelectSubOptions(
+                                              myCheckedOptions
+                                            );
+                                          }
                                         }
                                       }
                                     }
@@ -363,7 +372,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     readOnly={true}
                                     tabIndex="-1"
                                     labelText={itemText}
-                                    hasGroups={hasGroups}
+                                    hasGroups={subOptions}
                                     isExpanded={groupIsOpen}
                                   />
                                 </ListBox.MenuItem>
@@ -380,18 +389,21 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     const checkBoxIndex = index.toString();
                                     return (
                                       <ListBox.MenuItem
-                                        key={optionsProps.id}
+                                        key={index}
                                         style={{ paddingLeft: '35px' }}
                                         isActive={isCheckedSub}
                                         onClick={e => {
                                           {
-                                            const onlySupOpChecked =
-                                              myCheckedOptions.length == 1 &&
-                                              myCheckedOptions.includes(item);
-                                            onlySupOpChecked ||
-                                            myCheckedOptions.length == 0
-                                              ? onItemChange(currentParent)
-                                              : null;
+                                            if (subOptions) {
+                                              const onlySupOpChecked =
+                                                myCheckedOptions.length == 1 &&
+                                                myCheckedOptions.includes(item);
+                                              onlySupOpChecked ||
+                                              myCheckedOptions.length == 0
+                                                ? onItemChange(currentParent)
+                                                : null;
+                                            }
+
                                             this.handleOnChangeSubOption(item);
                                           }
                                         }}>
