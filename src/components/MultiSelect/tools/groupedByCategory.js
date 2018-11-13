@@ -1,3 +1,6 @@
+function Comparator(a, b) {
+  return a[0].localeCompare(b[0]);
+}
 export const groupedByCategory = items => {
   const result = items.reduce((groupedArray, currentItem) => {
     groupedArray[currentItem.category] =
@@ -5,5 +8,9 @@ export const groupedByCategory = items => {
     groupedArray[currentItem.category].push(currentItem);
     return groupedArray;
   }, Object.create(null));
-  return Object.entries(result);
+
+  var finalResult = Object.entries(result);
+  finalResult.sort(Comparator);
+
+  return finalResult;
 };
