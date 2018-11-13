@@ -26,7 +26,7 @@ const CheckBoxIcon = ({ isExpanded, translateWithId: t }) => {
         icon={iconChevronDown}
         description={description}
         alt={description}
-        name="iconName"
+        name="icon--chevron--down"
       />
     </div>
   );

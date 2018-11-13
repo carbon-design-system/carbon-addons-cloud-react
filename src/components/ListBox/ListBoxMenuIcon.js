@@ -29,7 +29,7 @@ const ListBoxMenuIcon = ({ isOpen, translateWithId: t }) => {
       <Icon
         icon={iconCaretDown}
         description={description}
-        name="iconName"
+        name="icon--caret--down"
         alt={description}
       />
     </div>
