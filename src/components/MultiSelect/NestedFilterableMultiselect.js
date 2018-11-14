@@ -309,7 +309,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                         : null;
 
                       return (
-                        <Fragment>
+                        <Fragment key={group[0] || index}>
                           {hasGroups && filteredItems.length > 0 && (
                             <div>
                               <GroupLabel key={index}>
@@ -351,9 +351,8 @@ export default class NestedFilterableMultiselect extends React.Component {
                             const currentParent = item;
 
                             return (
-                              <Fragment>
+                              <Fragment key={itemProps.id}>
                                 <ListBox.MenuItem
-                                  key={itemProps.id}
                                   isActive={isChecked}
                                   onClick={e => {
                                     {
@@ -426,7 +425,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     const checkBoxIndex = index.toString();
                                     return (
                                       <ListBox.MenuItem
-                                        key={index}
+                                        key={optionsProps.id}
                                         style={{ paddingLeft: '35px' }}
                                         isActive={isCheckedSub}
                                         onClick={e => {
