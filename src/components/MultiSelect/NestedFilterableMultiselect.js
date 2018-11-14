@@ -83,6 +83,7 @@ export default class NestedFilterableMultiselect extends React.Component {
       isOpen: false,
       inputValue: '',
       openSections: [],
+      checkedSuboptions: [],
     };
   }
 
@@ -93,8 +94,18 @@ export default class NestedFilterableMultiselect extends React.Component {
   };
 
   handleOnChangeSubOption = option => {
+    if (!option.checked) {
+      this.setState(prevState => ({
+        checkedSuboptions: [...prevState.checkedSuboptions, option],
+      }));
+    } else {
+      this.setState(prevState => ({
+        checkedSuboptions: prevState.checkedSuboptions.filter(
+          selectedOption => selectedOption !== option
+        ),
+      }));
+    }
     option.checked = !option.checked;
-    this.forceUpdate();
   };
 
   onToggle = item => {
@@ -201,7 +212,6 @@ export default class NestedFilterableMultiselect extends React.Component {
       compareItems,
       light,
     } = this.props;
-    debugger;
 
     const itemsToProcess = initialSelectedItems
       ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
@@ -327,7 +337,6 @@ export default class NestedFilterableMultiselect extends React.Component {
                                 isEqual(groupOpen, item)
                               ).length > 0;
 
-                            debugger;
                             const myCheckedOptions = subOptions
                               ? item.options.filter(
                                   subOption => subOption.checked == true
@@ -410,7 +419,9 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     }
                                   ).map((item, index) => {
                                     const optionsProps = getItemProps({ item });
-                                    const isCheckedSub = item.checked;
+                                    const isCheckedSub = myCheckedOptions.includes(
+                                      item
+                                    );
                                     const subOpText = itemToString(item);
                                     const checkBoxIndex = index.toString();
                                     return (
@@ -434,6 +445,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                             this.handleOnChange({
                                               selectedItems,
                                             });
+                                            this.forceUpdate();
                                           }
                                         }}>
                                         <Checkbox
