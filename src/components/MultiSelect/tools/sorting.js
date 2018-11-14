@@ -18,7 +18,7 @@ export const defaultCompareItems = (itemA, itemB, { locale }) =>
  */
 export const defaultSortItems = (
   items,
-  { selectedItems, itemToString, compareItems, locale = 'en' }
+  { selectedItems, itemToString, compareItems, locale = 'en', parent }
 ) =>
   items.sort((itemA, itemB) => {
     const hasItemA = selectedItems.includes(itemA);
@@ -31,6 +31,20 @@ export const defaultSortItems = (
 
     if (hasItemB && !hasItemA) {
       return 1;
+    }
+
+    if (parent) {
+      const checkedItemA = itemA.checked;
+      const checkedItemB = itemB.checked;
+
+      // Prefer whichever checked item be first
+      if (checkedItemA && !checkedItemB) {
+        return -1;
+      }
+
+      if (checkedItemB && !checkedItemA) {
+        return 1;
+      }
     }
 
     return compareItems(itemToString(itemA), itemToString(itemB), {
