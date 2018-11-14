@@ -58,7 +58,6 @@ const items = [
     ],
   },
 ];
-
 const selectedItems = [
   {
     id: 'item-2',
@@ -68,6 +67,7 @@ const selectedItems = [
       {
         id: 'opt-3',
         text: 'Option 3',
+        checked: true,
       },
       {
         id: 'opt-4',
@@ -87,6 +87,7 @@ const selectedItems = [
       {
         id: 'opt-6',
         text: 'Option 6',
+        checked: true,
       },
     ],
   },
@@ -100,8 +101,9 @@ const selectedItems = [
         text: 'Option 7',
       },
       {
-        id: 'opt-7',
-        text: 'Option 7',
+        id: 'opt-8',
+        text: 'Option 8',
+        checked: true,
       },
     ],
   },
@@ -149,6 +151,7 @@ storiesOf('NestedFilterableMultiselect', module)
             {...multiSelectProps}
             items={items}
             itemToString={item => (item ? item.text : '')}
+            initialSelectedItems={selectedItems}
             placeholder={defaultPlaceholder}
           />
         </div>
