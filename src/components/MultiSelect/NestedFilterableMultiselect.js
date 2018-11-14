@@ -94,6 +94,7 @@ export default class NestedFilterableMultiselect extends React.Component {
 
   handleOnChangeSubOption = option => {
     option.checked = !option.checked;
+    this.forceUpdate();
   };
 
   onToggle = item => {
@@ -201,6 +202,7 @@ export default class NestedFilterableMultiselect extends React.Component {
       light,
     } = this.props;
     debugger;
+
     const itemsToProcess = initialSelectedItems
       ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
       : items;
