@@ -261,6 +261,14 @@ export default class NestedFilterableMultiselect extends React.Component {
                     <ListBox.Selection
                       clearSelection={e => {
                         {
+                          selectedItems.forEach(item => {
+                            if (item.options) {
+                              const myCheckedOptions = item.options.filter(
+                                subOption => subOption.checked == true
+                              );
+                              this.handleSelectSubOptions(myCheckedOptions);
+                            }
+                          });
                           clearSelection(e);
                         }
                       }}
@@ -287,28 +295,29 @@ export default class NestedFilterableMultiselect extends React.Component {
                     style={{ maxHeight: '424px', overflowX: 'hidden' }}>
                     {groupedByCategory(items).map((group, index) => {
                       const hasGroups = group[0] !== 'undefined' ? true : false;
+                      const filteredItems = filterItems(group[1], {
+                        itemToString,
+                        inputValue,
+                      });
                       let categoryName = '';
                       hasGroups
                         ? (categoryName = group[0].toUpperCase())
                         : null;
                       return (
                         <Fragment>
-                          {hasGroups && (
+                          {hasGroups && filteredItems.length > 0 && (
                             <div>
                               <GroupLabel key={index}>
                                 {categoryName}
                               </GroupLabel>
                             </div>
                           )}
-                          {sortItems(
-                            filterItems(group[1], { itemToString, inputValue }),
-                            {
-                              selectedItems,
-                              itemToString,
-                              compareItems,
-                              locale,
-                            }
-                          ).map(item => {
+                          {sortItems(filteredItems, {
+                            selectedItems,
+                            itemToString,
+                            compareItems,
+                            locale,
+                          }).map(item => {
                             const itemProps = getItemProps({ item });
                             const itemText = itemToString(item);
                             const isChecked =
@@ -352,9 +361,6 @@ export default class NestedFilterableMultiselect extends React.Component {
                                             myCheckedOptions.length == 0 &&
                                             !selectedItems.includes(item)
                                           ) {
-                                            !groupIsOpen
-                                              ? this.onToggle(item)
-                                              : null;
                                             this.handleSelectSubOptions(
                                               myUncheckedOptions
                                             );
@@ -371,6 +377,12 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     id={itemProps.id}
                                     name={itemText}
                                     checked={isChecked}
+                                    indeterminate={
+                                      myCheckedOptions &&
+                                      myUncheckedOptions &&
+                                      myCheckedOptions.length > 0 &&
+                                      myUncheckedOptions.length > 0
+                                    }
                                     readOnly={true}
                                     tabIndex="-1"
                                     labelText={itemText}
@@ -407,6 +419,9 @@ export default class NestedFilterableMultiselect extends React.Component {
                                             }
 
                                             this.handleOnChangeSubOption(item);
+                                            this.handleOnChange({
+                                              selectedItems,
+                                            });
                                           }
                                         }}>
                                         <Checkbox
