@@ -83,8 +83,6 @@ export default class NestedFilterableMultiselect extends React.Component {
       isOpen: false,
       inputValue: '',
       openSections: [],
-      checkedSuboptions: [],
-      unCheckedSuboptions: [],
     };
   }
 
@@ -95,17 +93,6 @@ export default class NestedFilterableMultiselect extends React.Component {
   };
 
   handleOnChangeSubOption = option => {
-    if (!option.checked) {
-      this.setState(prevState => ({
-        checkedSuboptions: [...prevState.checkedSuboptions, option],
-      }));
-    } else {
-      this.setState(prevState => ({
-        checkedSuboptions: prevState.checkedSuboptions.filter(
-          selectedOption => selectedOption !== option
-        ),
-      }));
-    }
     option.checked = !option.checked;
   };
 
@@ -198,14 +185,7 @@ export default class NestedFilterableMultiselect extends React.Component {
   };
 
   render() {
-    const {
-      highlightedIndex,
-      isOpen,
-      inputValue,
-      checkedSuboptions,
-      unCheckedSuboptions,
-      openSections,
-    } = this.state;
+    const { highlightedIndex, isOpen, inputValue, openSections } = this.state;
     const {
       className: containerClassName,
       disabled,
@@ -272,7 +252,15 @@ export default class NestedFilterableMultiselect extends React.Component {
                           clearSelection(e);
                         }
                       }}
-                      selectionCount={selectedItem.length}
+                      selectionCount={selectedItems.reduce((total, item) => {
+                        if (item.options) {
+                          return (
+                            total +
+                            item.options.filter(option => option.checked).length
+                          );
+                        }
+                        return total + 1;
+                      }, 0)}
                     />
                   )}
                   <input
@@ -395,10 +383,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                   subOptions != undefined &&
                                   subOptions.map((item, index) => {
                                     const optionsProps = getItemProps({ item });
-                                    const isCheckedSub =
-                                      this.state.checkedSuboptions.filter(
-                                        selected => isEqual(selected, item)
-                                      ).length > 0;
+                                    const isCheckedSub = item.checked;
                                     const subOpText = itemToString(item);
                                     const checkBoxIndex = index.toString();
                                     return (
