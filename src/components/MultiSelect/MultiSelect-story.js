@@ -10,12 +10,12 @@ const items = [
   {
     id: 'item-1',
     text: 'Item 1',
-    category: 'Category 1',
+    category: 'Europe',
   },
   {
     id: 'item-2',
     text: 'Item 2',
-    category: 'Category 1',
+    category: 'Europe',
     options: [
       {
         id: 'opt-3',
@@ -30,7 +30,7 @@ const items = [
   {
     id: 'item-3',
     text: 'Item 3',
-    category: 'Category 3',
+    category: 'Asia',
     options: [
       {
         id: 'opt-5',
@@ -39,6 +39,71 @@ const items = [
       {
         id: 'opt-6',
         text: 'Option 6',
+      },
+    ],
+  },
+  {
+    id: 'item-4',
+    text: 'Item 4',
+    category: 'America',
+    options: [
+      {
+        id: 'opt-7',
+        text: 'Option 7',
+      },
+      {
+        id: 'opt-7',
+        text: 'Option 7',
+      },
+    ],
+  },
+];
+const selectedItems = [
+  {
+    id: 'item-2',
+    text: 'Item 2',
+    category: 'Europe',
+    options: [
+      {
+        id: 'opt-3',
+        text: 'Option 3',
+        checked: true,
+      },
+      {
+        id: 'opt-4',
+        text: 'Option 4',
+      },
+    ],
+  },
+  {
+    id: 'item-3',
+    text: 'Item 3',
+    category: 'Asia',
+    options: [
+      {
+        id: 'opt-5',
+        text: 'Option 5',
+      },
+      {
+        id: 'opt-6',
+        text: 'Option 6',
+        checked: true,
+      },
+    ],
+  },
+  {
+    id: 'item-4',
+    text: 'Item 4',
+    category: 'America',
+    options: [
+      {
+        id: 'opt-7',
+        text: 'Option 7',
+      },
+      {
+        id: 'opt-8',
+        text: 'Option 8',
+        checked: true,
       },
     ],
   },
@@ -86,6 +151,7 @@ storiesOf('NestedFilterableMultiselect', module)
             {...multiSelectProps}
             items={items}
             itemToString={item => (item ? item.text : '')}
+            initialSelectedItems={selectedItems}
             placeholder={defaultPlaceholder}
           />
         </div>
