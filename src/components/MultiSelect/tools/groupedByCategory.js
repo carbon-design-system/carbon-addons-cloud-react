@@ -1,7 +1,9 @@
-function Comparator(a, b) {
+function AlphabeticSort(a, b) {
   return a[0].localeCompare(b[0]);
 }
-export const groupedByCategory = items => {
+
+export const groupedByCategory = (items, customCategorySorting) => {
+  debugger;
   const result = items.reduce((groupedArray, currentItem) => {
     groupedArray[currentItem.category] =
       groupedArray[currentItem.category] || [];
@@ -10,7 +12,10 @@ export const groupedByCategory = items => {
   }, Object.create(null));
 
   var finalResult = Object.entries(result);
-  finalResult.sort(Comparator);
+  const comparator = customCategorySorting
+    ? customCategorySorting
+    : AlphabeticSort;
+  finalResult.sort(comparator);
 
   return finalResult;
 };
