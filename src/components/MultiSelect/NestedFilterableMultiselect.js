@@ -11,7 +11,7 @@ import { sortingPropTypes } from './MultiSelectPropTypes';
 import { defaultItemToString } from './tools/itemToString';
 import { groupedByCategory } from './tools/groupedByCategory';
 import { defaultSortItems, defaultCompareItems } from './tools/sorting';
-import { defaultFilterItems } from '../ComboBox/tools/filter';
+import { defaultFilterItems } from './tools/filter';
 
 export default class NestedFilterableMultiselect extends React.Component {
   static propTypes = {
@@ -381,7 +381,20 @@ export default class NestedFilterableMultiselect extends React.Component {
 
                                 {groupIsOpen &&
                                   subOptions != undefined &&
-                                  subOptions.map((item, index) => {
+                                  sortItems(
+                                    filterItems(subOptions, {
+                                      itemToString,
+                                      inputValue,
+                                      parent: item,
+                                    }),
+                                    {
+                                      selectedItems,
+                                      itemToString,
+                                      compareItems,
+                                      locale,
+                                      parent: item,
+                                    }
+                                  ).map((item, index) => {
                                     const optionsProps = getItemProps({ item });
                                     const isCheckedSub = item.checked;
                                     const subOpText = itemToString(item);
