@@ -392,6 +392,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                       itemToString,
                                       compareItems,
                                       locale,
+                                      parent: item,
                                     }
                                   ).map((item, index) => {
                                     const optionsProps = getItemProps({ item });
