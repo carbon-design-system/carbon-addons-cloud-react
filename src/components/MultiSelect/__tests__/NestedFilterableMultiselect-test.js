@@ -383,7 +383,7 @@ describe('NestedFilterableMultiselect', () => {
         .at(1)
         .simulate('click');
 
-      expect(mockProps.onChange).toHaveBeenCalledTimes(2);
+      expect(mockProps.onChange).toHaveBeenCalledTimes(1);
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [mockProps.items[0]],
       });
@@ -406,7 +406,7 @@ describe('NestedFilterableMultiselect', () => {
         .at(2)
         .simulate('click');
 
-      expect(mockProps.onChange).toHaveBeenCalledTimes(3);
+      expect(mockProps.onChange).toHaveBeenCalledTimes(2);
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [mockProps.items[0]],
       });
@@ -429,7 +429,7 @@ describe('NestedFilterableMultiselect', () => {
         .find('.bx--checkbox-label')
         .at(1)
         .simulate('click');
-      expect(mockProps.onChange).toHaveBeenCalledTimes(4);
+      expect(mockProps.onChange).toHaveBeenCalledTimes(3);
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [mockProps.items[0]],
       });
@@ -451,7 +451,7 @@ describe('NestedFilterableMultiselect', () => {
         .find('.bx--checkbox-label')
         .at(1)
         .simulate('click');
-      expect(mockProps.onChange).toHaveBeenCalledTimes(6);
+      expect(mockProps.onChange).toHaveBeenCalledTimes(4);
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [],
       });
