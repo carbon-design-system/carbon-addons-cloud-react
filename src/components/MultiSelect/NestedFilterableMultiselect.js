@@ -118,12 +118,6 @@ export default class NestedFilterableMultiselect extends React.Component {
         }));
   };
 
-  handleOnToggleMenu = () => {
-    this.setState(state => ({
-      isOpen: !state.isOpen,
-    }));
-  };
-
   handleOnOuterClick = () => {
     this.setState({
       isOpen: false,
@@ -430,21 +424,17 @@ export default class NestedFilterableMultiselect extends React.Component {
                                         isActive={isCheckedSub}
                                         onClick={e => {
                                           {
-                                            if (subOptions) {
-                                              const onlySupOpChecked =
-                                                myCheckedOptions.length == 1 &&
-                                                myCheckedOptions.includes(item);
-                                              onlySupOpChecked ||
-                                              myCheckedOptions.length == 0
-                                                ? onItemChange(currentParent)
-                                                : null;
-                                            }
-
                                             this.handleOnChangeSubOption(item);
-                                            this.handleOnChange({
-                                              selectedItems,
-                                            });
-                                            this.forceUpdate();
+
+                                            const onlySupOpChecked =
+                                              myCheckedOptions.length == 1 &&
+                                              myCheckedOptions.includes(item);
+                                            onlySupOpChecked ||
+                                            myCheckedOptions.length == 0
+                                              ? onItemChange(currentParent)
+                                              : this.handleOnChange({
+                                                  selectedItems,
+                                                });
                                           }
                                         }}>
                                         <Checkbox
