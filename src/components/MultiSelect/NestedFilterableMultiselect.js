@@ -390,6 +390,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     readOnly={true}
                                     tabIndex="-1"
                                     labelText={itemText}
+                                    tooltipText={itemText}
                                     hasGroups={subOptions}
                                     isExpanded={groupIsOpen}
                                   />
@@ -442,6 +443,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                           name={subOpText}
                                           checked={isCheckedSub}
                                           labelText={subOpText}
+                                          tooltipText={subOpText}
                                           readOnly={true}
                                           tabIndex="-1"
                                         />

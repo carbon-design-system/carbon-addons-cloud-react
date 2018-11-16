@@ -15,6 +15,12 @@ describe('Checkbox', () => {
         expect(label.length).toEqual(1);
       });
 
+      it('renders label text', () => {
+        expect(wrapper.containsMatchingElement(<span>testingLabel</span>)).toBe(
+          true
+        );
+      });
+
       it('has the expected classes', () => {
         expect(label.hasClass('bx--checkbox-label')).toEqual(true);
       });
@@ -37,6 +43,31 @@ describe('Checkbox', () => {
         });
       });
     });
+  });
+
+  it('renders with tooltip', () => {
+    const wrapper = mount(
+      <Checkbox
+        id="testing"
+        labelText="testingLabel"
+        className="extra-class"
+        tooltipText="testingTooltip"
+      />
+    );
+
+    expect(wrapper.find('MouseOverTooltip').exists()).toBe(true);
+    expect(wrapper.find('MouseOverTooltip').prop('triggerText')).toEqual(
+      'testingLabel'
+    );
+    expect(wrapper.find('MouseOverTooltip').prop('className')).toEqual(
+      'bx--checkbox--tooltip'
+    );
+    expect(
+      wrapper
+        .find('MouseOverTooltip')
+        .children()
+        .text()
+    ).toEqual('testingLabel');
   });
 
   it('disabled prop on component sets disabled prop on input', () => {
