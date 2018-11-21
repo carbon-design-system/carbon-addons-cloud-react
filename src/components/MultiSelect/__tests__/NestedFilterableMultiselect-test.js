@@ -1,4 +1,5 @@
 import React from 'react';
+import debounce from 'lodash.debounce';
 import { mount } from 'enzyme';
 import NestedFilterableMultiselect from '../NestedFilterableMultiselect';
 import {
@@ -11,6 +12,10 @@ import {
 } from '../../ListBox/test-helpers';
 
 const listItemName = 'ListBoxMenuItem';
+
+jest.mock('lodash.debounce');
+
+debounce.mockImplementation(fn => fn);
 
 describe('NestedFilterableMultiselect', () => {
   let mockProps;
@@ -63,8 +68,11 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
-      wrapper.setState({ inputValue: '3' });
+      wrapper.find('Downshift').prop('onInputValueChange')('3');
+      wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
+      expect(wrapper.state().inputValue).toEqual('3');
+      expect(wrapper.state().openSections).toEqual([]);
     });
 
     it('should call `onChange` with each update to selected items', () => {
@@ -229,8 +237,11 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
-      wrapper.setState({ inputValue: 'Nested item 2' });
+      wrapper.find('Downshift').prop('onInputValueChange')('Nested item 2');
+      wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
+      expect(wrapper.state().inputValue).toEqual('Nested item 2');
+      expect(wrapper.state().openSections).toEqual([]);
 
       // Expand the child items
       wrapper
@@ -245,24 +256,22 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
-      wrapper.setState({ inputValue: 'Sub item 2' });
-      expect(wrapper.find(listItemName).length).toBe(3);
-
-      // Expand the child items
-      wrapper
-        .find('.bx--checkbox-label')
-        .at(0)
-        .find('span')
-        .simulate('click');
-      expect(wrapper.find(listItemName).length).toBe(4);
+      wrapper.find('Downshift').prop('onInputValueChange')('Sub item 2');
+      wrapper.update();
+      expect(wrapper.find(listItemName).length).toBe(6);
+      expect(wrapper.state().inputValue).toEqual('Sub item 2');
+      expect(wrapper.state().openSections).toEqual(mockProps.items);
     });
 
     it('should filter all items by the input value', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
-      wrapper.setState({ inputValue: 'xxx' });
+      wrapper.find('Downshift').prop('onInputValueChange')('xxx');
+      wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(0);
+      expect(wrapper.state().inputValue).toEqual('xxx');
+      expect(wrapper.state().openSections).toEqual([]);
 
       // No group should exist
       expect(
