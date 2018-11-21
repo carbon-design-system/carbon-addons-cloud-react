@@ -2,6 +2,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import Downshift from 'downshift';
+import debounce from 'lodash.debounce';
 import isEqual from 'lodash.isequal';
 import ListBox from '../ListBox';
 import Checkbox from '../Checkbox';
@@ -165,18 +166,42 @@ export default class NestedFilterableMultiselect extends React.Component {
     event.stopPropagation();
   };
 
-  handleOnInputValueChange = inputValue => {
-    this.setState(() => {
-      if (Array.isArray(inputValue)) {
-        return {
-          inputValue: '',
-        };
+  handleOnInputValueChange = debounce(value => {
+    const {
+      items,
+      initialSelectedItems,
+      filterItems,
+      itemToString,
+    } = this.props;
+    const { openSections } = this.state;
+
+    const inputValue = Array.isArray(value) ? '' : value;
+    const itemsToProcess = initialSelectedItems
+      ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
+      : items;
+    const matchedItems = itemsToProcess.filter(item => {
+      if (!item.options || openSections.includes(item) || !inputValue) {
+        return false;
       }
+      const filteredItems = filterItems(item.options, {
+        itemToString,
+        inputValue,
+      });
+      return filteredItems.length > 0;
+    });
+
+    const itemsToExpand =
+      matchedItems.length > 0
+        ? [...openSections, ...matchedItems]
+        : openSections;
+
+    this.setState(() => {
       return {
+        openSections: itemsToExpand,
         inputValue: inputValue || '',
       };
     });
-  };
+  }, 200);
 
   clearInputValue = event => {
     event.stopPropagation();
