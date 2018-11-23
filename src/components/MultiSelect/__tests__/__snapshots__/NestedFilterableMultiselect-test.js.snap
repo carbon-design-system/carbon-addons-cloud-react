@@ -125,6 +125,7 @@ exports[`NestedFilterableMultiselect Simple multiselect should render 1`] = `
                 aria-activedescendant={null}
                 aria-autocomplete="list"
                 aria-expanded={false}
+                aria-label="Placeholder..."
                 autoComplete="off"
                 className="bx--text-input"
                 disabled={false}
@@ -333,6 +334,7 @@ exports[`NestedFilterableMultiselect multiselect with categories should render 1
                 aria-activedescendant={null}
                 aria-autocomplete="list"
                 aria-expanded={false}
+                aria-label="Placeholder..."
                 autoComplete="off"
                 className="bx--text-input"
                 disabled={false}
@@ -559,6 +561,7 @@ exports[`NestedFilterableMultiselect multiselect with suboptions should render 1
                 aria-activedescendant={null}
                 aria-autocomplete="list"
                 aria-expanded={false}
+                aria-label="Placeholder..."
                 autoComplete="off"
                 className="bx--text-input"
                 disabled={false}
