@@ -300,6 +300,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                   )}
                   <input
                     className="bx--text-input"
+                    aria-label={placeholder}
                     ref={el => (this.inputNode = el)}
                     {...getInputProps({
                       disabled,

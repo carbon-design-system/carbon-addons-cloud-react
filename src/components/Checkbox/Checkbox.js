@@ -47,7 +47,7 @@ const Checkbox = ({
         }}
       />
 
-      <label className={labelClasses} title={title || null}>
+      <label className={labelClasses} title={title || null} for={id}>
         <span
           className={innerLabelClasses}
           style={{ width: `${hasGroups ? 'calc(100% - 28px)' : '100%'}` }}>
