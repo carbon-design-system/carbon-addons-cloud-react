@@ -2,6 +2,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import Downshift from 'downshift';
+import debounce from 'lodash.debounce';
 import isEqual from 'lodash.isequal';
 import ListBox from '../ListBox';
 import Checkbox from '../Checkbox';
@@ -123,12 +124,6 @@ export default class NestedFilterableMultiselect extends React.Component {
         }));
   };
 
-  handleOnToggleMenu = () => {
-    this.setState(state => ({
-      isOpen: !state.isOpen,
-    }));
-  };
-
   handleOnOuterClick = () => {
     this.setState({
       isOpen: false,
@@ -176,18 +171,42 @@ export default class NestedFilterableMultiselect extends React.Component {
     event.stopPropagation();
   };
 
-  handleOnInputValueChange = inputValue => {
-    this.setState(() => {
-      if (Array.isArray(inputValue)) {
-        return {
-          inputValue: '',
-        };
+  handleOnInputValueChange = debounce(value => {
+    const {
+      items,
+      initialSelectedItems,
+      filterItems,
+      itemToString,
+    } = this.props;
+    const { openSections } = this.state;
+
+    const inputValue = Array.isArray(value) ? '' : value;
+    const itemsToProcess = initialSelectedItems
+      ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
+      : items;
+    const matchedItems = itemsToProcess.filter(item => {
+      if (!item.options || openSections.includes(item) || !inputValue) {
+        return false;
       }
+      const filteredItems = filterItems(item.options, {
+        itemToString,
+        inputValue,
+      });
+      return filteredItems.length > 0;
+    });
+
+    const itemsToExpand =
+      matchedItems.length > 0
+        ? [...openSections, ...matchedItems]
+        : openSections;
+
+    this.setState(() => {
       return {
+        openSections: itemsToExpand,
         inputValue: inputValue || '',
       };
     });
-  };
+  }, 200);
 
   clearInputValue = event => {
     event.stopPropagation();
@@ -287,6 +306,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                   )}
                   <input
                     className="bx--text-input"
+                    aria-label={placeholder}
                     ref={el => (this.inputNode = el)}
                     {...getInputProps({
                       disabled,
@@ -405,6 +425,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     readOnly={true}
                                     tabIndex="-1"
                                     labelText={itemText}
+                                    tooltipText={itemText}
                                     hasGroups={subOptions}
                                     isExpanded={groupIsOpen}
                                   />
@@ -439,21 +460,17 @@ export default class NestedFilterableMultiselect extends React.Component {
                                         isActive={isCheckedSub}
                                         onClick={e => {
                                           {
-                                            if (subOptions) {
-                                              const onlySupOpChecked =
-                                                myCheckedOptions.length == 1 &&
-                                                myCheckedOptions.includes(item);
-                                              onlySupOpChecked ||
-                                              myCheckedOptions.length == 0
-                                                ? onItemChange(currentParent)
-                                                : null;
-                                            }
-
                                             this.handleOnChangeSubOption(item);
-                                            this.handleOnChange({
-                                              selectedItems,
-                                            });
-                                            this.forceUpdate();
+
+                                            const onlySupOpChecked =
+                                              myCheckedOptions.length == 1 &&
+                                              myCheckedOptions.includes(item);
+                                            onlySupOpChecked ||
+                                            myCheckedOptions.length == 0
+                                              ? onItemChange(currentParent)
+                                              : this.handleOnChange({
+                                                  selectedItems,
+                                                });
                                           }
                                         }}>
                                         <Checkbox
@@ -461,6 +478,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                           name={subOpText}
                                           checked={isCheckedSub}
                                           labelText={subOpText}
+                                          tooltipText={subOpText}
                                           readOnly={true}
                                           tabIndex="-1"
                                         />

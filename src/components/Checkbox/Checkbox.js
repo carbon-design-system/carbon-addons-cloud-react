@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import CheckBoxIcon from './CheckBoxIcon';
+import MouseOverTooltip from '../Tooltip';
 
 const Checkbox = ({
   className,
@@ -14,6 +15,7 @@ const Checkbox = ({
   title = '',
   hasGroups,
   isExpanded,
+  tooltipText,
   ...other
 }) => {
   let input;
@@ -45,9 +47,20 @@ const Checkbox = ({
         }}
       />
 
-      <label className={labelClasses} title={title || null}>
-        <span className={innerLabelClasses} style={{ width: '100%' }}>
-          {labelText}
+      <label className={labelClasses} title={title || null} for={id}>
+        <span
+          className={innerLabelClasses}
+          style={{ width: `${hasGroups ? 'calc(100% - 28px)' : '100%'}` }}>
+          {tooltipText ? (
+            <MouseOverTooltip
+              className="bx--checkbox--tooltip"
+              showIcon={false}
+              triggerText={labelText}>
+              {tooltipText}
+            </MouseOverTooltip>
+          ) : (
+            labelText
+          )}
           {hasGroups && <CheckBoxIcon isExpanded={isExpanded} />}
         </span>
       </label>
