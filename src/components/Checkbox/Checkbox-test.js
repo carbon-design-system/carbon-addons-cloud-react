@@ -13,7 +13,7 @@ describe('Checkbox', () => {
     describe('label', () => {
       it('renders a label', () => {
         expect(label.length).toEqual(1);
-        expect(label.prop('for')).toEqual('testing');
+        expect(label.prop('htmlFor')).toEqual('testing');
       });
 
       it('renders label text', () => {
