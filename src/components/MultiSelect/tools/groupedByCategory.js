@@ -9,7 +9,11 @@ export const groupedByCategory = items => {
     return groupedArray;
   }, Object.create(null));
 
-  var finalResult = Object.entries(result);
+  const finalResult = Object.keys(result).reduce((array, key) => {
+    const elementArr = [key, result[key]];
+    array.push(elementArr);
+    return array;
+  }, []);
   finalResult.sort(Comparator);
 
   return finalResult;
