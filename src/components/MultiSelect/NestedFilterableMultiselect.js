@@ -164,6 +164,12 @@ export default class NestedFilterableMultiselect extends React.Component {
 
   handleOnInputKeyDown = event => {
     event.stopPropagation();
+
+    if (event.which === 13) {
+      this.setState({
+        isOpen: !this.state.isOpen,
+      });
+    }
   };
 
   handleOnInputValueChange = debounce(value => {
@@ -173,9 +179,9 @@ export default class NestedFilterableMultiselect extends React.Component {
       filterItems,
       itemToString,
     } = this.props;
-    const { openSections } = this.state;
+    const { openSections, inputValue: prevInputValue } = this.state;
 
-    const inputValue = Array.isArray(value) ? '' : value;
+    const inputValue = Array.isArray(value) ? prevInputValue : value;
     const itemsToProcess = initialSelectedItems
       ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
       : items;
@@ -267,11 +273,10 @@ export default class NestedFilterableMultiselect extends React.Component {
               selectedItem,
             }) => (
               <ListBox
-                style={{ outline: 'none' }}
                 className={className}
                 disabled={disabled}
                 {...getRootProps({ refKey: 'innerRef' })}>
-                <ListBox.Field {...getButtonProps({ disabled })}>
+                <ListBox.Field tabIndex="-1" {...getButtonProps({ disabled })}>
                   {selectedItem.length > 0 && (
                     <ListBox.Selection
                       clearSelection={e => {
@@ -374,11 +379,25 @@ export default class NestedFilterableMultiselect extends React.Component {
                               <Fragment key={itemProps.id}>
                                 <ListBox.MenuItem
                                   isActive={isChecked}
+                                  onKeyUp={e => {
+                                    {
+                                      const which = e.which;
+                                      const clickOutOfCheckBox =
+                                        subOptions &&
+                                        (e.target.localName !== 'label' &&
+                                          e.target.localName !== 'input');
+                                      if (which === 13 && clickOutOfCheckBox) {
+                                        e.stopPropagation();
+                                        this.onToggle(item);
+                                      }
+                                    }
+                                  }}
                                   onClick={e => {
                                     {
                                       const clickOutOfCheckBox =
                                         subOptions &&
-                                        e.target.localName != 'label';
+                                        (e.target.localName !== 'label' &&
+                                          e.target.localName !== 'input');
                                       if (clickOutOfCheckBox) {
                                         this.onToggle(item);
                                       } else {
@@ -414,7 +433,6 @@ export default class NestedFilterableMultiselect extends React.Component {
                                       myUncheckedOptions.length > 0
                                     }
                                     readOnly={true}
-                                    tabIndex="-1"
                                     labelText={itemText}
                                     tooltipText={itemText}
                                     hasGroups={subOptions}
@@ -471,7 +489,6 @@ export default class NestedFilterableMultiselect extends React.Component {
                                           labelText={subOpText}
                                           tooltipText={subOpText}
                                           readOnly={true}
-                                          tabIndex="-1"
                                         />
                                       </ListBox.MenuItem>
                                     );
