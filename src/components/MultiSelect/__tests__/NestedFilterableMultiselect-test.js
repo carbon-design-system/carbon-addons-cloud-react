@@ -54,6 +54,14 @@ describe('NestedFilterableMultiselect', () => {
       assertMenuClosed(wrapper);
     });
 
+    it('should let the user toggle the menu by hitting Enter in search field', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      wrapper.find('.bx--text-input').simulate('keyDown', { which: 13 });
+      assertMenuOpen(wrapper, mockProps);
+      wrapper.find('.bx--text-input').simulate('keyDown', { which: 13 });
+      assertMenuClosed(wrapper);
+    });
+
     it('should not close the menu after a user makes a selection', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
@@ -217,19 +225,33 @@ describe('NestedFilterableMultiselect', () => {
           <label className="bx--group-label">CATEGORY-2</label>,
         ])
       ).toBe(true);
-      // Expand the child items
+      // Expand the child items via mouse click
       wrapper
         .find('.bx--checkbox-label')
         .at(0)
         .find('span')
         .simulate('click');
       expect(wrapper.find(listItemName).length).toBe(5);
-      // Collapse the child items
+      // Collapse the child items via mouse click
       wrapper
         .find('.bx--checkbox-label')
         .at(0)
         .find('span')
         .simulate('click');
+      expect(wrapper.find(listItemName).length).toBe(3);
+      // Expand the child items via keyboard
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .find('span')
+        .simulate('keyUp', { which: 13 });
+      expect(wrapper.find(listItemName).length).toBe(5);
+      // Collapse the child items via keyboard
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .find('span')
+        .simulate('keyUp', { which: 13 });
       expect(wrapper.find(listItemName).length).toBe(3);
     });
 

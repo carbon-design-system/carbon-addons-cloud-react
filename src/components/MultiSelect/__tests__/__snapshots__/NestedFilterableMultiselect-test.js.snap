@@ -75,11 +75,6 @@ exports[`NestedFilterableMultiselect Simple multiselect should render 1`] = `
         className="bx--multi-select bx--combo-box"
         disabled={false}
         innerRef={[Function]}
-        style={
-          Object {
-            "outline": "none",
-          }
-        }
         type="default"
       >
         <div
@@ -88,12 +83,6 @@ exports[`NestedFilterableMultiselect Simple multiselect should render 1`] = `
           onClick={[Function]}
           onKeyDown={[Function]}
           role="listbox"
-          style={
-            Object {
-              "outline": "none",
-            }
-          }
-          tabIndex="0"
         >
           <ListBoxField
             aria-expanded={false}
@@ -105,6 +94,7 @@ exports[`NestedFilterableMultiselect Simple multiselect should render 1`] = `
             onClick={[Function]}
             onKeyDown={[Function]}
             role="button"
+            tabIndex="-1"
             type="button"
           >
             <div
@@ -118,7 +108,7 @@ exports[`NestedFilterableMultiselect Simple multiselect should render 1`] = `
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              tabIndex="0"
+              tabIndex="-1"
               type="button"
             >
               <input
@@ -284,11 +274,6 @@ exports[`NestedFilterableMultiselect multiselect with categories should render 1
         className="bx--multi-select bx--combo-box"
         disabled={false}
         innerRef={[Function]}
-        style={
-          Object {
-            "outline": "none",
-          }
-        }
         type="default"
       >
         <div
@@ -297,12 +282,6 @@ exports[`NestedFilterableMultiselect multiselect with categories should render 1
           onClick={[Function]}
           onKeyDown={[Function]}
           role="listbox"
-          style={
-            Object {
-              "outline": "none",
-            }
-          }
-          tabIndex="0"
         >
           <ListBoxField
             aria-expanded={false}
@@ -314,6 +293,7 @@ exports[`NestedFilterableMultiselect multiselect with categories should render 1
             onClick={[Function]}
             onKeyDown={[Function]}
             role="button"
+            tabIndex="-1"
             type="button"
           >
             <div
@@ -327,7 +307,7 @@ exports[`NestedFilterableMultiselect multiselect with categories should render 1
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              tabIndex="0"
+              tabIndex="-1"
               type="button"
             >
               <input
@@ -338,7 +318,7 @@ exports[`NestedFilterableMultiselect multiselect with categories should render 1
                 autoComplete="off"
                 className="bx--text-input"
                 disabled={false}
-                id="downshift-6-input"
+                id="downshift-7-input"
                 onBlur={[Function]}
                 onChange={[Function]}
                 onKeyDown={[Function]}
@@ -511,11 +491,6 @@ exports[`NestedFilterableMultiselect multiselect with suboptions should render 1
         className="bx--multi-select bx--combo-box"
         disabled={false}
         innerRef={[Function]}
-        style={
-          Object {
-            "outline": "none",
-          }
-        }
         type="default"
       >
         <div
@@ -524,12 +499,6 @@ exports[`NestedFilterableMultiselect multiselect with suboptions should render 1
           onClick={[Function]}
           onKeyDown={[Function]}
           role="listbox"
-          style={
-            Object {
-              "outline": "none",
-            }
-          }
-          tabIndex="0"
         >
           <ListBoxField
             aria-expanded={false}
@@ -541,6 +510,7 @@ exports[`NestedFilterableMultiselect multiselect with suboptions should render 1
             onClick={[Function]}
             onKeyDown={[Function]}
             role="button"
+            tabIndex="-1"
             type="button"
           >
             <div
@@ -554,7 +524,7 @@ exports[`NestedFilterableMultiselect multiselect with suboptions should render 1
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              tabIndex="0"
+              tabIndex="-1"
               type="button"
             >
               <input
@@ -565,7 +535,7 @@ exports[`NestedFilterableMultiselect multiselect with suboptions should render 1
                 autoComplete="off"
                 className="bx--text-input"
                 disabled={false}
-                id="downshift-8-input"
+                id="downshift-9-input"
                 onBlur={[Function]}
                 onChange={[Function]}
                 onKeyDown={[Function]}
