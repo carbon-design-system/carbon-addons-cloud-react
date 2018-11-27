@@ -179,9 +179,9 @@ export default class NestedFilterableMultiselect extends React.Component {
       filterItems,
       itemToString,
     } = this.props;
-    const { openSections } = this.state;
+    const { openSections, inputValue: prevInputValue } = this.state;
 
-    const inputValue = Array.isArray(value) ? '' : value;
+    const inputValue = Array.isArray(value) ? prevInputValue : value;
     const itemsToProcess = initialSelectedItems
       ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
       : items;

@@ -259,7 +259,14 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
+      // Type 'Nested item 2'
       wrapper.find('Downshift').prop('onInputValueChange')('Nested item 2');
+      wrapper.update();
+      expect(wrapper.find(listItemName).length).toBe(1);
+      expect(wrapper.state().inputValue).toEqual('Nested item 2');
+      expect(wrapper.state().openSections).toEqual([]);
+      // An array input persists the current value
+      wrapper.find('Downshift').prop('onInputValueChange')([]);
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
       expect(wrapper.state().inputValue).toEqual('Nested item 2');
