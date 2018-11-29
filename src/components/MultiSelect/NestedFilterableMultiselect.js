@@ -321,7 +321,11 @@ export default class NestedFilterableMultiselect extends React.Component {
                 </ListBox.Field>
                 {isOpen && (
                   <ListBox.Menu
-                    style={{ maxHeight: '424px', overflowX: 'hidden' }}>
+                    style={{
+                      maxHeight: '424px',
+                      overflowX: 'hidden',
+                      paddingTop: '8px',
+                    }}>
                     {groupedByCategory(itemsToProcess).map((group, index) => {
                       const hasGroups = group[0] !== 'undefined' ? true : false;
                       const filteredItems = filterItems(group[1], {

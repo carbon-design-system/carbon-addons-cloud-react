@@ -6,9 +6,9 @@ const categoryLabel = {
   color: '#5A6872',
   fontSize: '12px',
   fontFamily: 'ibm plex Sans',
-  fontWeight: '700',
+  fontWeight: '600',
   letterSpacing: '0.2px',
-  margin: '8px',
+  margin: '8px 16px',
 };
 
 const GroupLabel = ({ className, children, id, ...other }) => {
