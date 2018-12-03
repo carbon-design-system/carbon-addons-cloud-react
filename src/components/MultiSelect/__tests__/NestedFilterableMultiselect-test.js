@@ -130,7 +130,11 @@ describe('NestedFilterableMultiselect', () => {
   });
 
   describe('multiselect with categories', () => {
+    const customCategorySorting = jest.fn((a, b) => a[0].localeCompare(b[0]));
+
     beforeEach(() => {
+      jest.clearAllMocks();
+
       mockProps = {
         disabled: false,
         items: generateItems(5, index => ({
@@ -140,6 +144,7 @@ describe('NestedFilterableMultiselect', () => {
           category: `category-${index % 2 === 0 ? 1 : 2}`,
         })),
         initialSelectedItems: [],
+        customCategorySorting,
         onChange: jest.fn(),
         placeholder: 'Placeholder...',
       };
@@ -156,6 +161,7 @@ describe('NestedFilterableMultiselect', () => {
         ])
       ).toBe(true);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
+      expect(customCategorySorting).toHaveBeenCalled();
     });
 
     it('should clear all selections', () => {
