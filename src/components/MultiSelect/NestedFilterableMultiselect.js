@@ -64,6 +64,11 @@ export default class NestedFilterableMultiselect extends React.Component {
      * `true` to use the light version.
      */
     light: PropTypes.bool,
+
+    /**
+     * `customCategorySorting` is use to sort the items by category, aphabetic order if not specify
+     */
+    customCategorySorting: PropTypes.func,
   };
 
   static defaultProps = {
@@ -236,6 +241,7 @@ export default class NestedFilterableMultiselect extends React.Component {
       sortItems,
       compareItems,
       light,
+      customCategorySorting,
     } = this.props;
 
     const itemsToProcess = initialSelectedItems
@@ -326,7 +332,10 @@ export default class NestedFilterableMultiselect extends React.Component {
                       overflowX: 'hidden',
                       paddingTop: '8px',
                     }}>
-                    {groupedByCategory(itemsToProcess).map((group, index) => {
+                    {groupedByCategory(
+                      itemsToProcess,
+                      customCategorySorting
+                    ).map((group, index) => {
                       const hasGroups = group[0] !== 'undefined' ? true : false;
                       const filteredItems = filterItems(group[1], {
                         itemToString,

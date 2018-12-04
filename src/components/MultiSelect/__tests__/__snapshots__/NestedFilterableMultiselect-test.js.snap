@@ -197,6 +197,7 @@ exports[`NestedFilterableMultiselect Simple multiselect should render 1`] = `
 exports[`NestedFilterableMultiselect multiselect with categories should render 1`] = `
 <NestedFilterableMultiselect
   compareItems={[Function]}
+  customCategorySorting={[MockFunction]}
   disabled={false}
   filterItems={[Function]}
   initialSelectedItems={Array []}
