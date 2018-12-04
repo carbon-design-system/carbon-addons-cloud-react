@@ -467,7 +467,6 @@ describe('NestedFilterableMultiselect', () => {
           .prop('indeterminate')
       ).toBe(false);
       expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(2);
-
       // Un-select the child items
       wrapper
         .find('.bx--checkbox-label')
@@ -553,6 +552,126 @@ describe('NestedFilterableMultiselect', () => {
       });
       expect(wrapper.state().checkedSuboptions).toEqual([]);
       expect(wrapper.find('ListBoxSelection').exists()).toBe(false);
+    });
+
+    it('should set parent item as indeterminate if not all suboptions are checked', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .simulate('click');
+      expect(mockProps.onChange).toHaveBeenCalledTimes(1);
+      expect(wrapper.state().checkedSuboptions).toEqual([
+        ...mockProps.items[0].options.map(option => ({
+          ...option,
+          checked: true,
+        })),
+      ]);
+      //expand suboptions
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .find('span')
+        .simulate('click');
+      //unselect subOption
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .simulate('click');
+      expect(
+        wrapper
+          .find('Checkbox')
+          .at(0)
+          .prop('indeterminate')
+      ).toBe(true);
+    });
+
+    it('should unselect parent if all suboptions are unselect', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .simulate('click');
+      expect(mockProps.onChange).toHaveBeenCalledTimes(1);
+      expect(wrapper.state().checkedSuboptions).toEqual([
+        ...mockProps.items[0].options.map(option => ({
+          ...option,
+          checked: true,
+        })),
+      ]);
+      //expand suboptions
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .find('span')
+        .simulate('click');
+      //unselect 1 subOption
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .simulate('click');
+      expect(
+        wrapper
+          .find('Checkbox')
+          .at(0)
+          .prop('indeterminate')
+      ).toBe(true);
+      //unselect 2 subOption
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .simulate('click');
+      expect(
+        wrapper
+          .find('Checkbox')
+          .at(0)
+          .prop('checked')
+      ).toBe(false);
+    });
+
+    it('should expand when element is clicked out of CheckBox ', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .simulate('click');
+      expect(mockProps.onChange).toHaveBeenCalledTimes(1);
+      expect(wrapper.state().checkedSuboptions).toEqual([
+        ...mockProps.items[0].options.map(option => ({
+          ...option,
+          checked: true,
+        })),
+      ]);
+      //expand suboptions
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .find('span')
+        .simulate('click');
+      expect(wrapper.find('.bx--checkbox-label').length).toEqual(5);
+    });
+    it('should not expand subOptions when parent is selected ', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .simulate('click');
+      expect(mockProps.onChange).toHaveBeenCalledTimes(1);
+      expect(wrapper.state().checkedSuboptions).toEqual([
+        ...mockProps.items[0].options.map(option => ({
+          ...option,
+          checked: true,
+        })),
+      ]);
+      expect(wrapper.find('.bx--checkbox-label').length).toEqual(3);
     });
   });
 });
