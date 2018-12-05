@@ -55,6 +55,7 @@ const Checkbox = ({
             <MouseOverTooltip
               className="bx--checkbox--tooltip"
               showIcon={false}
+              tabIndex={hasGroups ? '0' : '-1'}
               triggerText={labelText}>
               {tooltipText}
             </MouseOverTooltip>
