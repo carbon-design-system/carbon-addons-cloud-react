@@ -35,6 +35,33 @@ describe('Tooltip', () => {
         expect(icon.length).toBe(1);
         expect(icon.props().icon).toBe(iconInfoGlyph);
       });
+
+      it('verify tabIndex', () => {
+        const thisWrapper = mount(
+          <MouseOverTooltip showIcon={false} triggerText="Tooltip">
+            <p className="bx--tooltip__label">Tooltip label</p>
+            <p>Lorem ipsum dolor sit amet</p>
+          </MouseOverTooltip>
+        );
+
+        expect(thisWrapper.instance().triggerEl.tabIndex).toBe(0);
+      });
+
+      it('override tabIndex', () => {
+        const thisWrapper = mount(
+          <MouseOverTooltip showIcon={false} triggerText="Tooltip" tabIndex="0">
+            <p className="bx--tooltip__label">Tooltip label</p>
+            <p>Lorem ipsum dolor sit amet</p>
+          </MouseOverTooltip>
+        );
+
+        expect(thisWrapper.instance().triggerEl.tabIndex).toBe(0);
+
+        thisWrapper.setProps({ tabIndex: '-1' });
+        thisWrapper.update();
+
+        expect(thisWrapper.instance().triggerEl.tabIndex).toBe(-1);
+      });
     });
   });
 

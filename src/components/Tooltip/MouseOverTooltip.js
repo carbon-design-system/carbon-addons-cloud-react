@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { Tooltip } from 'carbon-components-react';
 
 export default class MouseOverTooltip extends Tooltip {
+  static propTypes = {
+    ...Tooltip.propTypes,
+
+    /**
+     * The tab index of the trigger element.
+     */
+    tabIndex: PropTypes.string,
+  };
+
   /**
    * Handles `mouseover`/`mouseout`/`focus`/`blur` event.
    * @param {string} state `over` to show the tooltip, `out` to hide the tooltip.
@@ -59,4 +69,24 @@ export default class MouseOverTooltip extends Tooltip {
       }
     }
   };
+
+  updateTabIndex() {
+    const { tabIndex, showIcon } = this.props;
+
+    // To override the tab index of the tooltip
+    if (tabIndex && !showIcon && this.triggerEl) {
+      const tabIndexNum = Number(tabIndex);
+      if (this.triggerEl.tabIndex !== tabIndexNum) {
+        this.triggerEl.tabIndex = tabIndexNum;
+      }
+    }
+  }
+
+  componentDidMount() {
+    this.updateTabIndex();
+  }
+
+  componentDidUpdate() {
+    this.updateTabIndex();
+  }
 }

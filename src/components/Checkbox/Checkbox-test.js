@@ -57,6 +57,7 @@ describe('Checkbox', () => {
     );
 
     expect(wrapper.find('MouseOverTooltip').exists()).toBe(true);
+    expect(wrapper.find('MouseOverTooltip').prop('tabIndex')).toEqual('-1');
     expect(wrapper.find('MouseOverTooltip').prop('triggerText')).toEqual(
       'testingLabel'
     );
@@ -69,6 +70,13 @@ describe('Checkbox', () => {
         .children()
         .text()
     ).toEqual('testingLabel');
+    expect(wrapper.find('CheckBoxIcon').exists()).toBe(false);
+
+    wrapper.setProps({ hasGroups: true });
+    wrapper.update();
+
+    expect(wrapper.find('MouseOverTooltip').prop('tabIndex')).toEqual('0');
+    expect(wrapper.find('CheckBoxIcon').exists()).toBe(true);
   });
 
   it('disabled prop on component sets disabled prop on input', () => {
