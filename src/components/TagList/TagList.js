@@ -82,6 +82,10 @@ export default class TagList extends Component {
       counterTagClassName
     );
 
+    const overflowLabel = `${overflowCount} more ${
+      overflowCount === 1 ? 'tag' : 'tags'
+    }`;
+
     return (
       <div
         className={tagListClassNames}
@@ -108,12 +112,12 @@ export default class TagList extends Component {
             type="functional"
             className={counterTagClassNames}
             description="overflow"
-            title={`overflow ${overflowCount}`}>
+            title={overflowLabel}>
             <Icon
               name="add"
               className="bx--tag-list--tag-counter--icon"
               title="add icon"
-              description="add icon used to indicate additional tags"
+              description={overflowLabel}
             />
             {overflowCount}
           </Tag>
@@ -122,7 +126,7 @@ export default class TagList extends Component {
           <Tag
             type="functional"
             className={counterTagClassNames}
-            title={`overflow ${overflowCount}`}>
+            title={`${overflowCount} ${overflowCount === 1 ? 'tag' : 'tags'}`}>
             {tags.length}
           </Tag>
         )}
@@ -134,7 +138,7 @@ export default class TagList extends Component {
               name="edit--glyph"
               className="bx--tag-list--edit--icon"
               title="edit icon"
-              description="edit icon that can trigger an editable state for the tags in list"
+              description="click to edit tags"
             />
           </button>
         )}
@@ -146,7 +150,7 @@ export default class TagList extends Component {
               name="edit--glyph"
               className="bx--tag-list--edit--icon"
               title="edit icon"
-              description="edit icon that can trigger an editable state for the tags in list"
+              description="click to edit tags"
             />
           </button>
         )}
