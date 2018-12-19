@@ -24,13 +24,13 @@ console.log('Deleting old build folders...');
 Promise.all([rimrafAsync(`${rootDir}/cjs`), rimrafAsync(`${rootDir}/es`)])
   .then(() => {
     exec(
-      `${babelPath} src -q -d es -s --ignore "__tests__,__mocks__,*-story.js,*-test.js" src`,
+      `${babelPath} src -q -d es --ignore "__tests__,__mocks__,*-story.js,*-test.js" src`,
       {
         BABEL_ENV: 'es',
       }
     );
     exec(
-      `${babelPath} src -q -d lib -s --ignore "__tests__,__mocks__,*-story.js,*-test.js" src`,
+      `${babelPath} src -q -d lib --ignore "__tests__,__mocks__,*-story.js,*-test.js" src`,
       {
         BABEL_ENV: 'cjs',
       }
