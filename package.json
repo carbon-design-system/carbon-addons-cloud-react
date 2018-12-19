@@ -1,13 +1,15 @@
 {
   "name": "carbon-addons-cloud-react",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "sideEffects": false,
   "license": "Apache-2",
   "files": [
+    "es",
     "lib"
   ],
   "scripts": {
-    "build": "babel -q -d lib --ignore \"__tests__,__mocks__,*-story.js,*-test.js\" src",
+    "build": "node scripts/build.js",
     "build:storybook": "build-storybook",
     "ci-check": "yarn format:diff && yarn test --runInBand",
     "commitmsg": "commitlint -e $GIT_PARAMS",
@@ -41,6 +43,10 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-jest": "^23.0.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
@@ -70,6 +76,7 @@
     "semantic-release": "^15.0.1",
     "storybook-addon-a11y": "^3.1.9",
     "style-loader": "^0.20.2",
+    "util-promisify": "^2.1.0",
     "whatwg-fetch": "^2.0.3"
   },
   "commitlint": {
@@ -85,10 +92,33 @@
   },
   "babel": {
     "presets": [
-      "env",
+      "./scripts/env",
       "stage-1",
       "react",
-      "flow"
+      "flow",
+      [
+        "env",
+        {
+          "modules": false,
+          "chrome": "latest",
+          "edge": "latest",
+          "firefox": "latest",
+          "safari": "latest",
+          "ie": "11",
+          "ios": "latest"
+        }
+      ]
+    ],
+    "plugins": [
+      "transform-object-assign",
+      "transform-class-properties",
+      "transform-react-constant-elements",
+      [
+        "transform-object-rest-spread",
+        {
+          "useBuiltIns": true
+        }
+      ]
     ]
   },
   "prettier": {
