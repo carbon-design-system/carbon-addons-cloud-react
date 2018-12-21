@@ -318,6 +318,13 @@ export default class NestedFilterableMultiselect extends React.Component {
                       id,
                       placeholder,
                       onKeyDown: this.handleOnInputKeyDown,
+                      onKeyUp: e => {
+                        const which = e.which;
+                        if (which === 27) {
+                          e.stopPropagation();
+                          this.setState({ isOpen: false });
+                        }
+                      },
                     })}
                   />
                   {inputValue && isOpen && (
@@ -331,6 +338,13 @@ export default class NestedFilterableMultiselect extends React.Component {
                       maxHeight: '424px',
                       overflowX: 'hidden',
                       paddingTop: '8px',
+                    }}
+                    onKeyUp={e => {
+                      const which = e.which;
+                      if (which === 27) {
+                        e.stopPropagation();
+                        this.setState({ isOpen: false });
+                      }
                     }}>
                     {groupedByCategory(
                       itemsToProcess,

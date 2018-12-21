@@ -62,6 +62,32 @@ describe('NestedFilterableMultiselect', () => {
       assertMenuClosed(wrapper);
     });
 
+    it('should close the menu by hitting Esc in search field', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      wrapper.find('.bx--text-input').simulate('keyDown', { which: 13 });
+      assertMenuOpen(wrapper, mockProps);
+      wrapper.find('.bx--text-input').simulate('keyUp', { which: 13 });
+      assertMenuOpen(wrapper, mockProps);
+      wrapper.find('.bx--text-input').simulate('keyUp', { which: 27 });
+      assertMenuClosed(wrapper);
+    });
+
+    it('should close the menu by hitting Esc in the dropdown', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      wrapper.find('.bx--text-input').simulate('keyDown', { which: 13 });
+      assertMenuOpen(wrapper, mockProps);
+      wrapper
+        .find('.bx--tooltip__trigger')
+        .at(0)
+        .simulate('keyUp', { which: 13 });
+      assertMenuOpen(wrapper, mockProps);
+      wrapper
+        .find('.bx--tooltip__trigger')
+        .at(0)
+        .simulate('keyUp', { which: 27 });
+      assertMenuClosed(wrapper);
+    });
+
     it('should not close the menu after a user makes a selection', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
