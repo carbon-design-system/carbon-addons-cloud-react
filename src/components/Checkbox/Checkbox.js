@@ -50,7 +50,7 @@ const Checkbox = ({
       <label className={labelClasses} title={title || null} htmlFor={id}>
         <span
           className={innerLabelClasses}
-          style={{ width: `${hasGroups ? 'calc(100% - 28px)' : '100%'}` }}>
+          style={{ maxWidth: `${hasGroups ? 'calc(100% - 28px)' : '100%'}` }}>
           {tooltipText ? (
             <MouseOverTooltip
               className="bx--checkbox--tooltip"
