@@ -8,9 +8,10 @@ describe('Checkbox', () => {
     const wrapper = mount(
       <Checkbox id="testing" labelText="testingLabel" className="extra-class" />
     );
-    const label = wrapper.find('label');
 
     describe('label', () => {
+      const label = wrapper.find('label');
+
       it('renders a label', () => {
         expect(label.length).toEqual(1);
         expect(label.prop('htmlFor')).toEqual('testing');
@@ -44,6 +45,37 @@ describe('Checkbox', () => {
         });
       });
     });
+
+    it('has expected styles', () => {
+      const div = wrapper.find('label > div');
+      const span = wrapper.find('label span');
+
+      expect(div.prop('style')).toEqual({ width: '100%', display: 'flex' });
+      expect(span.prop('style')).toEqual({ maxWidth: '100%' });
+    });
+  });
+
+  it('renders for a group', () => {
+    const wrapper = mount(
+      <Checkbox
+        id="testing"
+        labelText="testingLabel"
+        className="extra-class"
+        hasGroups={true}
+      />
+    );
+
+    const div = wrapper.find('label > div');
+    const span = wrapper.find('label span');
+    const icon = wrapper.find('CheckBoxIcon');
+
+    expect(div.prop('style')).toEqual({
+      width: 'calc(100% - 28px)',
+      display: 'flex',
+    });
+    expect(span.prop('style')).toEqual({ maxWidth: '100%' });
+    expect(icon.length).toEqual(1);
+    expect(icon.prop('isExpanded')).toBeUndefined();
   });
 
   it('renders with tooltip', () => {
@@ -108,8 +140,8 @@ describe('Checkbox', () => {
 
     const label = wrapper.find('label');
     expect(label.length).toEqual(1);
-    const span = wrapper.find('span');
-    expect(span.hasClass('bx--visually-hidden')).toEqual(true);
+    const div = label.find('div');
+    expect(div.hasClass('bx--visually-hidden')).toEqual(true);
   });
 
   describe('events', () => {
