@@ -48,22 +48,27 @@ const Checkbox = ({
       />
 
       <label className={labelClasses} title={title || null} htmlFor={id}>
-        <span
+        <div
           className={innerLabelClasses}
-          style={{ maxWidth: `${hasGroups ? 'calc(100% - 28px)' : '100%'}` }}>
-          {tooltipText ? (
-            <MouseOverTooltip
-              className="bx--checkbox--tooltip"
-              showIcon={false}
-              tabIndex={hasGroups ? 0 : -1}
-              triggerText={labelText}>
-              {tooltipText}
-            </MouseOverTooltip>
-          ) : (
-            labelText
-          )}
-          {hasGroups && <CheckBoxIcon isExpanded={isExpanded} />}
-        </span>
+          style={{
+            width: `${hasGroups ? 'calc(100% - 28px)' : '100%'}`,
+            display: 'flex',
+          }}>
+          <span style={{ maxWidth: '100%' }}>
+            {tooltipText ? (
+              <MouseOverTooltip
+                className="bx--checkbox--tooltip"
+                showIcon={false}
+                tabIndex={hasGroups ? 0 : -1}
+                triggerText={labelText}>
+                {tooltipText}
+              </MouseOverTooltip>
+            ) : (
+              labelText
+            )}
+            {hasGroups && <CheckBoxIcon isExpanded={isExpanded} />}
+          </span>
+        </div>
       </label>
     </div>
   );
