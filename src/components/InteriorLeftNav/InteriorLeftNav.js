@@ -122,7 +122,6 @@ export default class InteriorLeftNav extends Component {
 
     return (
       <nav
-        role="presentation"
         tabIndex={-1}
         aria-label="Interior Left Navigation"
         className={classNames}
