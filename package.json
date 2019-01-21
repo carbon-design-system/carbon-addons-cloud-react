@@ -26,7 +26,7 @@
     "prop-types": "^15.6.0"
   },
   "peerDependencies": {
-    "carbon-addons-cloud": "^1.6.3 || ^2.x",
+    "carbon-addons-cloud": "^1.6.3 || ^2.x || ^3.x",
     "carbon-components-react": "^5.51.9 || ^6.x",
     "react": "^15.3.2 || ^16.1.0"
   },
@@ -52,7 +52,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
     "babel-runtime": "^6.26.0",
-    "carbon-addons-cloud": "^2.1.0",
+    "carbon-addons-cloud": "^3.1.1",
     "carbon-components": "^9.5.2",
     "carbon-components-react": "^6.19.0",
     "carbon-icons": "^7.0.7",
