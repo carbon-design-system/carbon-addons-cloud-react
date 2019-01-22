@@ -8,6 +8,7 @@ const newChild = (children, onFocus, onClick, href) => {
     className: 'left-nav-list__item-link',
     onFocus: onFocus,
     onClick: evt => onClick(evt, href),
+    onKeyPress: evt => onClick(evt, href),
   });
 };
 
