@@ -2,11 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
-const newChild = (children, tabIndex) => {
+const newChild = (children, onFocus, onBlur) => {
   const child = React.Children.only(children);
   return React.cloneElement(React.Children.only(child), {
-    tabIndex,
     className: 'left-nav-list__item-link',
+    onFocus: onFocus,
+    onBlur: onBlur,
   });
 };
 
@@ -18,6 +19,8 @@ const InteriorLeftNavItem = ({
   tabIndex,
   children,
   label,
+  onFocus,
+  onBlur,
   ...other
 }) => {
   const classNames = classnames('left-nav-list__item', className, {
@@ -25,20 +28,11 @@ const InteriorLeftNavItem = ({
   });
 
   return (
-    <li
-      tabIndex={children ? -1 : tabIndex}
-      role="menuitem"
-      className={classNames}
-      onClick={evt => onClick(evt, href)}
-      onKeyPress={evt => onClick(evt, href)}
-      {...other}>
+    <li className={classNames} {...other}>
       {children ? (
-        newChild(children, tabIndex)
+        newChild(children, onFocus, onBlur)
       ) : (
-        <a
-          className="left-nav-list__item-link"
-          href={href}
-          tabIndex={children ? tabIndex : -1}>
+        <a className="left-nav-list__item-link" href={href}>
           {label}
         </a>
       )}

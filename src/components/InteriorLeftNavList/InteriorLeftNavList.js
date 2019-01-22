@@ -56,6 +56,8 @@ export default class InteriorLeftNavList extends Component {
         onClick={onItemClick}
         activeHref={activeHref}
         tabIndex={this.state.open ? 0 : -1}
+        onFocus={() => this.setState({ open: true })}
+        onBlur={() => this.setState({ open: false })}
       />
     );
   };
@@ -91,8 +93,7 @@ export default class InteriorLeftNavList extends Component {
         className={classNames}
         tabIndex={tabIndex}
         onClick={this.toggle}
-        onKeyPress={this.toggle}
-        role="menuitem">
+        onKeyPress={this.toggle}>
         <div className="left-nav-list__item-link" id={id}>
           {title}
           <div className="left-nav-list__item-icon">
@@ -103,11 +104,7 @@ export default class InteriorLeftNavList extends Component {
             />
           </div>
         </div>
-        <ul
-          role="menu"
-          className="left-nav-list left-nav-list--nested"
-          aria-label={title}
-          aria-hidden>
+        <ul className="left-nav-list left-nav-list--nested" aria-label={title}>
           {newChildren}
         </ul>
       </li>
