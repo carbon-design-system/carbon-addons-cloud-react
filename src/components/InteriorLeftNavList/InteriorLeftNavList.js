@@ -57,7 +57,6 @@ export default class InteriorLeftNavList extends Component {
         activeHref={activeHref}
         tabIndex={this.state.open ? 0 : -1}
         onFocus={() => this.setState({ open: true })}
-        onBlur={() => this.setState({ open: false })}
       />
     );
   };
