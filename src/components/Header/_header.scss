@@ -1,0 +1,10 @@
+.contextHeader {
+  background-color: $ui-01;
+  padding: 2rem 5% 1rem;
+  z-index: 1000;
+
+  .pageTitle {
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+}
