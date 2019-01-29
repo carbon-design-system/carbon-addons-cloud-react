@@ -127,7 +127,7 @@ export default class InteriorLeftNav extends Component {
         className={classNames}
         onClick={!this.state.open ? this.toggle : () => {}}
         {...other}>
-        <ul key="main_list" className="left-nav-list" role="menubar">
+        <ul key="main_list" className="left-nav-list">
           {newChildren}
         </ul>
         <button

@@ -82,19 +82,13 @@ describe('InteriorLeftNav', () => {
 
     it('handles item click as expected', () => {
       interiorLeftNav.setState({ activeHref: '#' });
-      item.simulate('click');
+      item.find('a').simulate('click');
       expect(interiorLeftNav.state().activeHref).toEqual('#first');
     });
 
     it('should set activeHref to items href on Enter', () => {
       interiorLeftNav.setState({ activeHref: '#' });
-      item.simulate('keypress', { which: 13 });
-      expect(interiorLeftNav.state().activeHref).toEqual('#first');
-    });
-
-    it('should set activeHref to items href on Space', () => {
-      interiorLeftNav.setState({ activeHref: '#' });
-      item.simulate('keypress', { which: 32 });
+      item.find('a').simulate('keypress', { which: 13 });
       expect(interiorLeftNav.state().activeHref).toEqual('#first');
     });
 

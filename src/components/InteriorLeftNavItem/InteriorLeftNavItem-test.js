@@ -73,17 +73,17 @@ describe('InteriorLeftNavItem', () => {
     );
 
     it('handles click to leftNavList as expected', () => {
-      wrapper.simulate('click');
+      wrapper.find('a').simulate('click');
       expect(onClick).toBeCalled();
     });
 
     it('should toggle the leftNavList on Enter', () => {
-      wrapper.simulate('keypress', { which: 13 });
+      wrapper.find('a').simulate('keypress', { which: 13 });
       expect(onClick).toBeCalled();
     });
 
     it('should toggle the leftNavList on Space', () => {
-      wrapper.simulate('keypress', { which: 32 });
+      wrapper.find('a').simulate('keypress', { which: 32 });
       expect(onClick).toBeCalled();
     });
   });
