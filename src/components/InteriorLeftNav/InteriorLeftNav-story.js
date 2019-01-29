@@ -6,6 +6,8 @@ import InteriorLeftNavItem from '../InteriorLeftNavItem';
 import InteriorLeftNavList from '../InteriorLeftNavList';
 import { Icon } from 'carbon-components-react';
 
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
 storiesOf('InteriorLeftNav', module)
   .addWithInfo(
     'Default',
@@ -92,4 +94,39 @@ storiesOf('InteriorLeftNav', module)
         </InteriorLeftNav>
       );
     }
-  );
+  )
+  .add('With Router', () => {
+    const Index = () => <h2>Home</h2>;
+    const About = () => <h2>About</h2>;
+    const Users = () => <h2>Users</h2>;
+    return (
+      <Router>
+        <div>
+          <InteriorLeftNav>
+            <InteriorLeftNavHeader>Product</InteriorLeftNavHeader>
+            <InteriorLeftNavList open title="Example Item 1">
+              <InteriorLeftNavItem href="/">
+                <Link to="/">Home</Link>
+              </InteriorLeftNavItem>
+              <InteriorLeftNavItem href="/about">
+                <Link to="/about">About</Link>
+              </InteriorLeftNavItem>
+              <InteriorLeftNavItem href="/users">
+                <Link to="/users">Users</Link>
+              </InteriorLeftNavItem>
+            </InteriorLeftNavList>
+            <InteriorLeftNavItem href="/">
+              <Link to="/">Home</Link>
+            </InteriorLeftNavItem>
+            <InteriorLeftNavItem href="/about">
+              <Link to="/about">About</Link>
+            </InteriorLeftNavItem>
+          </InteriorLeftNav>
+
+          <Route path="/" exact component={Index} />
+          <Route path="/about/" component={About} />
+          <Route path="/users/" component={Users} />
+        </div>
+      </Router>
+    );
+  });
