@@ -7,8 +7,15 @@ const tagListEvents = {
   className: 'some-class',
   tags: [
     { name: 'test:tag', type: 'functional' },
+    { name: 'a really looooooooooooooong tag', type: 'functional' },
     { name: 'tag:test', type: 'functional' },
     { name: 'tag', type: 'functional' },
+    { name: 'anothertag', type: 'functional' },
+    { name: 'mytag', type: 'functional' },
+    { name: 'new label', type: 'functional' },
+    { name: 'my node app', type: 'functional' },
+    { name: 'hello world', type: 'functional' },
+    { name: 'yet another tag', type: 'functional' },
   ],
 };
 
@@ -16,6 +23,7 @@ const tagListEventsWithTagProps = {
   className: 'some-class',
   tags: [
     { name: 'test:tag', type: 'functional', otherProps: { maxCharacters: 3 } },
+    { name: 'a really looooooooooooooong tag', type: 'functional' },
     {
       name: 'tag:test',
       type: 'functional',
@@ -24,10 +32,16 @@ const tagListEventsWithTagProps = {
       },
     },
     {
-      name: 'really long tag',
+      name: 'tag',
       type: 'functional',
       otherProps: { maxCharacters: 5, isRemovable: true },
     },
+    { name: 'anothertag', type: 'functional' },
+    { name: 'mytag', type: 'functional' },
+    { name: 'new label', type: 'functional' },
+    { name: 'my node app', type: 'functional' },
+    { name: 'hello world', type: 'functional' },
+    { name: 'yet another tag', type: 'functional' },
   ],
 };
 

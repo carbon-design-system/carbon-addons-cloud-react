@@ -1,7 +1,7 @@
 import React from 'react';
 import TagList from '../TagList';
 import { shallow, mount } from 'enzyme';
-import { Icon } from 'carbon-components-react';
+import { Icon, Tooltip } from 'carbon-components-react';
 import Tag from '../Tag';
 
 const onIconClickMock = jest.fn();
@@ -49,9 +49,8 @@ describe('TagList', () => {
     };
 
     const wrapper = shallow(<TagList {...mockProps} />);
-    expect(wrapper.find(Tag)).toHaveLength(2);
-    expect(wrapper.find('.bx--tag-list--tag-counter')).toHaveLength(1);
-    expect(wrapper.find(Icon)).toHaveLength(1);
+    expect(wrapper.find(Tag)).toHaveLength(1);
+    expect(wrapper.find(Tooltip)).toHaveLength(1);
   });
 
   it('should display edit state when isEditable is always', () => {
