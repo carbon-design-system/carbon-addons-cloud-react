@@ -161,7 +161,7 @@ export default class TagList extends Component {
 
     return (
       <div
-        className={tagListClassNames}
+        className={isEditable !== 'never' ? tagListClassNames : undefined}
         onClick={this.handleOnIconClick}
         {...rest}
         onMouseEnter={
