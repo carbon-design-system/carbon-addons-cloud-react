@@ -162,6 +162,7 @@ export default class TagList extends Component {
     return (
       <div
         className={tagListClassNames}
+        onClick={this.handleOnIconClick}
         {...rest}
         onMouseEnter={
           isEditable === 'on-hover' ? this.toggleEditIconShow : undefined
@@ -182,9 +183,7 @@ export default class TagList extends Component {
         ))}
         {this.overflowNode()}
         {isEditable === 'always' && (
-          <button
-            className="bx--tag-list--edit--button"
-            onClick={this.handleOnIconClick}>
+          <button className="bx--tag-list--edit--button">
             <Icon
               name="edit--glyph"
               className="bx--tag-list--edit--icon"
@@ -194,9 +193,7 @@ export default class TagList extends Component {
           </button>
         )}
         {isEditable === 'on-hover' && this.state.showEditIcon && (
-          <button
-            className="bx--tag-list--edit--button"
-            onClick={this.handleOnIconClick}>
+          <button className="bx--tag-list--edit--button">
             <Icon
               name="edit--glyph"
               className="bx--tag-list--edit--icon"
