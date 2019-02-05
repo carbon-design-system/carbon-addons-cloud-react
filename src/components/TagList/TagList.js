@@ -157,11 +157,15 @@ export default class TagList extends Component {
 
     const displayList = tags.slice(0, limit);
 
-    const tagListClassNames = classNames('bx--tag-list', className);
+    const tagListClassNames = classNames(
+      'bx--tag-list',
+      { 'bx--tag-list-editable': isEditable !== 'never' },
+      className
+    );
 
     return (
       <div
-        className={isEditable !== 'never' ? tagListClassNames : undefined}
+        className={tagListClassNames}
         onClick={this.handleOnIconClick}
         {...rest}
         onMouseEnter={

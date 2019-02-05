@@ -40,6 +40,7 @@ describe('TagList', () => {
     const wrapper = shallow(<TagList {...mockProps} />);
     expect(wrapper).toHaveLength(1);
     expect(wrapper.find('.bx--tag-list--tag-counter'));
+    expect(wrapper.find('.bx--tag-list-editable')).toHaveLength(0);
   });
 
   it('should display 1 tag and 1 condensed tag', () => {
@@ -64,6 +65,7 @@ describe('TagList', () => {
     expect(wrapper.find(Icon)).toHaveLength(1);
     wrapper.find(Icon).simulate('click');
     expect(onIconClickMock).toHaveBeenCalled;
+    expect(wrapper.find('.bx--tag-list-editable')).toHaveLength(1);
   });
 
   it('should display edit state only on hover when isEditable is on-hover', () => {
@@ -79,6 +81,7 @@ describe('TagList', () => {
     expect(wrapper.find(Icon)).toHaveLength(1);
     wrapper.find(Icon).simulate('click');
     expect(onIconClickMock).toHaveBeenCalled;
+    expect(wrapper.find('.bx--tag-list-editable')).toHaveLength(1);
   });
 
   it('should limit characters when passing maxCharacters through otherProps', () => {
