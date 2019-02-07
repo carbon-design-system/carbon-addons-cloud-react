@@ -6,11 +6,11 @@ import {
   BreadcrumbItem,
   OverflowMenu,
   OverflowMenuItem,
-  DetailPageHeader,
   Tabs,
   Tab,
   Icon,
 } from 'carbon-components-react';
+import DetailPageHeader from '../DetailPageHeader';
 
 const detailPageHeaderProps = {
   title: 'Detail Page Header',
@@ -50,7 +50,6 @@ storiesOf('DetailPageHeader', module)
           {...overflowMenuItemProps}
           itemText="Delete App"
           isDelete
-          isLastItem
         />
       </OverflowMenu>
     </DetailPageHeader>
@@ -75,7 +74,6 @@ storiesOf('DetailPageHeader', module)
           {...overflowMenuItemProps}
           itemText="Delete App"
           isDelete
-          isLastItem
         />
       </OverflowMenu>
       <Tabs>
