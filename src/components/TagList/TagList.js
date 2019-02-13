@@ -118,7 +118,11 @@ export default class TagList extends Component {
       );
       const tooltipOverflowCount = tags.length - totalTagsDisplayed;
       overflowCountNode = (
-        <Tooltip showIcon={false} triggerText={overflowCountNode} tabIndex={0}>
+        <Tooltip
+          className="bx--cell--tooltip"
+          showIcon={false}
+          triggerText={overflowCountNode}
+          tabIndex={0}>
           {overflowTagsNode}
           {tooltipOverflowCount === 0 ? (
             undefined
