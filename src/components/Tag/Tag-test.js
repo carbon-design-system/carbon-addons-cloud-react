@@ -37,7 +37,7 @@ describe('Tag', () => {
     expect(tag.hasClass('extra-class')).toEqual(true);
   });
 
-  it('should shorten non-key:value tags to max 10 characters if set', () => {
+  it('should shorten tags to max 10 characters if set', () => {
     const tag = shallow(
       <Tag
         type="functional"
@@ -47,19 +47,6 @@ describe('Tag', () => {
       />
     );
     expect(tag.text()).toEqual('tag test l...');
-    expect(tag.text().replace('...', '').length).toBeLessThan(11);
-  });
-
-  it('should shorten key:value tags to max 10 characters if set', () => {
-    const tag = shallow(
-      <Tag
-        type="functional"
-        className="extra-class"
-        maxCharacters={10}
-        children={'acct:costCtr'}
-      />
-    );
-    expect(tag.text()).toEqual('acct:...stCtr');
     expect(tag.text().replace('...', '').length).toBeLessThan(11);
   });
 });

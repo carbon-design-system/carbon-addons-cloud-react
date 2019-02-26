@@ -1,11 +1,11 @@
 import React from 'react';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import { iconInfoGlyph } from 'carbon-icons';
 import { Icon } from 'carbon-components-react';
 import MouseOverTooltip from '../Tooltip';
 import { shallow, mount } from 'enzyme';
 
-jest.mock('lodash.debounce');
+jest.mock('lodash/debounce');
 
 const mockCancel = jest.fn();
 debounce.mockImplementation(fn =>

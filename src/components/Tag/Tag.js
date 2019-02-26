@@ -55,20 +55,8 @@ export default class Tag extends Component {
       maxCharacters &&
       children.length > maxCharacters
     ) {
-      // if tag is key:value pair
-      if (children.indexOf(':') !== -1) {
-        // grab trimmed first and last half
-        const beginning = children.substring(0, maxCharacters / 2).trim();
-        const end = children
-          .substring(children.length - maxCharacters / 2)
-          .trim();
-
-        shortenedName = beginning + '...' + end;
-      } else {
-        // if not key:value pair
-        const shorten = children.substring(0, maxCharacters).trim();
-        shortenedName = shorten + '...';
-      }
+      const shorten = children.substring(0, maxCharacters).trim();
+      shortenedName = shorten + '...';
     }
     const tagClasses = classNames({
       'bx--tag': true,

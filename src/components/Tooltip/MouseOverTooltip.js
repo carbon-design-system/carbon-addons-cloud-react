@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import { Tooltip } from 'carbon-components-react';
 
 export default class MouseOverTooltip extends Tooltip {
