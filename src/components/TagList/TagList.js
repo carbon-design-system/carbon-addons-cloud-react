@@ -60,6 +60,13 @@ export default class TagList extends Component {
     if (this.props.onIconClick) this.props.onIconClick();
   };
 
+  handleOnIconKeypress = evt => {
+    if (evt.key.toLowerCase() === 'enter') {
+      evt.stopPropagation();
+      if (this.props.onIconClick) this.props.onIconClick();
+    }
+  };
+
   overflowNode = () => {
     const {
       counterTagClassName,
@@ -171,13 +178,19 @@ export default class TagList extends Component {
       <div
         className={tagListClassNames}
         onClick={this.handleOnIconClick}
+        onKeyPress={this.handleOnIconKeypress}
         {...rest}
         onMouseEnter={
           isEditable === 'on-hover' ? this.toggleEditIconShow : undefined
         }
         onMouseLeave={
           isEditable === 'on-hover' ? this.toggleEditIconHide : undefined
-        }>
+        }
+        onFocus={
+          isEditable === 'on-hover' ? this.toggleEditIconShow : undefined
+        }
+        onBlur={isEditable === 'on-hover' ? this.toggleEditIconHide : undefined}
+        tabIndex={isEditable === 'on-hover' ? '0' : undefined}>
         {displayList.map(tag => (
           <Tag
             key={tag.name}
