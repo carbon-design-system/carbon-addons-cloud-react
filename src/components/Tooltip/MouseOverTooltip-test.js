@@ -75,7 +75,7 @@ describe('Tooltip', () => {
       const wrapper = mount(
         <MouseOverTooltip showIcon={false} triggerText="Tooltip" />
       );
-      const trigger = wrapper.find('.bx--tooltip__trigger');
+      const trigger = wrapper.find('.bx--tooltip__label');
       trigger.simulate('mouseover');
       expect(wrapper.state().open).toEqual(true);
       trigger.simulate('mouseout');
@@ -86,7 +86,7 @@ describe('Tooltip', () => {
       const wrapper = mount(
         <MouseOverTooltip showIcon={false} triggerText="Tooltip" />
       );
-      const trigger = wrapper.find('.bx--tooltip__trigger');
+      const trigger = wrapper.find('.bx--tooltip__label');
       trigger.simulate('mouseover');
       expect(wrapper.state().open).toEqual(true);
       trigger.simulate('focus');
@@ -97,7 +97,7 @@ describe('Tooltip', () => {
       const wrapper = mount(
         <MouseOverTooltip showIcon={false} triggerText="Tooltip" />
       );
-      const trigger = wrapper.find('.bx--tooltip__trigger');
+      const trigger = wrapper.find('.bx--tooltip__label');
       trigger.simulate('mouseover');
       expect(wrapper.state().open).toEqual(true);
       trigger.simulate('blur');
@@ -108,7 +108,7 @@ describe('Tooltip', () => {
       const wrapper = mount(
         <MouseOverTooltip showIcon={false} triggerText="Tooltip" />
       );
-      const trigger = wrapper.find('.bx--tooltip__trigger');
+      const trigger = wrapper.find('.bx--tooltip__label');
       trigger.simulate('mouseover');
       expect(wrapper.state().open).toEqual(true);
       const tooltip = wrapper.find('FloatingMenu');
