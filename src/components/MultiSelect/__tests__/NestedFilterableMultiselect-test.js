@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'lodash.debounce';
 import { mount } from 'enzyme';
+import Downshift from 'downshift';
 import NestedFilterableMultiselect from '../NestedFilterableMultiselect';
 import {
   assertMenuClosed,
@@ -40,6 +41,15 @@ describe('NestedFilterableMultiselect', () => {
       expect(wrapper).toMatchSnapshot();
     });
 
+    it('should render without showing tooltip', () => {
+      const thisProps = {
+        ...mockProps,
+        showTooltip: false,
+      };
+      const wrapper = mount(<NestedFilterableMultiselect {...thisProps} />);
+      expect(wrapper).toMatchSnapshot();
+    });
+
     it('should display all items when the menu is open initially', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
@@ -54,37 +64,14 @@ describe('NestedFilterableMultiselect', () => {
       assertMenuClosed(wrapper);
     });
 
-    it('should let the user toggle the menu by hitting Enter in search field', () => {
-      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
-      wrapper.find('.bx--text-input').simulate('keyDown', { which: 13 });
-      assertMenuOpen(wrapper, mockProps);
-      wrapper.find('.bx--text-input').simulate('keyDown', { which: 13 });
-      assertMenuClosed(wrapper);
-    });
-
     it('should close the menu by hitting Esc in search field', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
-      wrapper.find('.bx--text-input').simulate('keyDown', { which: 13 });
-      assertMenuOpen(wrapper, mockProps);
-      wrapper.find('.bx--text-input').simulate('keyUp', { which: 13 });
+      wrapper.find('.bx--text-input').simulate('keyDown', {
+        which: 40,
+        key: 'ArrowDown',
+      });
       assertMenuOpen(wrapper, mockProps);
       wrapper.find('.bx--text-input').simulate('keyUp', { which: 27 });
-      assertMenuClosed(wrapper);
-    });
-
-    it('should close the menu by hitting Esc in the dropdown', () => {
-      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
-      wrapper.find('.bx--text-input').simulate('keyDown', { which: 13 });
-      assertMenuOpen(wrapper, mockProps);
-      wrapper
-        .find('.bx--tooltip__trigger')
-        .at(0)
-        .simulate('keyUp', { which: 13 });
-      assertMenuOpen(wrapper, mockProps);
-      wrapper
-        .find('.bx--tooltip__trigger')
-        .at(0)
-        .simulate('keyUp', { which: 27 });
       assertMenuClosed(wrapper);
     });
 
@@ -102,14 +89,16 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
-      wrapper.find('Downshift').prop('onInputValueChange')('3');
+      wrapper.find('Downshift').prop('onInputValueChange')('3', {
+        type: Downshift.stateChangeTypes.changeInput,
+      });
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
       expect(wrapper.state().inputValue).toEqual('3');
       expect(wrapper.state().openSections).toEqual([]);
     });
 
-    it('should call `onChange` with each update to selected items', () => {
+    it('should call `onChange` with each update to selected items via mouse click', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
 
@@ -151,6 +140,53 @@ describe('NestedFilterableMultiselect', () => {
       expect(mockProps.onChange).toHaveBeenCalledTimes(4);
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [],
+      });
+    });
+
+    it('should call `onChange` with each update to selected items via keyboard', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      wrapper.setState({
+        highlightedIndex: 0,
+      });
+
+      // Select the first item
+      wrapper.find('.bx--text-input').simulate('keyDown', {
+        which: 13,
+        key: 'Enter',
+      });
+      expect(mockProps.onChange).toHaveBeenCalledTimes(1);
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItems: [mockProps.items[0]],
+      });
+
+      // Select the second item
+      wrapper.find('.bx--text-input').simulate('keyDown', {
+        which: 40,
+        key: 'ArrowDown',
+      });
+      wrapper.find('.bx--text-input').simulate('keyDown', {
+        which: 13,
+        key: 'Enter',
+      });
+      expect(mockProps.onChange).toHaveBeenCalledTimes(2);
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItems: [mockProps.items[0], mockProps.items[1]],
+      });
+
+      // Unselect the first item
+      wrapper.find('.bx--text-input').simulate('keyDown', {
+        which: 38,
+        key: 'ArrowUp',
+      });
+      wrapper.find('.bx--text-input').simulate('keyDown', {
+        which: 13,
+        key: 'Enter',
+      });
+      expect(mockProps.onChange).toHaveBeenCalledTimes(3);
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItems: [mockProps.items[1]],
       });
     });
   });
@@ -271,20 +307,6 @@ describe('NestedFilterableMultiselect', () => {
         .find('span')
         .simulate('click');
       expect(wrapper.find(listItemName).length).toBe(3);
-      // Expand the child items via keyboard
-      wrapper
-        .find('.bx--checkbox-label')
-        .at(1)
-        .find('span')
-        .simulate('keyUp', { which: 13 });
-      expect(wrapper.find(listItemName).length).toBe(5);
-      // Collapse the child items via keyboard
-      wrapper
-        .find('.bx--checkbox-label')
-        .at(1)
-        .find('span')
-        .simulate('keyUp', { which: 13 });
-      expect(wrapper.find(listItemName).length).toBe(3);
     });
 
     it('should filter a list of items by the input value', () => {
@@ -292,13 +314,17 @@ describe('NestedFilterableMultiselect', () => {
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
       // Type 'Nested item 2'
-      wrapper.find('Downshift').prop('onInputValueChange')('Nested item 2');
+      wrapper.find('Downshift').prop('onInputValueChange')('Nested item 2', {
+        type: Downshift.stateChangeTypes.changeInput,
+      });
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
       expect(wrapper.state().inputValue).toEqual('Nested item 2');
       expect(wrapper.state().openSections).toEqual([]);
       // An array input persists the current value
-      wrapper.find('Downshift').prop('onInputValueChange')([]);
+      wrapper.find('Downshift').prop('onInputValueChange')([], {
+        type: Downshift.stateChangeTypes.changeInput,
+      });
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
       expect(wrapper.state().inputValue).toEqual('Nested item 2');
@@ -317,7 +343,9 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
-      wrapper.find('Downshift').prop('onInputValueChange')('Sub item 2');
+      wrapper.find('Downshift').prop('onInputValueChange')('Sub item 2', {
+        type: Downshift.stateChangeTypes.changeInput,
+      });
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(6);
       expect(wrapper.state().inputValue).toEqual('Sub item 2');
@@ -328,7 +356,9 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
-      wrapper.find('Downshift').prop('onInputValueChange')('xxx');
+      wrapper.find('Downshift').prop('onInputValueChange')('xxx', {
+        type: Downshift.stateChangeTypes.changeInput,
+      });
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(0);
       expect(wrapper.state().inputValue).toEqual('xxx');
@@ -659,7 +689,7 @@ describe('NestedFilterableMultiselect', () => {
       ).toBe(false);
     });
 
-    it('should expand when element is clicked out of CheckBox ', () => {
+    it('should expand when element is clicked out of CheckBox', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
 
@@ -682,7 +712,31 @@ describe('NestedFilterableMultiselect', () => {
         .simulate('click');
       expect(wrapper.find('.bx--checkbox-label').length).toEqual(5);
     });
-    it('should not expand subOptions when parent is selected ', () => {
+
+    it('should expand suboptions via keyboard', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      wrapper.setState({
+        highlightedIndex: 0,
+      });
+      //expand suboptions
+      wrapper.find('.bx--text-input').simulate('keyDown', {
+        which: 40,
+        key: 'ArrowDown',
+      });
+      expect(wrapper.find('.bx--checkbox-label').length).toEqual(5);
+      expect(wrapper.state().highlightedIndex).toEqual(1);
+      // collapse suboptions
+      wrapper.find('.bx--text-input').simulate('keyDown', {
+        which: 38,
+        key: 'ArrowUp',
+      });
+      expect(wrapper.find('.bx--checkbox-label').length).toEqual(3);
+      expect(wrapper.state().highlightedIndex).toEqual(0);
+    });
+
+    it('should not expand subOptions when parent is selected', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
 
@@ -698,6 +752,26 @@ describe('NestedFilterableMultiselect', () => {
         })),
       ]);
       expect(wrapper.find('.bx--checkbox-label').length).toEqual(3);
+    });
+
+    it('should highlight suboption when mouse enter', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      //expand suboptions
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .find('span')
+        .simulate('click');
+      expect(wrapper.find('.bx--checkbox-label').length).toEqual(5);
+
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .find('span')
+        .simulate('mousemove');
+      expect(wrapper.state().highlightedIndex).toEqual(1);
     });
   });
 });
