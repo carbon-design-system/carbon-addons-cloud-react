@@ -128,7 +128,13 @@ storiesOf('TagList', module)
     A TagList is used to manage multiple tags at once. The example below shows how the TagList component can be used to condense a list.
     Custom Tag properties have also been applied.
   `,
-    () => <TagList {...tagListEventsWithTagProps} numTagsDisplayed={2} />
+    () => (
+      <TagList
+        {...tagListEventsWithTagProps}
+        numTagsDisplayed={2}
+        isEditable="always"
+      />
+    )
   )
   .addWithInfo(
     'Default with Class Applied to all Tags',

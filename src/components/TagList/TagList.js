@@ -6,10 +6,6 @@ import { Icon, Tooltip } from 'carbon-components-react';
 import Tag from '../Tag';
 
 export default class TagList extends Component {
-  state = {
-    showEditIcon: false,
-  };
-
   static propTypes = {
     numTagsDisplayed: PropTypes.number.isRequired,
     tags: PropTypes.arrayOf(
@@ -41,18 +37,6 @@ export default class TagList extends Component {
     numTagsDisplayed: 3,
     maxCharactersTooltip: 15,
     maxTagsTooltip: 8,
-  };
-
-  toggleEditIconShow = () => {
-    this.setState({
-      showEditIcon: true,
-    });
-  };
-
-  toggleEditIconHide = () => {
-    this.setState({
-      showEditIcon: false,
-    });
   };
 
   handleOnIconClick = evt => {
@@ -167,21 +151,22 @@ export default class TagList extends Component {
       className
     );
 
+    const editButtonClasses = classNames({
+      'bx--tag-list--edit--button': true,
+      'always-editable': isEditable === 'always',
+      'never-editable': isEditable === 'never',
+    });
+
     return (
       <div
         className={tagListClassNames}
         onClick={this.handleOnIconClick}
-        {...rest}
-        onMouseEnter={
-          isEditable === 'on-hover' ? this.toggleEditIconShow : undefined
-        }
-        onMouseLeave={
-          isEditable === 'on-hover' ? this.toggleEditIconHide : undefined
-        }>
+        {...rest}>
         {displayList.map(tag => (
           <Tag
             key={tag.name}
             className="bx--tag-list--tag"
+            tabIndex="0"
             type={tag.type}
             title={tag.name}
             maxCharacters={maxCharacters}
@@ -190,8 +175,8 @@ export default class TagList extends Component {
           </Tag>
         ))}
         {this.overflowNode()}
-        {isEditable === 'always' && (
-          <button className="bx--tag-list--edit--button">
+        {
+          <button className={editButtonClasses}>
             <Icon
               name="edit--glyph"
               className="bx--tag-list--edit--icon"
@@ -199,17 +184,7 @@ export default class TagList extends Component {
               description="click to edit tags"
             />
           </button>
-        )}
-        {isEditable === 'on-hover' && this.state.showEditIcon && (
-          <button className="bx--tag-list--edit--button">
-            <Icon
-              name="edit--glyph"
-              className="bx--tag-list--edit--icon"
-              title="edit icon"
-              description="click to edit tags"
-            />
-          </button>
-        )}
+        }
       </div>
     );
   }
