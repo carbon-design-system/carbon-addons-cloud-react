@@ -68,22 +68,6 @@ describe('TagList', () => {
     expect(wrapper.find('.bx--tag-list-editable')).toHaveLength(1);
   });
 
-  it('should display edit state only on hover when isEditable is on-hover', () => {
-    mockProps = {
-      ...mockProps,
-      isEditable: 'on-hover',
-      onIconClick: onIconClickMock,
-    };
-
-    const wrapper = shallow(<TagList {...mockProps} />);
-    expect(wrapper.find(Icon)).toHaveLength(0);
-    wrapper.find('div').simulate('mouseenter');
-    expect(wrapper.find(Icon)).toHaveLength(1);
-    wrapper.find(Icon).simulate('click');
-    expect(onIconClickMock).toHaveBeenCalled;
-    expect(wrapper.find('.bx--tag-list-editable')).toHaveLength(1);
-  });
-
   it('should limit characters when passing maxCharacters through otherProps', () => {
     mockProps = {
       tags: [
