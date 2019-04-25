@@ -52,8 +52,8 @@ const items = [
         text: 'Option 7',
       },
       {
-        id: 'opt-7',
-        text: 'Option 7',
+        id: 'opt-8',
+        text: 'Option 8',
       },
     ],
   },

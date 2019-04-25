@@ -18,11 +18,64 @@ export const defaultCompareItems = (itemA, itemB, { locale }) =>
  */
 export const defaultSortItems = (
   items,
-  { selectedItems, itemToString, compareItems, locale = 'en', parent }
+  { selectedItems, itemToString, compareItems, locale = 'en' }
 ) =>
   items.sort((itemA, itemB) => {
-    const hasItemA = selectedItems.includes(itemA);
-    const hasItemB = selectedItems.includes(itemB);
+    const hasItemA = selectedItems.some(item => item.id === itemA.id);
+    const hasItemB = selectedItems.some(item => item.id === itemB.id);
+
+    const parentItemA =
+      itemA.parentId && items.filter(item => item.id === itemA.parentId)[0];
+    const parentItemB =
+      itemB.parentId && items.filter(item => item.id === itemB.parentId)[0];
+
+    if (parentItemA && parentItemB) {
+      if (parentItemA !== parentItemB) {
+        return compareItems(
+          itemToString(parentItemA),
+          itemToString(parentItemB),
+          {
+            locale,
+          }
+        );
+      }
+    } else if (parentItemA && !parentItemB) {
+      if (parentItemA.id === itemB.parentId) {
+        return -1; // always place the child after the parent
+      }
+
+      const hasParentItemA = selectedItems.some(
+        item => item.id === parentItemA.id
+      );
+      // Prefer whichever item is in the `selectedItems` array first
+      if (hasParentItemA && !hasItemB) {
+        return -1;
+      } else if (hasItemB && !hasParentItemA) {
+        return 1;
+      }
+
+      return compareItems(itemToString(parentItemA), itemToString(itemB), {
+        locale,
+      });
+    } else if (!parentItemA && parentItemB) {
+      if (parentItemB.id === itemA.parentId) {
+        return 1; // always place the child after the parent
+      }
+
+      const hasParentItemB = selectedItems.some(
+        item => item.id === parentItemB.id
+      );
+      // Prefer whichever item is in the `selectedItems` array first
+      if (hasItemA && !hasParentItemB) {
+        return -1;
+      } else if (hasParentItemB && !hasItemA) {
+        return 1;
+      }
+
+      return compareItems(itemToString(itemA), itemToString(parentItemB), {
+        locale,
+      });
+    }
 
     // Prefer whichever item is in the `selectedItems` array first
     if (hasItemA && !hasItemB) {
@@ -31,20 +84,6 @@ export const defaultSortItems = (
 
     if (hasItemB && !hasItemA) {
       return 1;
-    }
-
-    if (parent) {
-      const checkedItemA = itemA.checked;
-      const checkedItemB = itemB.checked;
-
-      // Prefer whichever checked item be first
-      if (checkedItemA && !checkedItemB) {
-        return -1;
-      }
-
-      if (checkedItemB && !checkedItemA) {
-        return 1;
-      }
     }
 
     return compareItems(itemToString(itemA), itemToString(itemB), {

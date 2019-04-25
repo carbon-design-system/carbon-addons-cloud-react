@@ -35,34 +35,57 @@ export default class Selection extends React.Component {
   };
 
   handleSelectItem = item => {
+    const items = Array.isArray(item) ? item : [item];
     this.internalSetState(prevState => ({
-      selectedItems: [...prevState.selectedItems, item],
+      selectedItems: [...prevState.selectedItems, ...items],
     }));
   };
 
   handleRemoveItem = item => {
-    this.internalSetState(prevState => ({
-      selectedItems: prevState.selectedItems.filter(
-        itemOnState => itemOnState !== item
-      ),
-    }));
+    const items = Array.isArray(item) ? item : [item];
+    this.internalSetState(prevState => {
+      const newState = {
+        selectedItems: prevState.selectedItems.filter(
+          itemOnState => items.indexOf(itemOnState) === -1
+        ),
+      };
+      return newState;
+    });
   };
 
   handleOnItemChange = item => {
     const { selectedItems } = this.state;
 
-    let selectedIndex;
-    selectedItems.forEach((selectedItem, index) => {
-      if (isEqual(selectedItem, item)) {
-        selectedIndex = index;
+    const itemsToProcess = Array.isArray(item) ? item : [item];
+    const result = itemsToProcess.reduce(
+      (acc, theItem) => {
+        let selectedIndex;
+        selectedItems.some((selectedItem, index) => {
+          if (isEqual(selectedItem, theItem)) {
+            selectedIndex = index;
+            return true;
+          }
+          return false;
+        });
+        if (selectedIndex === undefined) {
+          acc.itemsToSelect.push(theItem);
+        } else {
+          acc.itemsToRemove.push(selectedItems[selectedIndex]);
+        }
+        return acc;
+      },
+      {
+        itemsToSelect: [],
+        itemsToRemove: [],
       }
-    });
+    );
 
-    if (selectedIndex === undefined) {
-      this.handleSelectItem(item);
-      return;
+    if (result.itemsToSelect.length > 0) {
+      this.handleSelectItem(result.itemsToSelect);
     }
-    this.handleRemoveItem(item);
+    if (result.itemsToRemove.length > 0) {
+      this.handleRemoveItem(result.itemsToRemove);
+    }
   };
 
   render() {

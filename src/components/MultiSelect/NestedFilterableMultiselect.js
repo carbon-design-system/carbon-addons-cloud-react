@@ -88,44 +88,167 @@ export default class NestedFilterableMultiselect extends React.Component {
     showTooltip: true,
   };
 
+  static find(items = [], target) {
+    return items.filter(item => item.id === target.id)[0];
+  }
+
+  static computeId({ item, itemToString = defaultItemToString, parentId }) {
+    return `${parentId ? `${parentId}-` : ''}${item.id || itemToString(item)}`;
+  }
+
+  static flatten({
+    category,
+    items = [],
+    level,
+    parentId,
+    itemToString = defaultItemToString,
+  }) {
+    return items.reduce((list, item) => {
+      const mappedItem = {
+        ...item,
+        id: NestedFilterableMultiselect.computeId({
+          item,
+          itemToString,
+          parentId,
+        }),
+        category: category || item.category,
+        level: level || 0,
+        parentId,
+      };
+      list.push(mappedItem);
+      if (Array.isArray(item.options) && item.options.length > 0) {
+        list.push(
+          ...NestedFilterableMultiselect.flatten({
+            category: mappedItem.category,
+            items: item.options,
+            level: mappedItem.level + 1,
+            parentId: item.id,
+            itemToString,
+          })
+        );
+      }
+      return list;
+    }, []);
+  }
+
+  static getDerivedStateFromProps(nextProps, currentState) {
+    const { items, initialSelectedItems, itemToString } = nextProps;
+    const { flattenedItems, flattenedSelectedItems } = currentState;
+
+    const itemsToProcess = initialSelectedItems
+      ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
+      : items;
+    const updatedItems = NestedFilterableMultiselect.flatten({
+      items: itemsToProcess,
+      itemToString,
+    });
+
+    if (!isEqual(updatedItems, flattenedItems)) {
+      const updatedSelectedItems = NestedFilterableMultiselect.flatten({
+        items: initialSelectedItems,
+        itemToString,
+      }).filter(item => !item.parentId || item.checked);
+
+      flattenedItems.splice(0, flattenedItems.length, ...updatedItems);
+      flattenedSelectedItems.splice(
+        0,
+        flattenedSelectedItems.length,
+        ...updatedSelectedItems
+      );
+
+      return {
+        ...currentState,
+        flattenedItems,
+        flattenedSelectedItems,
+      };
+    }
+
+    return null;
+  }
+
+  static updateCheckedState({
+    options = [],
+    itemToString = defaultItemToString,
+    parentId,
+    selectedItems,
+  }) {
+    return options.map(option => {
+      const optionId = NestedFilterableMultiselect.computeId({
+        item: option,
+        itemToString,
+        parentId,
+      });
+      const result = {
+        ...option,
+        checked: selectedItems.some(
+          selectedItem => selectedItem.id === optionId
+        ),
+      };
+      if (result.options) {
+        result.options = NestedFilterableMultiselect.updateCheckedState({
+          options: result.options,
+          itemToString,
+          optionId,
+          selectedItems,
+        });
+      }
+      return result;
+    });
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       highlightedIndex: null,
       isOpen: false,
       inputValue: '',
-      openSections: [],
-      checkedSuboptions: [],
+      flattenedItems: [],
+      flattenedSelectedItems: [],
+      expandedItems: [],
     };
   }
 
   handleOnChange = changes => {
-    if (this.props.onChange) {
-      this.props.onChange(changes);
-    }
-  };
+    const { items, itemToString, onChange } = this.props;
 
-  handleOnChangeSubOption = option => {
-    if (!option.checked) {
-      this.setState(prevState => ({
-        checkedSuboptions: [...prevState.checkedSuboptions, option],
-      }));
-    } else {
-      this.setState(prevState => ({
-        checkedSuboptions: prevState.checkedSuboptions.filter(
-          selectedOption => selectedOption !== option
-        ),
-      }));
+    if (onChange) {
+      const { selectedItems = [] } = changes;
+
+      const mappedSelectedItems = items.reduce((list, item) => {
+        if (NestedFilterableMultiselect.find(selectedItems, item)) {
+          const selectedItem = { ...item };
+          if (item.options) {
+            selectedItem.options = NestedFilterableMultiselect.updateCheckedState(
+              {
+                options: item.options,
+                itemToString,
+                parentId: NestedFilterableMultiselect.computeId({
+                  item,
+                  itemToString,
+                }),
+                selectedItems,
+              }
+            );
+          }
+          list.push(selectedItem);
+        }
+        return list;
+      }, []);
+
+      onChange({ selectedItems: mappedSelectedItems });
     }
-    option.checked = !option.checked;
   };
 
   onToggle = item => {
-    !this.state.openSections.includes(item)
-      ? this.setState({ openSections: [...this.state.openSections, item] })
+    const isExpanded = NestedFilterableMultiselect.find(
+      this.state.expandedItems,
+      item
+    );
+    !isExpanded
+      ? this.setState({ expandedItems: [...this.state.expandedItems, item] })
       : this.setState(prevState => ({
-          openSections: prevState.openSections.filter(
-            itemOnState => itemOnState !== item
+          expandedItems: prevState.expandedItems.filter(
+            expandedItem => expandedItem.id !== item.id
           ),
         }));
   };
@@ -181,44 +304,45 @@ export default class NestedFilterableMultiselect extends React.Component {
 
   handleOnInputValueChange = debounce((value, { type }) => {
     if (type === Downshift.stateChangeTypes.changeInput) {
+      const { filterItems, itemToString } = this.props;
       const {
-        items,
-        initialSelectedItems,
-        filterItems,
-        itemToString,
-      } = this.props;
-      const { openSections, inputValue: prevInputValue } = this.state;
+        expandedItems,
+        flattenedItems: items,
+        inputValue: prevInputValue,
+      } = this.state;
 
       const inputValue = Array.isArray(value) ? prevInputValue : value;
-      const itemsToProcess = initialSelectedItems
-        ? items.map(
-            obj => initialSelectedItems.find(o => o.id === obj.id) || obj
-          )
-        : items;
-      const matchedItems = itemsToProcess.filter(item => {
-        if (!item.options || openSections.includes(item) || !inputValue) {
-          return false;
-        }
-        const filteredItems = filterItems(item.options, {
-          itemToString,
-          inputValue,
-        });
-        return filteredItems.length > 0;
-      });
 
-      const itemsToExpand =
-        matchedItems.length > 0
-          ? [...openSections, ...matchedItems]
-          : openSections;
+      const itemsToExpand = items.reduce((toExpand, item) => {
+        const children = items.filter(theItem => theItem.parentId === item.id);
+        if (children.length > 0) {
+          const filteredChildren = filterItems(children, {
+            itemToString,
+            inputValue,
+          });
+          if (filteredChildren.length > 0) {
+            if (
+              !inputValue ||
+              NestedFilterableMultiselect.find(expandedItems, item)
+            ) {
+              return toExpand;
+            }
+            if (!NestedFilterableMultiselect.find(toExpand, item)) {
+              toExpand.push(item);
+            }
+          }
+        }
+        return toExpand;
+      }, []);
 
       this.setState(() => {
         return {
-          openSections: itemsToExpand,
+          expandedItems: [...expandedItems, ...itemsToExpand],
           inputValue: inputValue || '',
         };
       });
     }
-  }, 200);
+  }, 200).bind(this);
 
   clearInputValue = event => {
     event.stopPropagation();
@@ -227,69 +351,111 @@ export default class NestedFilterableMultiselect extends React.Component {
   };
 
   getParentItem = item => {
-    const { items } = this.props;
+    const { flattenedItems: items } = this.state;
 
     let parent;
-    items.some(thisItem => {
-      if (thisItem.options && thisItem.options.includes(item)) {
-        parent = thisItem;
-        return true;
-      }
-      return false;
-    });
+    if (item.parentId) {
+      items.some(thisItem => {
+        if (thisItem.id === item.parentId) {
+          parent = thisItem;
+          return true;
+        }
+        return false;
+      });
+    }
 
     return parent;
   };
 
-  handleSelectSubOptions = supOptions => {
-    supOptions.map(option => {
-      this.handleOnChangeSubOption(option);
-    });
+  getAllChildren = item => {
+    const { flattenedItems: items } = this.state;
+
+    const results = [];
+    const children = items.filter(theItem => theItem.parentId === item.id);
+
+    if (children.length > 0) {
+      results.push(...children);
+
+      children.forEach(child => {
+        results.push(...this.getAllChildren(child));
+      });
+    }
+
+    return results;
   };
 
   onItemChange = (item, selectedItems, onItemChange) => {
-    const parent = this.getParentItem(item);
+    const { flattenedItems: items } = this.state;
 
-    const options = parent ? parent.options : item.options;
-    const myCheckedOptions = options
-      ? options.filter(subOption => subOption.checked)
-      : null;
-    const myUncheckedOptions = options
-      ? options.filter(subOption => !subOption.checked)
-      : null;
+    const itemsChanged = [item];
 
-    if (parent) {
-      this.handleOnChangeSubOption(item);
+    if (item.parentId) {
+      // Walk parents
+      let theItem = item;
+      while (theItem && theItem.parentId) {
+        const parent = this.getParentItem(theItem);
 
-      const onlySupOpChecked =
-        myCheckedOptions.length == 1 && myCheckedOptions.includes(item);
-      if (onlySupOpChecked || myCheckedOptions.length == 0) {
-        onItemChange(parent);
-      } else {
-        this.handleOnChange({ selectedItems });
-      }
-    } else {
-      onItemChange(item);
-      if (item.options) {
-        const includesItem = selectedItems.includes(item);
-        if (myCheckedOptions.length == 0 && !includesItem) {
-          this.handleSelectSubOptions(myUncheckedOptions);
-        } else {
-          this.handleSelectSubOptions(myCheckedOptions);
+        if (parent) {
+          const toRemove = !!NestedFilterableMultiselect.find(
+            selectedItems,
+            theItem
+          );
+          const isParentSelected = !!NestedFilterableMultiselect.find(
+            selectedItems,
+            parent
+          );
+          const children = selectedItems.filter(
+            selectedItem => selectedItem.parentId === theItem.parentId
+          );
+          if (children.length === 1 && toRemove && isParentSelected) {
+            // Uncheck parent too
+            itemsChanged.push(parent);
+          } else if (children.length === 0 && !toRemove && !isParentSelected) {
+            // Check parent too
+            itemsChanged.push(parent);
+          }
         }
+
+        theItem = parent;
       }
     }
+
+    // Walk children
+    const children = this.getAllChildren(item);
+    if (children.length > 0) {
+      const toRemove = !!NestedFilterableMultiselect.find(selectedItems, item);
+      children.forEach(child => {
+        const isChildSelected = !!NestedFilterableMultiselect.find(
+          selectedItems,
+          child
+        );
+        if (toRemove && isChildSelected) {
+          // Uncheck the child too
+          itemsChanged.push(child);
+        } else if (!toRemove && !isChildSelected) {
+          // Check the child too
+          itemsChanged.push(child);
+        }
+      });
+    }
+
+    onItemChange(itemsChanged);
   };
 
   render() {
-    const { highlightedIndex, isOpen, inputValue, openSections } = this.state;
+    const {
+      highlightedIndex,
+      isOpen,
+      inputValue,
+      expandedItems,
+      flattenedItems: items,
+      flattenedSelectedItems: initialSelectedItems,
+    } = this.state;
     const {
       className: containerClassName,
       disabled,
       filterItems,
-      items,
       itemToString,
-      initialSelectedItems,
       id,
       locale,
       placeholder,
@@ -300,9 +466,6 @@ export default class NestedFilterableMultiselect extends React.Component {
       showTooltip,
     } = this.props;
 
-    const itemsToProcess = initialSelectedItems
-      ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
-      : items;
     const className = cx(
       'bx--multi-select',
       'bx--combo-box',
@@ -348,28 +511,10 @@ export default class NestedFilterableMultiselect extends React.Component {
                 <ListBox.Field tabIndex="-1" {...getButtonProps({ disabled })}>
                   {selectedItem.length > 0 && (
                     <ListBox.Selection
-                      clearSelection={e => {
-                        {
-                          selectedItems.forEach(item => {
-                            if (item.options) {
-                              const myCheckedOptions = item.options.filter(
-                                subOption => subOption.checked == true
-                              );
-                              this.handleSelectSubOptions(myCheckedOptions);
-                            }
-                          });
-                          clearSelection(e);
-                        }
-                      }}
-                      selectionCount={selectedItems.reduce((total, item) => {
-                        if (item.options) {
-                          return (
-                            total +
-                            item.options.filter(option => option.checked).length
-                          );
-                        }
-                        return total + 1;
-                      }, 0)}
+                      clearSelection={clearSelection}
+                      selectionCount={
+                        selectedItem.filter(item => !item.options).length
+                      }
                     />
                   )}
                   <input
@@ -388,7 +533,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                             // Down arrow
                             if (
                               highlightedItem.options &&
-                              !openSections.includes(highlightedItem)
+                              !expandedItems.includes(highlightedItem)
                             ) {
                               this.onToggle(highlightedItem);
                             }
@@ -399,8 +544,10 @@ export default class NestedFilterableMultiselect extends React.Component {
                             );
                             if (
                               parentItem &&
-                              highlighted.index === 0 &&
-                              openSections.includes(parentItem)
+                              highlighted.parentIndex > -1 &&
+                              highlighted.index ===
+                                highlighted.parentIndex + 1 &&
+                              expandedItems.includes(parentItem)
                             ) {
                               this.onToggle(parentItem);
                             }
@@ -427,71 +574,88 @@ export default class NestedFilterableMultiselect extends React.Component {
                       overflowX: 'hidden',
                       paddingTop: '8px',
                     }}>
-                    {groupedByCategory(
-                      itemsToProcess,
-                      customCategorySorting
-                    ).map((group, index) => {
-                      const hasGroups = group[0] !== 'undefined' ? true : false;
-                      const filteredItems = filterItems(group[1], {
-                        itemToString,
-                        inputValue,
-                      });
-                      let categoryName = '';
-                      hasGroups
-                        ? (categoryName = group[0].toUpperCase())
-                        : null;
+                    {groupedByCategory(items, customCategorySorting).map(
+                      (group, index) => {
+                        const hasGroups =
+                          group[0] !== 'undefined' ? true : false;
+                        const filteredItems = filterItems(group[1], {
+                          itemToString,
+                          inputValue,
+                          expandedItems,
+                        });
+                        let categoryName = '';
+                        hasGroups
+                          ? (categoryName = group[0].toUpperCase())
+                          : null;
 
-                      return (
-                        <Fragment key={group[0] || index}>
-                          {hasGroups && filteredItems.length > 0 && (
-                            <div>
-                              <GroupLabel key={index}>
-                                {categoryName}
-                              </GroupLabel>
-                            </div>
-                          )}
-                          {sortItems(filteredItems, {
-                            selectedItems,
-                            itemToString,
-                            compareItems,
-                            locale,
-                          }).map(item => {
-                            currentIndex++;
+                        return (
+                          <Fragment key={group[0] || index}>
+                            {hasGroups && filteredItems.length > 0 && (
+                              <div>
+                                <GroupLabel key={index}>
+                                  {categoryName}
+                                </GroupLabel>
+                              </div>
+                            )}
+                            {sortItems(filteredItems, {
+                              selectedItems,
+                              itemToString,
+                              compareItems,
+                              locale,
+                            }).map((item, itemIndex, itemArr) => {
+                              currentIndex++;
 
-                            if (highlightedIndex === currentIndex) {
-                              highlighted = { item, index };
-                            }
+                              if (highlightedIndex === currentIndex) {
+                                const parentItem = this.getParentItem(item);
+                                highlighted = {
+                                  item,
+                                  index: itemIndex,
+                                  parentIndex: parentItem
+                                    ? itemArr.indexOf(parentItem)
+                                    : -1,
+                                };
+                              }
 
-                            const itemProps = getItemProps({
-                              item,
-                              index: currentIndex,
-                            });
-                            const itemText = itemToString(item);
+                              const itemProps = getItemProps({
+                                item,
+                                index: currentIndex,
+                              });
+                              const itemText = itemToString(item);
 
-                            const isChecked =
-                              selectedItem.filter(
-                                selected => selected.id == item.id
-                              ).length > 0;
-                            const subOptions = item.options;
-                            const groupIsOpen =
-                              openSections.filter(groupOpen =>
-                                isEqual(groupOpen, item)
-                              ).length > 0;
+                              const isChecked =
+                                selectedItem.filter(
+                                  selected => selected.id == item.id
+                                ).length > 0;
+                              const subOptions = items.filter(
+                                theItem => theItem.parentId === item.id
+                              );
+                              const groupIsOpen = !!NestedFilterableMultiselect.find(
+                                expandedItems,
+                                item
+                              );
 
-                            const myCheckedOptions = subOptions
-                              ? item.options.filter(
-                                  subOption => subOption.checked
-                                )
-                              : null;
-                            const myUncheckedOptions = subOptions
-                              ? item.options.filter(
-                                  subOption => !subOption.checked
-                                )
-                              : null;
+                              const myCheckedOptions = subOptions.filter(
+                                subOption =>
+                                  selectedItem.filter(
+                                    selected => selected.id === subOption.id
+                                  ).length > 0
+                              );
+                              const myUncheckedOptions = subOptions.filter(
+                                subOption =>
+                                  selectedItem.filter(
+                                    selected => selected.id === subOption.id
+                                  ).length === 0
+                              );
 
-                            return (
-                              <Fragment key={itemProps.id}>
+                              const itemStyle = item.level
+                                ? {
+                                    paddingLeft: `${item.level * 35}px`,
+                                  }
+                                : undefined;
+
+                              return (
                                 <ListBox.MenuItem
+                                  style={itemStyle}
                                   isActive={isChecked}
                                   isHighlighted={
                                     highlightedIndex === currentIndex
@@ -500,7 +664,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                   onClick={e => {
                                     {
                                       const clickOutOfCheckBox =
-                                        subOptions &&
+                                        subOptions.length > 0 &&
                                         (e.target.localName !== 'label' &&
                                           e.target.localName !== 'input');
                                       if (clickOutOfCheckBox) {
@@ -528,81 +692,16 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     tabIndex="-1"
                                     labelText={itemText}
                                     tooltipText={showTooltip && itemText}
-                                    hasGroups={subOptions}
+                                    hasGroups={subOptions.length > 0}
                                     isExpanded={groupIsOpen}
                                   />
                                 </ListBox.MenuItem>
-
-                                {groupIsOpen &&
-                                  subOptions != undefined &&
-                                  sortItems(
-                                    filterItems(subOptions, {
-                                      itemToString,
-                                      inputValue,
-                                      parent: item,
-                                    }),
-                                    {
-                                      selectedItems,
-                                      itemToString,
-                                      compareItems,
-                                      locale,
-                                      parent: item,
-                                    }
-                                  ).map((item, index) => {
-                                    const myIndex = ++currentIndex;
-
-                                    if (highlightedIndex === currentIndex) {
-                                      highlighted = { item, index };
-                                    }
-
-                                    const optionsProps = getItemProps({
-                                      item,
-                                      index: currentIndex,
-                                    });
-                                    const isCheckedSub = myCheckedOptions.includes(
-                                      item
-                                    );
-                                    const subOpText = itemToString(item);
-                                    const checkBoxIndex = index.toString();
-                                    return (
-                                      <ListBox.MenuItem
-                                        key={optionsProps.id}
-                                        style={{ paddingLeft: '35px' }}
-                                        isActive={isCheckedSub}
-                                        isHighlighted={
-                                          highlightedIndex === myIndex
-                                        }
-                                        {...optionsProps}
-                                        onClick={e => {
-                                          this.onItemChange(
-                                            item,
-                                            selectedItems,
-                                            onItemChange
-                                          );
-                                        }}
-                                        onMouseMove={() => {
-                                          this.setState({
-                                            highlightedIndex: myIndex,
-                                          });
-                                        }}>
-                                        <Checkbox
-                                          id={checkBoxIndex}
-                                          name={subOpText}
-                                          checked={isCheckedSub}
-                                          tabIndex="-1"
-                                          labelText={subOpText}
-                                          tooltipText={showTooltip && subOpText}
-                                          readOnly={true}
-                                        />
-                                      </ListBox.MenuItem>
-                                    );
-                                  })}
-                              </Fragment>
-                            );
-                          })}
-                        </Fragment>
-                      );
-                    })}
+                              );
+                            })}
+                          </Fragment>
+                        );
+                      }
+                    )}
                   </ListBox.Menu>
                 )}
               </ListBox>

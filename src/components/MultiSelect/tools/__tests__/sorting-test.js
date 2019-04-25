@@ -15,39 +15,51 @@ describe('defaultSortItems', () => {
   });
 
   it('should sort un-selected options alphabetically', () => {
-    const mockItems = ['d', 'c', 'b', 'a'].map(label => ({ label }));
+    const mockItems = ['d', 'c', 'b', 'a'].map(label => ({ id: label, label }));
     expect(defaultSortItems(mockItems, mockOptions)).toEqual([
       {
+        id: 'a',
         label: 'a',
       },
       {
+        id: 'b',
         label: 'b',
       },
       {
+        id: 'c',
         label: 'c',
       },
       {
+        id: 'd',
         label: 'd',
       },
     ]);
   });
 
   it('should sort un-selected numbers in increasing order', () => {
-    const mockItems = ['1', '10', '11', '2', '3'].map(label => ({ label }));
+    const mockItems = ['1', '10', '11', '2', '3'].map(label => ({
+      id: label,
+      label,
+    }));
     expect(defaultSortItems(mockItems, mockOptions)).toEqual([
       {
+        id: '1',
         label: '1',
       },
       {
+        id: '2',
         label: '2',
       },
       {
+        id: '3',
         label: '3',
       },
       {
+        id: '10',
         label: '10',
       },
       {
+        id: '11',
         label: '11',
       },
     ]);
@@ -55,19 +67,23 @@ describe('defaultSortItems', () => {
 
   it('should sort un-selected alpha-numeric sequences with increasing order', () => {
     const mockItems = ['Option 1', 'Option 10', 'Option 11', 'Option 2'].map(
-      label => ({ label })
+      label => ({ id: label, label })
     );
     expect(defaultSortItems(mockItems, mockOptions)).toEqual([
       {
+        id: 'Option 1',
         label: 'Option 1',
       },
       {
+        id: 'Option 2',
         label: 'Option 2',
       },
       {
+        id: 'Option 10',
         label: 'Option 10',
       },
       {
+        id: 'Option 11',
         label: 'Option 11',
       },
     ]);
@@ -75,7 +91,7 @@ describe('defaultSortItems', () => {
 
   it('should order a selected item before all other options', () => {
     const mockItems = ['Option 1', 'Option 10', 'Option 11', 'Option 2'].map(
-      label => ({ label })
+      label => ({ id: label, label })
     );
 
     // Set `selectedItems` to ['Option 11']
@@ -83,15 +99,19 @@ describe('defaultSortItems', () => {
 
     expect(defaultSortItems(mockItems, mockOptions)).toEqual([
       {
+        id: 'Option 11',
         label: 'Option 11',
       },
       {
+        id: 'Option 1',
         label: 'Option 1',
       },
       {
+        id: 'Option 2',
         label: 'Option 2',
       },
       {
+        id: 'Option 10',
         label: 'Option 10',
       },
     ]);
@@ -99,7 +119,7 @@ describe('defaultSortItems', () => {
 
   it('should sort selected items and order them before all other options', () => {
     const mockItems = ['Option 1', 'Option 10', 'Option 11', 'Option 2'].map(
-      label => ({ label })
+      label => ({ id: label, label })
     );
 
     // Set `selectedItems` to ['Option 11', 'Option 2']
@@ -107,15 +127,19 @@ describe('defaultSortItems', () => {
 
     expect(defaultSortItems(mockItems, mockOptions)).toEqual([
       {
+        id: 'Option 2',
         label: 'Option 2',
       },
       {
+        id: 'Option 11',
         label: 'Option 11',
       },
       {
+        id: 'Option 1',
         label: 'Option 1',
       },
       {
+        id: 'Option 10',
         label: 'Option 10',
       },
     ]);

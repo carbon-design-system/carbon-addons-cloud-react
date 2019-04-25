@@ -20,6 +20,7 @@ debounce.mockImplementation(fn => fn);
 
 describe('NestedFilterableMultiselect', () => {
   let mockProps;
+  let expectedExpandedItems;
 
   describe('Simple multiselect', () => {
     beforeEach(() => {
@@ -95,7 +96,7 @@ describe('NestedFilterableMultiselect', () => {
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
       expect(wrapper.state().inputValue).toEqual('3');
-      expect(wrapper.state().openSections).toEqual([]);
+      expect(wrapper.state().expandedItems).toEqual([]);
     });
 
     it('should call `onChange` with each update to selected items via mouse click', () => {
@@ -244,7 +245,6 @@ describe('NestedFilterableMultiselect', () => {
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [mockProps.items[0], mockProps.items[2]],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([]);
       expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(2);
 
       // Clear all selection
@@ -253,7 +253,6 @@ describe('NestedFilterableMultiselect', () => {
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([]);
       expect(wrapper.find('ListBoxSelection').exists()).toBe(false);
     });
   });
@@ -281,6 +280,10 @@ describe('NestedFilterableMultiselect', () => {
         onChange: jest.fn(),
         placeholder: 'Placeholder...',
       };
+      expectedExpandedItems = mockProps.items.map(item => ({
+        ...item,
+        level: 0,
+      }));
     });
 
     it('should render', () => {
@@ -320,7 +323,7 @@ describe('NestedFilterableMultiselect', () => {
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
       expect(wrapper.state().inputValue).toEqual('Nested item 2');
-      expect(wrapper.state().openSections).toEqual([]);
+      expect(wrapper.state().expandedItems).toEqual([]);
       // An array input persists the current value
       wrapper.find('Downshift').prop('onInputValueChange')([], {
         type: Downshift.stateChangeTypes.changeInput,
@@ -328,7 +331,7 @@ describe('NestedFilterableMultiselect', () => {
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(1);
       expect(wrapper.state().inputValue).toEqual('Nested item 2');
-      expect(wrapper.state().openSections).toEqual([]);
+      expect(wrapper.state().expandedItems).toEqual([]);
 
       // Expand the child items
       wrapper
@@ -349,7 +352,7 @@ describe('NestedFilterableMultiselect', () => {
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(6);
       expect(wrapper.state().inputValue).toEqual('Sub item 2');
-      expect(wrapper.state().openSections).toEqual(mockProps.items);
+      expect(wrapper.state().expandedItems).toEqual(expectedExpandedItems);
     });
 
     it('should filter all items by the input value', () => {
@@ -362,7 +365,7 @@ describe('NestedFilterableMultiselect', () => {
       wrapper.update();
       expect(wrapper.find(listItemName).length).toBe(0);
       expect(wrapper.state().inputValue).toEqual('xxx');
-      expect(wrapper.state().openSections).toEqual([]);
+      expect(wrapper.state().expandedItems).toEqual([]);
 
       // No group should exist
       expect(
@@ -396,14 +399,16 @@ describe('NestedFilterableMultiselect', () => {
 
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
       expect(mockProps.onChange).toHaveBeenCalledWith({
-        selectedItems: [mockProps.items[0]],
+        selectedItems: [
+          {
+            ...mockProps.items[0],
+            options: mockProps.items[0].options.map(o => ({
+              ...o,
+              checked: true,
+            })),
+          },
+        ],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual(
-        mockProps.items[0].options.map(option => ({
-          ...option,
-          checked: true,
-        }))
-      );
       expect(
         wrapper
           .find('Checkbox')
@@ -419,18 +424,23 @@ describe('NestedFilterableMultiselect', () => {
 
       expect(mockProps.onChange).toHaveBeenCalledTimes(2);
       expect(mockProps.onChange).toHaveBeenCalledWith({
-        selectedItems: [mockProps.items[0], mockProps.items[2]],
+        selectedItems: [
+          {
+            ...mockProps.items[0],
+            options: mockProps.items[0].options.map(o => ({
+              ...o,
+              checked: true,
+            })),
+          },
+          {
+            ...mockProps.items[2],
+            options: mockProps.items[2].options.map(o => ({
+              ...o,
+              checked: true,
+            })),
+          },
+        ],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        ...mockProps.items[0].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-        ...mockProps.items[2].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-      ]);
       expect(
         wrapper
           .find('Checkbox')
@@ -446,14 +456,16 @@ describe('NestedFilterableMultiselect', () => {
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(3);
       expect(mockProps.onChange).toHaveBeenCalledWith({
-        selectedItems: [mockProps.items[2]],
+        selectedItems: [
+          {
+            ...mockProps.items[2],
+            options: mockProps.items[2].options.map(o => ({
+              ...o,
+              checked: true,
+            })),
+          },
+        ],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        ...mockProps.items[2].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-      ]);
       expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(2);
 
       wrapper
@@ -464,7 +476,6 @@ describe('NestedFilterableMultiselect', () => {
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([]);
       expect(wrapper.find('ListBoxSelection').exists()).toBe(false);
     });
 
@@ -485,14 +496,16 @@ describe('NestedFilterableMultiselect', () => {
 
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
       expect(mockProps.onChange).toHaveBeenCalledWith({
-        selectedItems: [mockProps.items[0]],
+        selectedItems: [
+          {
+            ...mockProps.items[0],
+            options: mockProps.items[0].options.map((o, i) => ({
+              ...o,
+              checked: i === 0,
+            })),
+          },
+        ],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        {
-          ...mockProps.items[0].options[0],
-          checked: true,
-        },
-      ]);
       expect(
         wrapper
           .find('Checkbox')
@@ -508,14 +521,16 @@ describe('NestedFilterableMultiselect', () => {
 
       expect(mockProps.onChange).toHaveBeenCalledTimes(2);
       expect(mockProps.onChange).toHaveBeenCalledWith({
-        selectedItems: [mockProps.items[0]],
+        selectedItems: [
+          {
+            ...mockProps.items[0],
+            options: mockProps.items[0].options.map(o => ({
+              ...o,
+              checked: true,
+            })),
+          },
+        ],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual(
-        mockProps.items[0].options.map(option => ({
-          ...option,
-          checked: true,
-        }))
-      );
       expect(
         wrapper
           .find('Checkbox')
@@ -530,14 +545,16 @@ describe('NestedFilterableMultiselect', () => {
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(3);
       expect(mockProps.onChange).toHaveBeenCalledWith({
-        selectedItems: [mockProps.items[0]],
+        selectedItems: [
+          {
+            ...mockProps.items[0],
+            options: mockProps.items[0].options.map((o, i) => ({
+              ...o,
+              checked: i !== 0,
+            })),
+          },
+        ],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        {
-          ...mockProps.items[0].options[1],
-          checked: true,
-        },
-      ]);
       expect(
         wrapper
           .find('Checkbox')
@@ -554,7 +571,6 @@ describe('NestedFilterableMultiselect', () => {
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([]);
       expect(
         wrapper
           .find('Checkbox')
@@ -580,18 +596,23 @@ describe('NestedFilterableMultiselect', () => {
 
       expect(mockProps.onChange).toHaveBeenCalledTimes(2);
       expect(mockProps.onChange).toHaveBeenCalledWith({
-        selectedItems: [mockProps.items[0], mockProps.items[2]],
+        selectedItems: [
+          {
+            ...mockProps.items[0],
+            options: mockProps.items[0].options.map(o => ({
+              ...o,
+              checked: true,
+            })),
+          },
+          {
+            ...mockProps.items[2],
+            options: mockProps.items[2].options.map(o => ({
+              ...o,
+              checked: true,
+            })),
+          },
+        ],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        ...mockProps.items[0].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-        ...mockProps.items[2].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-      ]);
       expect(
         wrapper
           .find('Checkbox')
@@ -606,7 +627,6 @@ describe('NestedFilterableMultiselect', () => {
       expect(mockProps.onChange).toHaveBeenCalledWith({
         selectedItems: [],
       });
-      expect(wrapper.state().checkedSuboptions).toEqual([]);
       expect(wrapper.find('ListBoxSelection').exists()).toBe(false);
     });
 
@@ -619,12 +639,6 @@ describe('NestedFilterableMultiselect', () => {
         .at(0)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        ...mockProps.items[0].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-      ]);
       //expand suboptions
       wrapper
         .find('.bx--checkbox-label')
@@ -653,12 +667,6 @@ describe('NestedFilterableMultiselect', () => {
         .at(0)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        ...mockProps.items[0].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-      ]);
       //expand suboptions
       wrapper
         .find('.bx--checkbox-label')
@@ -698,12 +706,6 @@ describe('NestedFilterableMultiselect', () => {
         .at(0)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        ...mockProps.items[0].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-      ]);
       //expand suboptions
       wrapper
         .find('.bx--checkbox-label')
@@ -745,12 +747,6 @@ describe('NestedFilterableMultiselect', () => {
         .at(0)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
-      expect(wrapper.state().checkedSuboptions).toEqual([
-        ...mockProps.items[0].options.map(option => ({
-          ...option,
-          checked: true,
-        })),
-      ]);
       expect(wrapper.find('.bx--checkbox-label').length).toEqual(3);
     });
 
