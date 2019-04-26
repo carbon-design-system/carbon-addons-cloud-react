@@ -20,7 +20,6 @@ debounce.mockImplementation(fn => fn);
 
 describe('NestedFilterableMultiselect', () => {
   let mockProps;
-  let expectedExpandedItems;
 
   describe('Simple multiselect', () => {
     beforeEach(() => {
@@ -270,20 +269,42 @@ describe('NestedFilterableMultiselect', () => {
             {
               id: 'option-id-1',
               label: 'Sub item 1',
+              options:
+                index > 0
+                  ? [
+                      {
+                        id: 'suboption-id-11',
+                        label: 'Sub-child item 11',
+                      },
+                      {
+                        id: 'suboption-id-12',
+                        label: 'Sub-child item 12',
+                      },
+                    ]
+                  : undefined,
             },
             {
               id: 'option-id-2',
               label: 'Sub item 2',
+              options:
+                index === 1
+                  ? [
+                      {
+                        id: 'suboption-id-21',
+                        label: 'Sub-child item 21',
+                      },
+                      {
+                        id: 'suboption-id-22',
+                        label: 'Sub-child item 22',
+                      },
+                    ]
+                  : undefined,
             },
           ],
         })),
         onChange: jest.fn(),
         placeholder: 'Placeholder...',
       };
-      expectedExpandedItems = mockProps.items.map(item => ({
-        ...item,
-        level: 0,
-      }));
     });
 
     it('should render', () => {
@@ -299,20 +320,34 @@ describe('NestedFilterableMultiselect', () => {
       // Expand the child items via mouse click
       wrapper
         .find('.bx--checkbox-label')
-        .at(0)
+        .at(1)
+        .find('span')
+        .simulate('click');
+      expect(wrapper.find(listItemName).length).toBe(5);
+      // Expand the sub-child items via mouse click
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .find('span')
+        .simulate('click');
+      expect(wrapper.find(listItemName).length).toBe(7);
+      // Collapse the sub-child items via mouse click
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
         .find('span')
         .simulate('click');
       expect(wrapper.find(listItemName).length).toBe(5);
       // Collapse the child items via mouse click
       wrapper
         .find('.bx--checkbox-label')
-        .at(0)
+        .at(1)
         .find('span')
         .simulate('click');
       expect(wrapper.find(listItemName).length).toBe(3);
     });
 
-    it('should filter a list of items by the input value', () => {
+    it('should filter a list of items by the input value (level=0)', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
@@ -340,9 +375,17 @@ describe('NestedFilterableMultiselect', () => {
         .find('span')
         .simulate('click');
       expect(wrapper.find(listItemName).length).toBe(3);
+
+      // Expand the sub-child items
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .find('span')
+        .simulate('click');
+      expect(wrapper.find(listItemName).length).toBe(5);
     });
 
-    it('should filter a list of sub items by the input value', () => {
+    it('should filter a list of sub items by the input value (level=1)', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
       expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
@@ -350,9 +393,80 @@ describe('NestedFilterableMultiselect', () => {
         type: Downshift.stateChangeTypes.changeInput,
       });
       wrapper.update();
+
+      const expectedExpandedItems = mockProps.items.map(item => ({
+        ...item,
+        level: 0,
+      }));
+
       expect(wrapper.find(listItemName).length).toBe(6);
       expect(wrapper.state().inputValue).toEqual('Sub item 2');
       expect(wrapper.state().expandedItems).toEqual(expectedExpandedItems);
+
+      // Expand the sub-child items
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(5)
+        .find('span')
+        .simulate('click');
+      expect(wrapper.find(listItemName).length).toBe(8);
+    });
+
+    it('should filter a list of sub child items by the input value (level=2)', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+      expect(wrapper.find(listItemName).length).toBe(mockProps.items.length);
+      wrapper.find('Downshift').prop('onInputValueChange')('Sub-child item 1', {
+        type: Downshift.stateChangeTypes.changeInput,
+      });
+      wrapper.update();
+
+      const expectedExpandedItems = [
+        {
+          ...mockProps.items[1],
+          level: 0,
+        },
+        {
+          ...mockProps.items[1].options[0],
+          level: 1,
+          category: mockProps.items[1].category,
+          parentId: mockProps.items[1].id,
+          id: `${mockProps.items[1].id}-${mockProps.items[1].options[0].id}`,
+        },
+        {
+          ...mockProps.items[2],
+          level: 0,
+        },
+        {
+          ...mockProps.items[2].options[0],
+          level: 1,
+          category: mockProps.items[2].category,
+          parentId: mockProps.items[2].id,
+          id: `${mockProps.items[2].id}-${mockProps.items[2].options[0].id}`,
+        },
+      ];
+
+      expect(wrapper.find(listItemName).length).toBe(8);
+      expect(wrapper.state().inputValue).toEqual('Sub-child item 1');
+      expect(wrapper.state().expandedItems).toEqual(expectedExpandedItems);
+
+      wrapper.find('Downshift').prop('onInputValueChange')('Sub-child item 2', {
+        type: Downshift.stateChangeTypes.changeInput,
+      });
+      wrapper.update();
+
+      expect(wrapper.find(listItemName).length).toBe(4);
+      expect(wrapper.state().inputValue).toEqual('Sub-child item 2');
+      expect(wrapper.state().expandedItems).toEqual([
+        ...expectedExpandedItems,
+        {
+          ...mockProps.items[1].options[1],
+          level: 1,
+          category: mockProps.items[1].category,
+          parentId: mockProps.items[1].id,
+          id: `${mockProps.items[1].id}-${mockProps.items[1].options[1].id}`,
+        },
+      ]);
     });
 
     it('should filter all items by the input value', () => {
@@ -391,7 +505,7 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
 
-      // Select the first two items
+      // Select the first item
       wrapper
         .find('.bx--checkbox-label')
         .at(0)
@@ -417,6 +531,7 @@ describe('NestedFilterableMultiselect', () => {
       ).toBe(false);
       expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(2);
 
+      // Select the second item
       wrapper
         .find('.bx--checkbox-label')
         .at(1)
@@ -437,6 +552,12 @@ describe('NestedFilterableMultiselect', () => {
             options: mockProps.items[2].options.map(o => ({
               ...o,
               checked: true,
+              options:
+                o.options &&
+                o.options.map(p => ({
+                  ...p,
+                  checked: true,
+                })),
             })),
           },
         ],
@@ -447,7 +568,7 @@ describe('NestedFilterableMultiselect', () => {
           .at(1)
           .prop('indeterminate')
       ).toBe(false);
-      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(4);
+      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(5);
 
       // Un-select the next two items
       wrapper
@@ -462,11 +583,17 @@ describe('NestedFilterableMultiselect', () => {
             options: mockProps.items[2].options.map(o => ({
               ...o,
               checked: true,
+              options:
+                o.options &&
+                o.options.map(p => ({
+                  ...p,
+                  checked: true,
+                })),
             })),
           },
         ],
       });
-      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(2);
+      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(3);
 
       wrapper
         .find('.bx--checkbox-label')
@@ -580,6 +707,129 @@ describe('NestedFilterableMultiselect', () => {
       expect(wrapper.find('ListBoxSelection').exists()).toBe(false);
     });
 
+    it('should call `onChange` with each update to selected sub child items', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      // Expand the child items
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .find('span')
+        .simulate('click');
+      // Check child item 1
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(3)
+        .simulate('click');
+
+      expect(mockProps.onChange).toHaveBeenCalledTimes(1);
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItems: [
+          {
+            ...mockProps.items[1],
+            options: mockProps.items[1].options.map((o, i) => ({
+              ...o,
+              checked: i === 0,
+              options: o.options.map(p => ({
+                ...p,
+                checked: i === 0,
+              })),
+            })),
+          },
+        ],
+      });
+      expect(
+        wrapper.find('Checkbox[name="Nested item 1"]').prop('indeterminate')
+      ).toBe(true);
+      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(2);
+
+      // Expand sub child items
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(3)
+        .find('span')
+        .simulate('click');
+
+      // Uncheck sub child 1
+      wrapper
+        .find('Checkbox[name="Sub-child item 11"]')
+        .find('.bx--checkbox-label')
+        .simulate('click');
+
+      expect(mockProps.onChange).toHaveBeenCalledTimes(2);
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItems: [
+          {
+            ...mockProps.items[1],
+            options: mockProps.items[1].options.map((o, i) => ({
+              ...o,
+              checked: false,
+              options: o.options.map((p, j) => ({
+                ...p,
+                checked: i !== 0 ? false : j !== 0,
+              })),
+            })),
+          },
+        ],
+      });
+      expect(
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(true);
+      expect(
+        wrapper.find('Checkbox[name="Nested item 1"]').prop('indeterminate')
+      ).toBe(true);
+      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(1);
+
+      // Uncheck sub child 2
+      wrapper
+        .find('Checkbox[name="Sub-child item 12"]')
+        .find('.bx--checkbox-label')
+        .simulate('click');
+
+      expect(mockProps.onChange).toHaveBeenCalledTimes(3);
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItems: [],
+      });
+      expect(
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(false);
+      expect(
+        wrapper.find('Checkbox[name="Nested item 1"]').prop('indeterminate')
+      ).toBe(false);
+      expect(wrapper.find('ListBoxSelection').exists()).toBe(false);
+
+      // Check sub child 1
+      wrapper
+        .find('Checkbox[name="Sub-child item 11"]')
+        .find('.bx--checkbox-label')
+        .simulate('click');
+
+      expect(mockProps.onChange).toHaveBeenCalledTimes(4);
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItems: [
+          {
+            ...mockProps.items[1],
+            options: mockProps.items[1].options.map((o, i) => ({
+              ...o,
+              checked: false,
+              options: o.options.map((p, j) => ({
+                ...p,
+                checked: i !== 0 ? false : j === 0,
+              })),
+            })),
+          },
+        ],
+      });
+      expect(
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(true);
+      expect(
+        wrapper.find('Checkbox[name="Nested item 1"]').prop('indeterminate')
+      ).toBe(true);
+      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(1);
+    });
+
     it('should clear all selections', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
@@ -609,6 +859,12 @@ describe('NestedFilterableMultiselect', () => {
             options: mockProps.items[2].options.map(o => ({
               ...o,
               checked: true,
+              options:
+                o.options &&
+                o.options.map(p => ({
+                  ...p,
+                  checked: true,
+                })),
             })),
           },
         ],
@@ -619,7 +875,7 @@ describe('NestedFilterableMultiselect', () => {
           .at(1)
           .prop('indeterminate')
       ).toBe(false);
-      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(4);
+      expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(5);
 
       // Clear all selection
       wrapper.find('.bx--list-box__selection--multi').simulate('click');
@@ -634,27 +890,52 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
 
+      // checked the item with multiple levels
       wrapper
         .find('.bx--checkbox-label')
-        .at(0)
+        .at(1)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
-      //expand suboptions
+      // checked item is now at the top
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
+      ).toBe(false);
+      // expand suboptions
       wrapper
         .find('.bx--checkbox-label')
         .at(0)
         .find('span')
         .simulate('click');
-      //unselect subOption
+      expect(
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(false);
+      // unselect subOption
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .simulate('click');
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
+      ).toBe(true);
+      // expand subChild
       wrapper
         .find('.bx--checkbox-label')
         .at(1)
+        .find('span')
         .simulate('click');
       expect(
-        wrapper
-          .find('Checkbox')
-          .at(0)
-          .prop('indeterminate')
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(false);
+      // unselect subChild
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .simulate('click');
+      expect(
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(true);
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
       ).toBe(true);
     });
 
@@ -662,38 +943,111 @@ describe('NestedFilterableMultiselect', () => {
       const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
       openMenu(wrapper);
 
+      // checked the item with multiple levels
       wrapper
         .find('.bx--checkbox-label')
-        .at(0)
+        .at(1)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
-      //expand suboptions
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
+      ).toBe(true);
+      // checked item is now at the top, expand suboptions
       wrapper
         .find('.bx--checkbox-label')
         .at(0)
         .find('span')
         .simulate('click');
-      //unselect 1 subOption
+      // unselect 1 subOption
       wrapper
         .find('.bx--checkbox-label')
         .at(1)
         .simulate('click');
       expect(
-        wrapper
-          .find('Checkbox')
-          .at(0)
-          .prop('indeterminate')
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
       ).toBe(true);
-      //unselect 2 subOption
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
+      ).toBe(true);
+      // unselect 2 subOption
       wrapper
         .find('.bx--checkbox-label')
         .at(1)
         .simulate('click');
       expect(
-        wrapper
-          .find('Checkbox')
-          .at(0)
-          .prop('checked')
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
+      ).toBe(false);
+    });
+
+    it('should unselect parent if the suboptions at all levels are unselect', () => {
+      const wrapper = mount(<NestedFilterableMultiselect {...mockProps} />);
+      openMenu(wrapper);
+
+      // checked the item with multiple levels
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .simulate('click');
+      expect(mockProps.onChange).toHaveBeenCalledTimes(1);
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
+      ).toBe(true);
+      // checked item is now at the top, expand suboptions
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .find('span')
+        .simulate('click');
+      // unselect 1 subOption
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .simulate('click');
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
+      ).toBe(true);
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
+      ).toBe(true);
+      // expand subChild
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .find('span')
+        .simulate('click');
+      // unselect 1 subChild
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .simulate('click');
+      expect(
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(true);
+      expect(wrapper.find('Checkbox[name="Sub item 1"]').prop('checked')).toBe(
+        true
+      );
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
+      ).toBe(true);
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
+      ).toBe(true);
+      // unselect 2 subChild
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .simulate('click');
+      expect(
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(false);
+      expect(wrapper.find('Checkbox[name="Sub item 1"]').prop('checked')).toBe(
+        false
+      );
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
+      ).toBe(false);
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
       ).toBe(false);
     });
 
@@ -768,6 +1122,313 @@ describe('NestedFilterableMultiselect', () => {
         .find('span')
         .simulate('mousemove');
       expect(wrapper.state().highlightedIndex).toEqual(1);
+    });
+  });
+
+  describe('multiselect with initial selections', () => {
+    beforeEach(() => {
+      mockProps = {
+        disabled: false,
+        items: generateItems(3, index => ({
+          id: `id-${index}`,
+          label: `Nested item ${index}`,
+          value: index,
+          category: `category-${index % 2 === 0 ? 1 : 2}`,
+          options:
+            index === 0
+              ? [
+                  {
+                    id: 'option-id-1',
+                    label: 'Sub item 1',
+                    options: [
+                      {
+                        id: 'suboption-id-11',
+                        label: 'Sub-child item 11',
+                      },
+                      {
+                        id: 'suboption-id-12',
+                        label: 'Sub-child item 12',
+                      },
+                    ],
+                  },
+                  {
+                    id: 'option-id-2',
+                    label: 'Sub item 2',
+                    options: [
+                      {
+                        id: 'suboption-id-21',
+                        label: 'Sub-child item 21',
+                      },
+                      {
+                        id: 'suboption-id-22',
+                        label: 'Sub-child item 22',
+                      },
+                    ],
+                  },
+                ]
+              : undefined,
+        })),
+        placeholder: 'Placeholder...',
+      };
+    });
+
+    it('preselect item at level 0', () => {
+      const props = {
+        ...mockProps,
+        initialSelectedItems: [
+          {
+            ...mockProps.items[0],
+          },
+          {
+            ...mockProps.items[2],
+          },
+        ],
+      };
+
+      const wrapper = mount(<NestedFilterableMultiselect {...props} />);
+      expect(wrapper).toMatchSnapshot();
+      openMenu(wrapper);
+      // Expand the child items via mouse click
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .find('span')
+        .simulate('click');
+      // Expand the sub-child items via mouse click
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .find('span')
+        .simulate('click');
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .find('span')
+        .simulate('click');
+
+      const checked = wrapper
+        .find('Checkbox')
+        .filterWhere(node => !!node.prop('checked'));
+      expect(checked.length).toEqual(8);
+      expect(wrapper.instance().state.flattenedSelectedItems).toEqual([
+        {
+          ...props.initialSelectedItems[0],
+          level: 0,
+        },
+        {
+          ...props.initialSelectedItems[0].options[0],
+          level: 1,
+          parentId: props.initialSelectedItems[0].id,
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-1',
+        },
+        {
+          ...props.initialSelectedItems[0].options[0].options[0],
+          level: 2,
+          parentId: 'id-0-option-id-1',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-1-suboption-id-11',
+        },
+        {
+          ...props.initialSelectedItems[0].options[0].options[1],
+          level: 2,
+          parentId: 'id-0-option-id-1',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-1-suboption-id-12',
+        },
+        {
+          ...props.initialSelectedItems[0].options[1],
+          level: 1,
+          parentId: props.initialSelectedItems[0].id,
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-2',
+        },
+        {
+          ...props.initialSelectedItems[0].options[1].options[0],
+          level: 2,
+          parentId: 'id-0-option-id-2',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-2-suboption-id-21',
+        },
+        {
+          ...props.initialSelectedItems[0].options[1].options[1],
+          level: 2,
+          parentId: 'id-0-option-id-2',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-2-suboption-id-22',
+        },
+        {
+          ...props.initialSelectedItems[1],
+          level: 0,
+        },
+      ]);
+    });
+
+    it('preselect item at level 1', () => {
+      const props = {
+        ...mockProps,
+        initialSelectedItems: [
+          {
+            ...mockProps.items[0],
+            options: mockProps.items[0].options.map(o => ({
+              ...o,
+              checked: true,
+            })),
+          },
+        ],
+      };
+
+      const wrapper = mount(<NestedFilterableMultiselect {...props} />);
+      expect(wrapper).toMatchSnapshot();
+      openMenu(wrapper);
+      // Expand the child items via mouse click
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .find('span')
+        .simulate('click');
+      // Expand the sub-child items via mouse click
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .find('span')
+        .simulate('click');
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .find('span')
+        .simulate('click');
+
+      const checked = wrapper
+        .find('Checkbox')
+        .filterWhere(node => !!node.prop('checked'));
+      expect(checked.length).toEqual(7);
+      expect(wrapper.instance().state.flattenedSelectedItems).toEqual([
+        {
+          ...props.initialSelectedItems[0],
+          level: 0,
+        },
+        {
+          ...props.initialSelectedItems[0].options[0],
+          level: 1,
+          parentId: props.initialSelectedItems[0].id,
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-1',
+        },
+        {
+          ...props.initialSelectedItems[0].options[0].options[0],
+          level: 2,
+          parentId: 'id-0-option-id-1',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-1-suboption-id-11',
+        },
+        {
+          ...props.initialSelectedItems[0].options[0].options[1],
+          level: 2,
+          parentId: 'id-0-option-id-1',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-1-suboption-id-12',
+        },
+        {
+          ...props.initialSelectedItems[0].options[1],
+          level: 1,
+          parentId: props.initialSelectedItems[0].id,
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-2',
+        },
+        {
+          ...props.initialSelectedItems[0].options[1].options[0],
+          level: 2,
+          parentId: 'id-0-option-id-2',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-2-suboption-id-21',
+        },
+        {
+          ...props.initialSelectedItems[0].options[1].options[1],
+          level: 2,
+          parentId: 'id-0-option-id-2',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-2-suboption-id-22',
+        },
+      ]);
+    });
+
+    it('preselect item at level 2', () => {
+      const props = {
+        ...mockProps,
+        initialSelectedItems: [
+          {
+            ...mockProps.items[0],
+            options: mockProps.items[0].options.map(o => ({
+              ...o,
+              options: o.options.map((p, i) => ({
+                ...p,
+                checked: i === 0,
+              })),
+            })),
+          },
+        ],
+      };
+
+      const wrapper = mount(<NestedFilterableMultiselect {...props} />);
+      expect(wrapper).toMatchSnapshot();
+      openMenu(wrapper);
+      // Expand the child items via mouse click
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(0)
+        .find('span')
+        .simulate('click');
+      // Expand the sub-child items via mouse click
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(2)
+        .find('span')
+        .simulate('click');
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(1)
+        .find('span')
+        .simulate('click');
+
+      const checked = wrapper
+        .find('Checkbox')
+        .filterWhere(node => !!node.prop('checked'));
+      expect(checked.length).toEqual(5);
+      expect(wrapper.instance().state.flattenedSelectedItems).toEqual([
+        {
+          ...props.initialSelectedItems[0],
+          level: 0,
+        },
+        {
+          ...props.initialSelectedItems[0].options[0],
+          level: 1,
+          parentId: props.initialSelectedItems[0].id,
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-1',
+        },
+        {
+          ...props.initialSelectedItems[0].options[0].options[0],
+          level: 2,
+          parentId: 'id-0-option-id-1',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-1-suboption-id-11',
+        },
+        {
+          ...props.initialSelectedItems[0].options[1],
+          level: 1,
+          parentId: props.initialSelectedItems[0].id,
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-2',
+        },
+        {
+          ...props.initialSelectedItems[0].options[1].options[0],
+          level: 2,
+          parentId: 'id-0-option-id-2',
+          category: props.initialSelectedItems[0].category,
+          id: 'id-0-option-id-2-suboption-id-21',
+        },
+      ]);
     });
   });
 });

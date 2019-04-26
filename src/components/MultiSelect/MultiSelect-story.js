@@ -24,6 +24,16 @@ const items = [
       {
         id: 'opt-4',
         text: 'Option 4',
+        options: [
+          {
+            id: 'subopt-25',
+            text: 'SubOption 20',
+          },
+          {
+            id: 'subopt-30',
+            text: 'SubOption 30',
+          },
+        ],
       },
     ],
   },
@@ -50,10 +60,49 @@ const items = [
       {
         id: 'opt-7',
         text: 'Option 7',
+        options: [
+          {
+            id: 'subopt-20',
+            text: 'SubOption 20',
+          },
+          {
+            id: 'subopt-15',
+            text: 'SubOption 15',
+          },
+          {
+            id: 'subopt-18',
+            text: 'SubOption 18',
+          },
+        ],
       },
       {
         id: 'opt-8',
         text: 'Option 8',
+        options: [
+          {
+            id: 'subopt-20',
+            text: 'SubOption 5',
+          },
+          {
+            id: 'subopt-15',
+            text: 'SubOption 10',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'item-5',
+    text: 'Item 5',
+    category: 'America',
+    options: [
+      {
+        id: 'opt-9',
+        text: 'Option 9',
+      },
+      {
+        id: 'opt-10',
+        text: 'Option 10',
       },
     ],
   },
@@ -72,6 +121,17 @@ const selectedItems = [
       {
         id: 'opt-4',
         text: 'Option 4',
+        options: [
+          {
+            id: 'subopt-25',
+            text: 'SubOption 25',
+          },
+          {
+            id: 'subopt-30',
+            text: 'SubOption 30',
+            checked: true,
+          },
+        ],
       },
     ],
   },
@@ -99,11 +159,35 @@ const selectedItems = [
       {
         id: 'opt-7',
         text: 'Option 7',
+        checked: true,
+        options: [
+          {
+            id: 'subopt-20',
+            text: 'SubOption 20',
+          },
+          {
+            id: 'subopt-15',
+            text: 'SubOption 15',
+          },
+          {
+            id: 'subopt-18',
+            text: 'SubOption 18',
+          },
+        ],
       },
       {
         id: 'opt-8',
         text: 'Option 8',
-        checked: true,
+        options: [
+          {
+            id: 'subopt-20',
+            text: 'SubOption 5',
+          },
+          {
+            id: 'subopt-15',
+            text: 'SubOption 10',
+          },
+        ],
       },
     ],
   },

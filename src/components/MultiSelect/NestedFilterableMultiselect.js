@@ -11,8 +11,13 @@ import Selection from '../../internal/Selection';
 import { sortingPropTypes } from './MultiSelectPropTypes';
 import { defaultItemToString } from './tools/itemToString';
 import { groupedByCategory } from './tools/groupedByCategory';
-import { defaultSortItems, defaultCompareItems } from './tools/sorting';
-import { defaultFilterItems } from './tools/filter';
+import {
+  buildHierarchy,
+  defaultSortItems,
+  defaultCompareItems,
+  findParent,
+} from './tools/sorting';
+import { defaultFilterItems, getAllChildren } from './tools/filter';
 
 export default class NestedFilterableMultiselect extends React.Component {
   static propTypes = {
@@ -89,7 +94,15 @@ export default class NestedFilterableMultiselect extends React.Component {
   };
 
   static find(items = [], target) {
-    return items.filter(item => item.id === target.id)[0];
+    let found;
+    items.some(item => {
+      if (item.id === target.id) {
+        found = item;
+        return true;
+      }
+      return false;
+    });
+    return found;
   }
 
   static computeId({ item, itemToString = defaultItemToString, parentId }) {
@@ -122,7 +135,7 @@ export default class NestedFilterableMultiselect extends React.Component {
             category: mappedItem.category,
             items: item.options,
             level: mappedItem.level + 1,
-            parentId: item.id,
+            parentId: mappedItem.id,
             itemToString,
           })
         );
@@ -147,7 +160,33 @@ export default class NestedFilterableMultiselect extends React.Component {
       const updatedSelectedItems = NestedFilterableMultiselect.flatten({
         items: initialSelectedItems,
         itemToString,
-      }).filter(item => !item.parentId || item.checked);
+      }).filter((item, index, itemArray) => {
+        if (!item.parentId || item.checked) {
+          return true;
+        }
+
+        // Any parent checked will make all its children checked
+        const hierarchy = buildHierarchy(item, itemArray);
+        const parentChecked = hierarchy.some(parent => parent.checked);
+        if (parentChecked) {
+          return true;
+        }
+
+        // Any child checked will make its parent checked
+        const allChildren = getAllChildren(item, itemArray);
+        const childChecked = allChildren.some(child => child.checked);
+        if (childChecked) {
+          return true;
+        }
+
+        // If none of the children has the `checked` flag,
+        // all children are considered checked.
+        const rootAllChildren = getAllChildren(hierarchy[0], itemArray);
+        return (
+          rootAllChildren.length > 0 &&
+          !rootAllChildren.some(child => child.checked)
+        );
+      });
 
       flattenedItems.splice(0, flattenedItems.length, ...updatedItems);
       flattenedSelectedItems.splice(
@@ -178,19 +217,20 @@ export default class NestedFilterableMultiselect extends React.Component {
         itemToString,
         parentId,
       });
-      const result = {
-        ...option,
-        checked: selectedItems.some(
-          selectedItem => selectedItem.id === optionId
-        ),
-      };
+      const result = { ...option };
       if (result.options) {
         result.options = NestedFilterableMultiselect.updateCheckedState({
           options: result.options,
           itemToString,
-          optionId,
+          parentId: optionId,
           selectedItems,
         });
+        // The parent is checked only if all its children is checked
+        result.checked = !result.options.some(option => !option.checked);
+      } else {
+        result.checked = selectedItems.some(
+          selectedItem => selectedItem.id === optionId
+        );
       }
       return result;
     });
@@ -314,9 +354,9 @@ export default class NestedFilterableMultiselect extends React.Component {
       const inputValue = Array.isArray(value) ? prevInputValue : value;
 
       const itemsToExpand = items.reduce((toExpand, item) => {
-        const children = items.filter(theItem => theItem.parentId === item.id);
-        if (children.length > 0) {
-          const filteredChildren = filterItems(children, {
+        const allChildren = getAllChildren(item, items);
+        if (allChildren.length > 0) {
+          const filteredChildren = filterItems(allChildren, {
             itemToString,
             inputValue,
           });
@@ -352,87 +392,57 @@ export default class NestedFilterableMultiselect extends React.Component {
 
   getParentItem = item => {
     const { flattenedItems: items } = this.state;
-
-    let parent;
-    if (item.parentId) {
-      items.some(thisItem => {
-        if (thisItem.id === item.parentId) {
-          parent = thisItem;
-          return true;
-        }
-        return false;
-      });
-    }
-
-    return parent;
-  };
-
-  getAllChildren = item => {
-    const { flattenedItems: items } = this.state;
-
-    const results = [];
-    const children = items.filter(theItem => theItem.parentId === item.id);
-
-    if (children.length > 0) {
-      results.push(...children);
-
-      children.forEach(child => {
-        results.push(...this.getAllChildren(child));
-      });
-    }
-
-    return results;
+    return findParent(item, items);
   };
 
   onItemChange = (item, selectedItems, onItemChange) => {
     const { flattenedItems: items } = this.state;
 
+    const toRemove = !!NestedFilterableMultiselect.find(selectedItems, item);
+
     const itemsChanged = [item];
 
     if (item.parentId) {
       // Walk parents
-      let theItem = item;
-      while (theItem && theItem.parentId) {
-        const parent = this.getParentItem(theItem);
-
-        if (parent) {
-          const toRemove = !!NestedFilterableMultiselect.find(
-            selectedItems,
-            theItem
-          );
-          const isParentSelected = !!NestedFilterableMultiselect.find(
-            selectedItems,
-            parent
-          );
-          const children = selectedItems.filter(
-            selectedItem => selectedItem.parentId === theItem.parentId
-          );
-          if (children.length === 1 && toRemove && isParentSelected) {
-            // Uncheck parent too
-            itemsChanged.push(parent);
-          } else if (children.length === 0 && !toRemove && !isParentSelected) {
-            // Check parent too
-            itemsChanged.push(parent);
-          }
+      const parents = buildHierarchy(item, items).reverse();
+      parents.shift();
+      parents.some(parent => {
+        const isSelected = !!NestedFilterableMultiselect.find(
+          selectedItems,
+          parent
+        );
+        const children = selectedItems.filter(
+          selectedItem => selectedItem.parentId === parent.id
+        );
+        if (children.length === 1 && toRemove && isSelected) {
+          // Uncheck parent too and keep walking up
+          itemsChanged.push(parent);
+          return false;
+        } else if (!toRemove && !isSelected) {
+          // Check parent too
+          itemsChanged.push(parent);
+          return false;
         }
-
-        theItem = parent;
-      }
+        // If selecting a new item, we need to keep going up to
+        // make sure all parents are checked.
+        // If unselecting an item, we will break out when the
+        // current parent does not need to be removed
+        return toRemove;
+      });
     }
 
     // Walk children
-    const children = this.getAllChildren(item);
+    const children = getAllChildren(item, items);
     if (children.length > 0) {
-      const toRemove = !!NestedFilterableMultiselect.find(selectedItems, item);
       children.forEach(child => {
-        const isChildSelected = !!NestedFilterableMultiselect.find(
+        const isSelected = !!NestedFilterableMultiselect.find(
           selectedItems,
           child
         );
-        if (toRemove && isChildSelected) {
+        if (toRemove && isSelected) {
           // Uncheck the child too
           itemsChanged.push(child);
-        } else if (!toRemove && !isChildSelected) {
+        } else if (!toRemove && !isSelected) {
           // Check the child too
           itemsChanged.push(child);
         }
@@ -626,9 +636,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                 selectedItem.filter(
                                   selected => selected.id == item.id
                                 ).length > 0;
-                              const subOptions = items.filter(
-                                theItem => theItem.parentId === item.id
-                              );
+                              const subOptions = getAllChildren(item, items);
                               const groupIsOpen = !!NestedFilterableMultiselect.find(
                                 expandedItems,
                                 item
