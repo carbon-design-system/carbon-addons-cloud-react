@@ -657,7 +657,7 @@ export default class NestedFilterableMultiselect extends React.Component {
 
                               const itemStyle = item.level
                                 ? {
-                                    paddingLeft: `${item.level * 35}px`,
+                                    paddingLeft: `${item.level * 19 + 16}px`,
                                   }
                                 : undefined;
 
