@@ -1509,4 +1509,162 @@ describe('NestedFilterableMultiselect', () => {
       ]);
     });
   });
+
+  describe('multiselect with flat list', () => {
+    beforeEach(() => {
+      mockProps = {
+        disabled: false,
+        items: [
+          {
+            id: 'id-0',
+            label: 'Flat item 1',
+            value: 0,
+            category: 'category-0',
+            level: 0,
+            hasChildren: true,
+          },
+          {
+            id: 'id-1',
+            label: 'Child item 1',
+            value: 1,
+            category: 'category-0',
+            level: 1,
+            hasChildren: true,
+            parentId: 'id-0',
+          },
+          {
+            id: 'id-2',
+            label: 'Subchild item 2',
+            value: 2,
+            category: 'category-0',
+            level: 2,
+            parentId: 'id-1',
+          },
+          {
+            id: 'id-3',
+            label: 'Subchild item 3',
+            value: 3,
+            category: 'category-0',
+            level: 2,
+            parentId: 'id-1',
+          },
+          {
+            id: 'id-4',
+            label: 'Child item 4',
+            value: 4,
+            category: 'category-0',
+            level: 1,
+            parentId: 'id-0',
+          },
+          {
+            id: 'id-5',
+            label: 'Flat item 5',
+            value: 5,
+            category: 'category-0',
+            level: 0,
+          },
+          {
+            id: 'id-6',
+            label: 'Flat item 6',
+            value: 6,
+            category: 'category-1',
+            level: 0,
+            hasChildren: true,
+          },
+          {
+            id: 'id-7',
+            label: 'Child item 7',
+            value: 7,
+            category: 'category-1',
+            level: 1,
+            parentId: 'id-6',
+          },
+          {
+            id: 'id-8',
+            label: 'Child item 8',
+            value: 8,
+            category: 'category-1',
+            level: 1,
+            parentId: 'id-6',
+          },
+        ],
+        placeholder: 'Placeholder...',
+      };
+    });
+
+    it('preselect item at level 0', () => {
+      const props = {
+        ...mockProps,
+        initialSelectedItems: [
+          {
+            ...mockProps.items[0],
+          },
+          {
+            ...mockProps.items[6],
+          },
+        ],
+      };
+
+      const wrapper = mount(<NestedFilterableMultiselect {...props} />);
+      expect(wrapper).toMatchSnapshot();
+      expect(wrapper.instance().state.flattenedSelectedItems).toEqual([
+        mockProps.items[0],
+        mockProps.items[6],
+        mockProps.items[1],
+        mockProps.items[4],
+        mockProps.items[2],
+        mockProps.items[3],
+        mockProps.items[7],
+        mockProps.items[8],
+      ]);
+    });
+
+    it('preselect item at level 1', () => {
+      const props = {
+        ...mockProps,
+        initialSelectedItems: [
+          {
+            ...mockProps.items[1],
+          },
+          {
+            ...mockProps.items[5],
+          },
+          {
+            ...mockProps.items[7],
+          },
+        ],
+      };
+
+      const wrapper = mount(<NestedFilterableMultiselect {...props} />);
+      expect(wrapper).toMatchSnapshot();
+      expect(wrapper.instance().state.flattenedSelectedItems).toEqual([
+        mockProps.items[1],
+        mockProps.items[5],
+        mockProps.items[7],
+        mockProps.items[0],
+        mockProps.items[2],
+        mockProps.items[3],
+        mockProps.items[6],
+      ]);
+    });
+
+    it('preselect item at level 2', () => {
+      const props = {
+        ...mockProps,
+        initialSelectedItems: [
+          {
+            ...mockProps.items[2],
+          },
+        ],
+      };
+
+      const wrapper = mount(<NestedFilterableMultiselect {...props} />);
+      expect(wrapper).toMatchSnapshot();
+      expect(wrapper.instance().state.flattenedSelectedItems).toEqual([
+        mockProps.items[2],
+        mockProps.items[0],
+        mockProps.items[1],
+      ]);
+    });
+  });
 });

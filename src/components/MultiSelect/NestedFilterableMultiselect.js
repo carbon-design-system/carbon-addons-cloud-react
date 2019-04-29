@@ -159,44 +159,73 @@ export default class NestedFilterableMultiselect extends React.Component {
     const itemsToProcess = initialSelectedItems
       ? items.map(obj => initialSelectedItems.find(o => o.id === obj.id) || obj)
       : items;
-    const updatedItems = NestedFilterableMultiselect.flatten({
-      items: itemsToProcess,
-      itemToString,
-    }).map(NestedFilterableMultiselect.cleanItem);
+    const isHierarchical = items.some(item => !!item.options);
+    const updatedItems = isHierarchical
+      ? NestedFilterableMultiselect.flatten({
+          items: itemsToProcess,
+          itemToString,
+        }).map(NestedFilterableMultiselect.cleanItem)
+      : itemsToProcess;
 
     if (!isEqual(updatedItems, flattenedItems)) {
-      const updatedSelectedItems = NestedFilterableMultiselect.flatten({
-        items: initialSelectedItems,
-        itemToString,
-      })
-        .filter((item, index, itemArray) => {
-          if (!item.parentId || item.checked) {
-            return true;
-          }
+      const updatedSelectedItems = isHierarchical
+        ? NestedFilterableMultiselect.flatten({
+            items: initialSelectedItems,
+            itemToString,
+          })
+            .filter((item, index, itemArray) => {
+              if (!item.parentId || item.checked) {
+                return true;
+              }
 
-          // Any parent checked will make all its children checked
-          const hierarchy = buildHierarchy(item, itemArray);
-          const parentChecked = hierarchy.some(parent => parent.checked);
-          if (parentChecked) {
-            return true;
-          }
+              // Any parent checked will make all its children checked
+              const hierarchy = buildHierarchy(item, itemArray);
+              const parentChecked = hierarchy.some(parent => parent.checked);
+              if (parentChecked) {
+                return true;
+              }
 
-          // Any child checked will make its parent checked
-          const allChildren = getAllChildren(item, itemArray);
-          const childChecked = allChildren.some(child => child.checked);
-          if (childChecked) {
-            return true;
-          }
+              // Any child checked will make its parent checked
+              const allChildren = getAllChildren(item, itemArray);
+              const childChecked = allChildren.some(child => child.checked);
+              if (childChecked) {
+                return true;
+              }
 
-          // If none of the children has the `checked` flag,
-          // all children are considered checked.
-          const rootAllChildren = getAllChildren(hierarchy[0], itemArray);
-          return (
-            rootAllChildren.length > 0 &&
-            !rootAllChildren.some(child => child.checked)
+              // If none of the children has the `checked` flag,
+              // all children are considered checked.
+              const rootAllChildren = getAllChildren(hierarchy[0], itemArray);
+              return (
+                rootAllChildren.length > 0 &&
+                !rootAllChildren.some(child => child.checked)
+              );
+            })
+            .map(NestedFilterableMultiselect.cleanItem)
+        : initialSelectedItems.reduce(
+            (list, item) => {
+              // Any parent checked will make all its children checked
+              const hierarchy = buildHierarchy(item, updatedItems);
+              hierarchy.forEach(parent => {
+                if (!NestedFilterableMultiselect.find(list, parent)) {
+                  list.push({ ...parent });
+                }
+              });
+
+              // If none of the children has the `checked` flag,
+              // all children are considered checked.
+              const allChildren = getAllChildren(item, updatedItems);
+              if (
+                !allChildren.some(child =>
+                  NestedFilterableMultiselect.find(list, child)
+                )
+              ) {
+                list.push(...allChildren.map(child => ({ ...child })));
+              }
+
+              return list;
+            },
+            [...initialSelectedItems]
           );
-        })
-        .map(NestedFilterableMultiselect.cleanItem);
 
       flattenedItems.splice(0, flattenedItems.length, ...updatedItems);
       flattenedSelectedItems.splice(
@@ -264,26 +293,29 @@ export default class NestedFilterableMultiselect extends React.Component {
     if (onChange) {
       const { selectedItems = [] } = changes;
 
-      const mappedSelectedItems = items.reduce((list, item) => {
-        if (NestedFilterableMultiselect.find(selectedItems, item)) {
-          const selectedItem = { ...item };
-          if (item.options) {
-            selectedItem.options = NestedFilterableMultiselect.updateCheckedState(
-              {
-                options: item.options,
-                itemToString,
-                parentId: NestedFilterableMultiselect.computeId({
-                  item,
-                  itemToString,
-                }),
-                selectedItems,
+      const isHierarchical = items.some(item => !!item.options);
+      const mappedSelectedItems = isHierarchical
+        ? items.reduce((list, item) => {
+            if (NestedFilterableMultiselect.find(selectedItems, item)) {
+              const selectedItem = { ...item };
+              if (item.options) {
+                selectedItem.options = NestedFilterableMultiselect.updateCheckedState(
+                  {
+                    options: item.options,
+                    itemToString,
+                    parentId: NestedFilterableMultiselect.computeId({
+                      item,
+                      itemToString,
+                    }),
+                    selectedItems,
+                  }
+                );
               }
-            );
-          }
-          list.push(selectedItem);
-        }
-        return list;
-      }, []);
+              list.push(selectedItem);
+            }
+            return list;
+          }, [])
+        : selectedItems;
 
       onChange({ selectedItems: mappedSelectedItems });
     }
