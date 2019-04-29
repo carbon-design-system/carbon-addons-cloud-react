@@ -397,6 +397,9 @@ describe('NestedFilterableMultiselect', () => {
       const expectedExpandedItems = mockProps.items.map(item => ({
         ...item,
         level: 0,
+        options: undefined,
+        checked: undefined,
+        hasChildren: true,
       }));
 
       expect(wrapper.find(listItemName).length).toBe(6);
@@ -425,6 +428,9 @@ describe('NestedFilterableMultiselect', () => {
         {
           ...mockProps.items[1],
           level: 0,
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...mockProps.items[1].options[0],
@@ -432,10 +438,16 @@ describe('NestedFilterableMultiselect', () => {
           category: mockProps.items[1].category,
           parentId: mockProps.items[1].id,
           id: `${mockProps.items[1].id}-${mockProps.items[1].options[0].id}`,
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...mockProps.items[2],
           level: 0,
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...mockProps.items[2].options[0],
@@ -443,6 +455,9 @@ describe('NestedFilterableMultiselect', () => {
           category: mockProps.items[2].category,
           parentId: mockProps.items[2].id,
           id: `${mockProps.items[2].id}-${mockProps.items[2].options[0].id}`,
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
       ];
 
@@ -465,6 +480,9 @@ describe('NestedFilterableMultiselect', () => {
           category: mockProps.items[1].category,
           parentId: mockProps.items[1].id,
           id: `${mockProps.items[1].id}-${mockProps.items[1].options[1].id}`,
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
       ]);
     });
@@ -1214,6 +1232,9 @@ describe('NestedFilterableMultiselect', () => {
         {
           ...props.initialSelectedItems[0],
           level: 0,
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[0],
@@ -1221,6 +1242,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: props.initialSelectedItems[0].id,
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-1',
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[0].options[0],
@@ -1228,6 +1252,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-1',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-1-suboption-id-11',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
         {
           ...props.initialSelectedItems[0].options[0].options[1],
@@ -1235,6 +1262,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-1',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-1-suboption-id-12',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
         {
           ...props.initialSelectedItems[0].options[1],
@@ -1242,6 +1272,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: props.initialSelectedItems[0].id,
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-2',
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[1].options[0],
@@ -1249,6 +1282,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-2',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-2-suboption-id-21',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
         {
           ...props.initialSelectedItems[0].options[1].options[1],
@@ -1256,10 +1292,16 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-2',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-2-suboption-id-22',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
         {
           ...props.initialSelectedItems[1],
           level: 0,
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
       ]);
     });
@@ -1307,6 +1349,9 @@ describe('NestedFilterableMultiselect', () => {
         {
           ...props.initialSelectedItems[0],
           level: 0,
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[0],
@@ -1314,6 +1359,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: props.initialSelectedItems[0].id,
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-1',
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[0].options[0],
@@ -1321,6 +1369,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-1',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-1-suboption-id-11',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
         {
           ...props.initialSelectedItems[0].options[0].options[1],
@@ -1328,6 +1379,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-1',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-1-suboption-id-12',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
         {
           ...props.initialSelectedItems[0].options[1],
@@ -1335,6 +1389,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: props.initialSelectedItems[0].id,
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-2',
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[1].options[0],
@@ -1342,6 +1399,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-2',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-2-suboption-id-21',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
         {
           ...props.initialSelectedItems[0].options[1].options[1],
@@ -1349,6 +1409,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-2',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-2-suboption-id-22',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
       ]);
     });
@@ -1399,6 +1462,9 @@ describe('NestedFilterableMultiselect', () => {
         {
           ...props.initialSelectedItems[0],
           level: 0,
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[0],
@@ -1406,6 +1472,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: props.initialSelectedItems[0].id,
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-1',
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[0].options[0],
@@ -1413,6 +1482,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-1',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-1-suboption-id-11',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
         {
           ...props.initialSelectedItems[0].options[1],
@@ -1420,6 +1492,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: props.initialSelectedItems[0].id,
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-2',
+          options: undefined,
+          checked: undefined,
+          hasChildren: true,
         },
         {
           ...props.initialSelectedItems[0].options[1].options[0],
@@ -1427,6 +1502,9 @@ describe('NestedFilterableMultiselect', () => {
           parentId: 'id-0-option-id-2',
           category: props.initialSelectedItems[0].category,
           id: 'id-0-option-id-2-suboption-id-21',
+          options: undefined,
+          checked: undefined,
+          hasChildren: false,
         },
       ]);
     });

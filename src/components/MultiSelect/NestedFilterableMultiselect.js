@@ -126,6 +126,7 @@ export default class NestedFilterableMultiselect extends React.Component {
         }),
         category: category || item.category,
         level: level || 0,
+        hasChildren: !!item.options,
         parentId,
       };
       list.push(mappedItem);
@@ -144,6 +145,13 @@ export default class NestedFilterableMultiselect extends React.Component {
     }, []);
   }
 
+  static cleanItem(item) {
+    const result = { ...item };
+    delete result.options;
+    delete result.checked;
+    return result;
+  }
+
   static getDerivedStateFromProps(nextProps, currentState) {
     const { items, initialSelectedItems, itemToString } = nextProps;
     const { flattenedItems, flattenedSelectedItems } = currentState;
@@ -154,39 +162,41 @@ export default class NestedFilterableMultiselect extends React.Component {
     const updatedItems = NestedFilterableMultiselect.flatten({
       items: itemsToProcess,
       itemToString,
-    });
+    }).map(NestedFilterableMultiselect.cleanItem);
 
     if (!isEqual(updatedItems, flattenedItems)) {
       const updatedSelectedItems = NestedFilterableMultiselect.flatten({
         items: initialSelectedItems,
         itemToString,
-      }).filter((item, index, itemArray) => {
-        if (!item.parentId || item.checked) {
-          return true;
-        }
+      })
+        .filter((item, index, itemArray) => {
+          if (!item.parentId || item.checked) {
+            return true;
+          }
 
-        // Any parent checked will make all its children checked
-        const hierarchy = buildHierarchy(item, itemArray);
-        const parentChecked = hierarchy.some(parent => parent.checked);
-        if (parentChecked) {
-          return true;
-        }
+          // Any parent checked will make all its children checked
+          const hierarchy = buildHierarchy(item, itemArray);
+          const parentChecked = hierarchy.some(parent => parent.checked);
+          if (parentChecked) {
+            return true;
+          }
 
-        // Any child checked will make its parent checked
-        const allChildren = getAllChildren(item, itemArray);
-        const childChecked = allChildren.some(child => child.checked);
-        if (childChecked) {
-          return true;
-        }
+          // Any child checked will make its parent checked
+          const allChildren = getAllChildren(item, itemArray);
+          const childChecked = allChildren.some(child => child.checked);
+          if (childChecked) {
+            return true;
+          }
 
-        // If none of the children has the `checked` flag,
-        // all children are considered checked.
-        const rootAllChildren = getAllChildren(hierarchy[0], itemArray);
-        return (
-          rootAllChildren.length > 0 &&
-          !rootAllChildren.some(child => child.checked)
-        );
-      });
+          // If none of the children has the `checked` flag,
+          // all children are considered checked.
+          const rootAllChildren = getAllChildren(hierarchy[0], itemArray);
+          return (
+            rootAllChildren.length > 0 &&
+            !rootAllChildren.some(child => child.checked)
+          );
+        })
+        .map(NestedFilterableMultiselect.cleanItem);
 
       flattenedItems.splice(0, flattenedItems.length, ...updatedItems);
       flattenedSelectedItems.splice(
@@ -523,7 +533,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                     <ListBox.Selection
                       clearSelection={clearSelection}
                       selectionCount={
-                        selectedItem.filter(item => !item.options).length
+                        selectedItem.filter(item => !item.hasChildren).length
                       }
                     />
                   )}
@@ -542,7 +552,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                           if (e.which === 40) {
                             // Down arrow
                             if (
-                              highlightedItem.options &&
+                              highlightedItem.hasChildren &&
                               !expandedItems.includes(highlightedItem)
                             ) {
                               this.onToggle(highlightedItem);

@@ -56,13 +56,14 @@ export const defaultCompareItems = (itemA, itemB, { locale }) =>
 export const defaultSortItems = (
   items,
   { selectedItems, itemToString, compareItems, locale = 'en' }
-) =>
-  items.sort((itemA, itemB) => {
+) => {
+  const itemArr = [...items];
+  return items.sort((itemA, itemB) => {
     const hasItemA = selectedItems.some(item => item.id === itemA.id);
     const hasItemB = selectedItems.some(item => item.id === itemB.id);
 
-    const hierarchyA = buildHierarchy(itemA, items);
-    const hierarchyB = buildHierarchy(itemB, items);
+    const hierarchyA = buildHierarchy(itemA, itemArr);
+    const hierarchyB = buildHierarchy(itemB, itemArr);
     const depth =
       hierarchyA.length > hierarchyB.length
         ? hierarchyA.length
@@ -111,3 +112,4 @@ export const defaultSortItems = (
 
     return compareResult;
   });
+};

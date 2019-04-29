@@ -712,61 +712,24 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
       Array [
         Object {
           "category": "category-1",
+          "hasChildren": true,
           "id": "id-0",
           "label": "Nested item 0",
           "level": 0,
-          "options": Array [
-            Object {
-              "id": "option-id-1",
-              "label": "Sub item 1",
-              "options": Array [
-                Object {
-                  "id": "suboption-id-11",
-                  "label": "Sub-child item 11",
-                },
-                Object {
-                  "id": "suboption-id-12",
-                  "label": "Sub-child item 12",
-                },
-              ],
-            },
-            Object {
-              "id": "option-id-2",
-              "label": "Sub item 2",
-              "options": Array [
-                Object {
-                  "id": "suboption-id-21",
-                  "label": "Sub-child item 21",
-                },
-                Object {
-                  "id": "suboption-id-22",
-                  "label": "Sub-child item 22",
-                },
-              ],
-            },
-          ],
           "parentId": undefined,
           "value": 0,
         },
         Object {
           "category": "category-1",
+          "hasChildren": true,
           "id": "id-0-option-id-1",
           "label": "Sub item 1",
           "level": 1,
-          "options": Array [
-            Object {
-              "id": "suboption-id-11",
-              "label": "Sub-child item 11",
-            },
-            Object {
-              "id": "suboption-id-12",
-              "label": "Sub-child item 12",
-            },
-          ],
           "parentId": "id-0",
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-0-option-id-1-suboption-id-11",
           "label": "Sub-child item 11",
           "level": 2,
@@ -774,6 +737,7 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-0-option-id-1-suboption-id-12",
           "label": "Sub-child item 12",
           "level": 2,
@@ -781,23 +745,15 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         },
         Object {
           "category": "category-1",
+          "hasChildren": true,
           "id": "id-0-option-id-2",
           "label": "Sub item 2",
           "level": 1,
-          "options": Array [
-            Object {
-              "id": "suboption-id-21",
-              "label": "Sub-child item 21",
-            },
-            Object {
-              "id": "suboption-id-22",
-              "label": "Sub-child item 22",
-            },
-          ],
           "parentId": "id-0",
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-0-option-id-2-suboption-id-21",
           "label": "Sub-child item 21",
           "level": 2,
@@ -805,6 +761,7 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-0-option-id-2-suboption-id-22",
           "label": "Sub-child item 22",
           "level": 2,
@@ -812,10 +769,10 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-2",
           "label": "Nested item 2",
           "level": 0,
-          "options": undefined,
           "parentId": undefined,
           "value": 2,
         },
@@ -847,61 +804,24 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         Array [
           Object {
             "category": "category-1",
+            "hasChildren": true,
             "id": "id-0",
             "label": "Nested item 0",
             "level": 0,
-            "options": Array [
-              Object {
-                "id": "option-id-1",
-                "label": "Sub item 1",
-                "options": Array [
-                  Object {
-                    "id": "suboption-id-11",
-                    "label": "Sub-child item 11",
-                  },
-                  Object {
-                    "id": "suboption-id-12",
-                    "label": "Sub-child item 12",
-                  },
-                ],
-              },
-              Object {
-                "id": "option-id-2",
-                "label": "Sub item 2",
-                "options": Array [
-                  Object {
-                    "id": "suboption-id-21",
-                    "label": "Sub-child item 21",
-                  },
-                  Object {
-                    "id": "suboption-id-22",
-                    "label": "Sub-child item 22",
-                  },
-                ],
-              },
-            ],
             "parentId": undefined,
             "value": 0,
           },
           Object {
             "category": "category-1",
+            "hasChildren": true,
             "id": "id-0-option-id-1",
             "label": "Sub item 1",
             "level": 1,
-            "options": Array [
-              Object {
-                "id": "suboption-id-11",
-                "label": "Sub-child item 11",
-              },
-              Object {
-                "id": "suboption-id-12",
-                "label": "Sub-child item 12",
-              },
-            ],
             "parentId": "id-0",
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-0-option-id-1-suboption-id-11",
             "label": "Sub-child item 11",
             "level": 2,
@@ -909,6 +829,7 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-0-option-id-1-suboption-id-12",
             "label": "Sub-child item 12",
             "level": 2,
@@ -916,23 +837,15 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
           },
           Object {
             "category": "category-1",
+            "hasChildren": true,
             "id": "id-0-option-id-2",
             "label": "Sub item 2",
             "level": 1,
-            "options": Array [
-              Object {
-                "id": "suboption-id-21",
-                "label": "Sub-child item 21",
-              },
-              Object {
-                "id": "suboption-id-22",
-                "label": "Sub-child item 22",
-              },
-            ],
             "parentId": "id-0",
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-0-option-id-2-suboption-id-21",
             "label": "Sub-child item 21",
             "level": 2,
@@ -940,6 +853,7 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-0-option-id-2-suboption-id-22",
             "label": "Sub-child item 22",
             "level": 2,
@@ -947,10 +861,10 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-2",
             "label": "Nested item 2",
             "level": 0,
-            "options": undefined,
             "parentId": undefined,
             "value": 2,
           },
@@ -1264,64 +1178,24 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
       Array [
         Object {
           "category": "category-1",
+          "hasChildren": true,
           "id": "id-0",
           "label": "Nested item 0",
           "level": 0,
-          "options": Array [
-            Object {
-              "checked": true,
-              "id": "option-id-1",
-              "label": "Sub item 1",
-              "options": Array [
-                Object {
-                  "id": "suboption-id-11",
-                  "label": "Sub-child item 11",
-                },
-                Object {
-                  "id": "suboption-id-12",
-                  "label": "Sub-child item 12",
-                },
-              ],
-            },
-            Object {
-              "checked": true,
-              "id": "option-id-2",
-              "label": "Sub item 2",
-              "options": Array [
-                Object {
-                  "id": "suboption-id-21",
-                  "label": "Sub-child item 21",
-                },
-                Object {
-                  "id": "suboption-id-22",
-                  "label": "Sub-child item 22",
-                },
-              ],
-            },
-          ],
           "parentId": undefined,
           "value": 0,
         },
         Object {
           "category": "category-1",
-          "checked": true,
+          "hasChildren": true,
           "id": "id-0-option-id-1",
           "label": "Sub item 1",
           "level": 1,
-          "options": Array [
-            Object {
-              "id": "suboption-id-11",
-              "label": "Sub-child item 11",
-            },
-            Object {
-              "id": "suboption-id-12",
-              "label": "Sub-child item 12",
-            },
-          ],
           "parentId": "id-0",
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-0-option-id-1-suboption-id-11",
           "label": "Sub-child item 11",
           "level": 2,
@@ -1329,6 +1203,7 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-0-option-id-1-suboption-id-12",
           "label": "Sub-child item 12",
           "level": 2,
@@ -1336,24 +1211,15 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         },
         Object {
           "category": "category-1",
-          "checked": true,
+          "hasChildren": true,
           "id": "id-0-option-id-2",
           "label": "Sub item 2",
           "level": 1,
-          "options": Array [
-            Object {
-              "id": "suboption-id-21",
-              "label": "Sub-child item 21",
-            },
-            Object {
-              "id": "suboption-id-22",
-              "label": "Sub-child item 22",
-            },
-          ],
           "parentId": "id-0",
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-0-option-id-2-suboption-id-21",
           "label": "Sub-child item 21",
           "level": 2,
@@ -1361,6 +1227,7 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         },
         Object {
           "category": "category-1",
+          "hasChildren": false,
           "id": "id-0-option-id-2-suboption-id-22",
           "label": "Sub-child item 22",
           "level": 2,
@@ -1394,64 +1261,24 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         Array [
           Object {
             "category": "category-1",
+            "hasChildren": true,
             "id": "id-0",
             "label": "Nested item 0",
             "level": 0,
-            "options": Array [
-              Object {
-                "checked": true,
-                "id": "option-id-1",
-                "label": "Sub item 1",
-                "options": Array [
-                  Object {
-                    "id": "suboption-id-11",
-                    "label": "Sub-child item 11",
-                  },
-                  Object {
-                    "id": "suboption-id-12",
-                    "label": "Sub-child item 12",
-                  },
-                ],
-              },
-              Object {
-                "checked": true,
-                "id": "option-id-2",
-                "label": "Sub item 2",
-                "options": Array [
-                  Object {
-                    "id": "suboption-id-21",
-                    "label": "Sub-child item 21",
-                  },
-                  Object {
-                    "id": "suboption-id-22",
-                    "label": "Sub-child item 22",
-                  },
-                ],
-              },
-            ],
             "parentId": undefined,
             "value": 0,
           },
           Object {
             "category": "category-1",
-            "checked": true,
+            "hasChildren": true,
             "id": "id-0-option-id-1",
             "label": "Sub item 1",
             "level": 1,
-            "options": Array [
-              Object {
-                "id": "suboption-id-11",
-                "label": "Sub-child item 11",
-              },
-              Object {
-                "id": "suboption-id-12",
-                "label": "Sub-child item 12",
-              },
-            ],
             "parentId": "id-0",
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-0-option-id-1-suboption-id-11",
             "label": "Sub-child item 11",
             "level": 2,
@@ -1459,6 +1286,7 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-0-option-id-1-suboption-id-12",
             "label": "Sub-child item 12",
             "level": 2,
@@ -1466,24 +1294,15 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
           },
           Object {
             "category": "category-1",
-            "checked": true,
+            "hasChildren": true,
             "id": "id-0-option-id-2",
             "label": "Sub item 2",
             "level": 1,
-            "options": Array [
-              Object {
-                "id": "suboption-id-21",
-                "label": "Sub-child item 21",
-              },
-              Object {
-                "id": "suboption-id-22",
-                "label": "Sub-child item 22",
-              },
-            ],
             "parentId": "id-0",
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-0-option-id-2-suboption-id-21",
             "label": "Sub-child item 21",
             "level": 2,
@@ -1491,6 +1310,7 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
           },
           Object {
             "category": "category-1",
+            "hasChildren": false,
             "id": "id-0-option-id-2-suboption-id-22",
             "label": "Sub-child item 22",
             "level": 2,
@@ -1808,68 +1628,24 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
       Array [
         Object {
           "category": "category-1",
+          "hasChildren": true,
           "id": "id-0",
           "label": "Nested item 0",
           "level": 0,
-          "options": Array [
-            Object {
-              "id": "option-id-1",
-              "label": "Sub item 1",
-              "options": Array [
-                Object {
-                  "checked": true,
-                  "id": "suboption-id-11",
-                  "label": "Sub-child item 11",
-                },
-                Object {
-                  "checked": false,
-                  "id": "suboption-id-12",
-                  "label": "Sub-child item 12",
-                },
-              ],
-            },
-            Object {
-              "id": "option-id-2",
-              "label": "Sub item 2",
-              "options": Array [
-                Object {
-                  "checked": true,
-                  "id": "suboption-id-21",
-                  "label": "Sub-child item 21",
-                },
-                Object {
-                  "checked": false,
-                  "id": "suboption-id-22",
-                  "label": "Sub-child item 22",
-                },
-              ],
-            },
-          ],
           "parentId": undefined,
           "value": 0,
         },
         Object {
           "category": "category-1",
+          "hasChildren": true,
           "id": "id-0-option-id-1",
           "label": "Sub item 1",
           "level": 1,
-          "options": Array [
-            Object {
-              "checked": true,
-              "id": "suboption-id-11",
-              "label": "Sub-child item 11",
-            },
-            Object {
-              "checked": false,
-              "id": "suboption-id-12",
-              "label": "Sub-child item 12",
-            },
-          ],
           "parentId": "id-0",
         },
         Object {
           "category": "category-1",
-          "checked": true,
+          "hasChildren": false,
           "id": "id-0-option-id-1-suboption-id-11",
           "label": "Sub-child item 11",
           "level": 2,
@@ -1877,26 +1653,15 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         },
         Object {
           "category": "category-1",
+          "hasChildren": true,
           "id": "id-0-option-id-2",
           "label": "Sub item 2",
           "level": 1,
-          "options": Array [
-            Object {
-              "checked": true,
-              "id": "suboption-id-21",
-              "label": "Sub-child item 21",
-            },
-            Object {
-              "checked": false,
-              "id": "suboption-id-22",
-              "label": "Sub-child item 22",
-            },
-          ],
           "parentId": "id-0",
         },
         Object {
           "category": "category-1",
-          "checked": true,
+          "hasChildren": false,
           "id": "id-0-option-id-2-suboption-id-21",
           "label": "Sub-child item 21",
           "level": 2,
@@ -1930,68 +1695,24 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
         Array [
           Object {
             "category": "category-1",
+            "hasChildren": true,
             "id": "id-0",
             "label": "Nested item 0",
             "level": 0,
-            "options": Array [
-              Object {
-                "id": "option-id-1",
-                "label": "Sub item 1",
-                "options": Array [
-                  Object {
-                    "checked": true,
-                    "id": "suboption-id-11",
-                    "label": "Sub-child item 11",
-                  },
-                  Object {
-                    "checked": false,
-                    "id": "suboption-id-12",
-                    "label": "Sub-child item 12",
-                  },
-                ],
-              },
-              Object {
-                "id": "option-id-2",
-                "label": "Sub item 2",
-                "options": Array [
-                  Object {
-                    "checked": true,
-                    "id": "suboption-id-21",
-                    "label": "Sub-child item 21",
-                  },
-                  Object {
-                    "checked": false,
-                    "id": "suboption-id-22",
-                    "label": "Sub-child item 22",
-                  },
-                ],
-              },
-            ],
             "parentId": undefined,
             "value": 0,
           },
           Object {
             "category": "category-1",
+            "hasChildren": true,
             "id": "id-0-option-id-1",
             "label": "Sub item 1",
             "level": 1,
-            "options": Array [
-              Object {
-                "checked": true,
-                "id": "suboption-id-11",
-                "label": "Sub-child item 11",
-              },
-              Object {
-                "checked": false,
-                "id": "suboption-id-12",
-                "label": "Sub-child item 12",
-              },
-            ],
             "parentId": "id-0",
           },
           Object {
             "category": "category-1",
-            "checked": true,
+            "hasChildren": false,
             "id": "id-0-option-id-1-suboption-id-11",
             "label": "Sub-child item 11",
             "level": 2,
@@ -1999,26 +1720,15 @@ exports[`NestedFilterableMultiselect multiselect with initial selections presele
           },
           Object {
             "category": "category-1",
+            "hasChildren": true,
             "id": "id-0-option-id-2",
             "label": "Sub item 2",
             "level": 1,
-            "options": Array [
-              Object {
-                "checked": true,
-                "id": "suboption-id-21",
-                "label": "Sub-child item 21",
-              },
-              Object {
-                "checked": false,
-                "id": "suboption-id-22",
-                "label": "Sub-child item 22",
-              },
-            ],
             "parentId": "id-0",
           },
           Object {
             "category": "category-1",
-            "checked": true,
+            "hasChildren": false,
             "id": "id-0-option-id-2-suboption-id-21",
             "label": "Sub-child item 21",
             "level": 2,

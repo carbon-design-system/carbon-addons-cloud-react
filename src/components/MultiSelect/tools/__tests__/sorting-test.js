@@ -144,4 +144,143 @@ describe('defaultSortItems', () => {
       },
     ]);
   });
+
+  it('should sort parent and child', () => {
+    const mockItems = [
+      {
+        id: 'x-a',
+        label: 'a',
+        parentId: 'x',
+      },
+      {
+        id: 'x',
+        label: 'x',
+      },
+      {
+        id: 'z-d-m',
+        label: 'm',
+        parentId: 'z-d',
+      },
+      {
+        id: 'z-1',
+        label: 'z',
+      },
+      {
+        id: 'x-b',
+        label: 'b',
+        parentId: 'x',
+      },
+      {
+        id: 'y',
+        label: 'y',
+      },
+      {
+        id: 'z-c',
+        label: 'c',
+        parentId: 'z',
+      },
+      {
+        id: 'z-d',
+        label: 'd',
+        parentId: 'z',
+      },
+      {
+        id: 'z',
+        label: 'z',
+      },
+      {
+        id: 'z-c-k',
+        label: 'k',
+        parentId: 'z-c',
+      },
+      {
+        id: 'z-e',
+        label: 'e',
+        parentId: 'z',
+      },
+      {
+        id: 'z-a',
+        label: 'a',
+        parentId: 'z',
+      },
+      {
+        id: 'z-c-l',
+        label: 'l',
+        parentId: 'z-c',
+      },
+      {
+        id: 'z-d-n',
+        label: 'n',
+        parentId: 'z-d',
+      },
+    ];
+    expect(defaultSortItems(mockItems, mockOptions)).toEqual([
+      {
+        id: 'x',
+        label: 'x',
+      },
+      {
+        id: 'x-a',
+        label: 'a',
+        parentId: 'x',
+      },
+      {
+        id: 'x-b',
+        label: 'b',
+        parentId: 'x',
+      },
+      {
+        id: 'y',
+        label: 'y',
+      },
+      {
+        id: 'z-1',
+        label: 'z',
+      },
+      {
+        id: 'z',
+        label: 'z',
+      },
+      {
+        id: 'z-a',
+        label: 'a',
+        parentId: 'z',
+      },
+      {
+        id: 'z-c',
+        label: 'c',
+        parentId: 'z',
+      },
+      {
+        id: 'z-c-k',
+        label: 'k',
+        parentId: 'z-c',
+      },
+      {
+        id: 'z-c-l',
+        label: 'l',
+        parentId: 'z-c',
+      },
+      {
+        id: 'z-d',
+        label: 'd',
+        parentId: 'z',
+      },
+      {
+        id: 'z-d-m',
+        label: 'm',
+        parentId: 'z-d',
+      },
+      {
+        id: 'z-d-n',
+        label: 'n',
+        parentId: 'z-d',
+      },
+      {
+        id: 'z-e',
+        label: 'e',
+        parentId: 'z',
+      },
+    ]);
+  });
 });
