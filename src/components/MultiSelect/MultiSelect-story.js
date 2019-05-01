@@ -368,6 +368,7 @@ storiesOf('NestedFilterableMultiselect', module)
         <div style={{ width: 300 }}>
           <NestedFilterableMultiselect
             {...multiSelectProps}
+            key={flatList ? 'flat' : 'hierarchy'}
             items={flatList ? flattenItems : items}
             itemToString={item => (item ? item.text : '')}
             initialSelectedItems={
