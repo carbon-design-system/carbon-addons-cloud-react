@@ -135,7 +135,7 @@ describe('NestedFilterableMultiselect', () => {
 
       wrapper
         .find(listItemName)
-        .at(0)
+        .at(1)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(4);
       expect(mockProps.onChange).toHaveBeenCalledWith({
@@ -615,7 +615,7 @@ describe('NestedFilterableMultiselect', () => {
 
       wrapper
         .find('.bx--checkbox-label')
-        .at(0)
+        .at(1)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(4);
       expect(mockProps.onChange).toHaveBeenCalledWith({
@@ -634,6 +634,7 @@ describe('NestedFilterableMultiselect', () => {
         .at(0)
         .find('span')
         .simulate('click');
+      // Check the first suboption
       wrapper
         .find('.bx--checkbox-label')
         .at(1)
@@ -659,6 +660,7 @@ describe('NestedFilterableMultiselect', () => {
       ).toBe(true);
       expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(1);
 
+      // Check the second suboption
       wrapper
         .find('.bx--checkbox-label')
         .at(2)
@@ -683,7 +685,8 @@ describe('NestedFilterableMultiselect', () => {
           .prop('indeterminate')
       ).toBe(false);
       expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(2);
-      // Un-select the child items
+
+      // Un-select the first suboption
       wrapper
         .find('.bx--checkbox-label')
         .at(1)
@@ -708,9 +711,10 @@ describe('NestedFilterableMultiselect', () => {
       ).toBe(true);
       expect(wrapper.find('ListBoxSelection').prop('selectionCount')).toBe(1);
 
+      // Un-select the second suboption
       wrapper
         .find('.bx--checkbox-label')
-        .at(1)
+        .at(2)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(4);
       expect(mockProps.onChange).toHaveBeenCalledWith({
@@ -914,28 +918,10 @@ describe('NestedFilterableMultiselect', () => {
         .at(1)
         .simulate('click');
       expect(mockProps.onChange).toHaveBeenCalledTimes(1);
-      // checked item is now at the top
       expect(
         wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
       ).toBe(false);
       // expand suboptions
-      wrapper
-        .find('.bx--checkbox-label')
-        .at(0)
-        .find('span')
-        .simulate('click');
-      expect(
-        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
-      ).toBe(false);
-      // unselect subOption
-      wrapper
-        .find('.bx--checkbox-label')
-        .at(2)
-        .simulate('click');
-      expect(
-        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
-      ).toBe(true);
-      // expand subChild
       wrapper
         .find('.bx--checkbox-label')
         .at(1)
@@ -944,10 +930,27 @@ describe('NestedFilterableMultiselect', () => {
       expect(
         wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
       ).toBe(false);
-      // unselect subChild
+      // unselect subOption
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(3)
+        .simulate('click');
+      expect(
+        wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
+      ).toBe(true);
+      // expand subChild
       wrapper
         .find('.bx--checkbox-label')
         .at(2)
+        .find('span')
+        .simulate('click');
+      expect(
+        wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
+      ).toBe(false);
+      // unselect subChild
+      wrapper
+        .find('.bx--checkbox-label')
+        .at(3)
         .simulate('click');
       expect(
         wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
@@ -970,16 +973,16 @@ describe('NestedFilterableMultiselect', () => {
       expect(
         wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
       ).toBe(true);
-      // checked item is now at the top, expand suboptions
+      // expand suboptions
       wrapper
         .find('.bx--checkbox-label')
-        .at(0)
+        .at(1)
         .find('span')
         .simulate('click');
       // unselect 1 subOption
       wrapper
         .find('.bx--checkbox-label')
-        .at(1)
+        .at(2)
         .simulate('click');
       expect(
         wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
@@ -990,7 +993,7 @@ describe('NestedFilterableMultiselect', () => {
       // unselect 2 subOption
       wrapper
         .find('.bx--checkbox-label')
-        .at(1)
+        .at(3)
         .simulate('click');
       expect(
         wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
@@ -1010,16 +1013,16 @@ describe('NestedFilterableMultiselect', () => {
       expect(
         wrapper.find('Checkbox[name="Nested item 2"]').prop('checked')
       ).toBe(true);
-      // checked item is now at the top, expand suboptions
+      // expand suboptions
       wrapper
         .find('.bx--checkbox-label')
-        .at(0)
+        .at(1)
         .find('span')
         .simulate('click');
       // unselect 1 subOption
       wrapper
         .find('.bx--checkbox-label')
-        .at(2)
+        .at(3)
         .simulate('click');
       expect(
         wrapper.find('Checkbox[name="Nested item 2"]').prop('indeterminate')
@@ -1030,13 +1033,13 @@ describe('NestedFilterableMultiselect', () => {
       // expand subChild
       wrapper
         .find('.bx--checkbox-label')
-        .at(1)
+        .at(2)
         .find('span')
         .simulate('click');
       // unselect 1 subChild
       wrapper
         .find('.bx--checkbox-label')
-        .at(2)
+        .at(3)
         .simulate('click');
       expect(
         wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
@@ -1053,7 +1056,7 @@ describe('NestedFilterableMultiselect', () => {
       // unselect 2 subChild
       wrapper
         .find('.bx--checkbox-label')
-        .at(2)
+        .at(4)
         .simulate('click');
       expect(
         wrapper.find('Checkbox[name="Sub item 1"]').prop('indeterminate')
