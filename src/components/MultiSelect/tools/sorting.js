@@ -55,13 +55,10 @@ export const defaultCompareItems = (itemA, itemB, { locale }) =>
  */
 export const defaultSortItems = (
   items,
-  { selectedItems, itemToString, compareItems, locale = 'en' }
+  { itemToString, compareItems, locale = 'en' }
 ) => {
   const itemArr = [...items];
   return items.sort((itemA, itemB) => {
-    const hasItemA = selectedItems.some(item => item.id === itemA.id);
-    const hasItemB = selectedItems.some(item => item.id === itemB.id);
-
     const hierarchyA = buildHierarchy(itemA, itemArr);
     const hierarchyB = buildHierarchy(itemB, itemArr);
     const depth =
@@ -83,18 +80,6 @@ export const defaultSortItems = (
         // `currentB` is a child of `currentA`
         // always place the child after the parent
         return -1;
-      }
-
-      const hasCurrentA = selectedItems.some(item => item.id === currentA.id);
-      const hasCurrentB = selectedItems.some(item => item.id === currentB.id);
-
-      // Prefer whichever item is in the `selectedItems` array first
-      if (hasCurrentA && !hasCurrentB) {
-        return -1;
-      }
-
-      if (hasCurrentB && !hasCurrentA) {
-        return 1;
       }
 
       compareResult = compareItems(

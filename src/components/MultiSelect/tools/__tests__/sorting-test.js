@@ -89,62 +89,6 @@ describe('defaultSortItems', () => {
     ]);
   });
 
-  it('should order a selected item before all other options', () => {
-    const mockItems = ['Option 1', 'Option 10', 'Option 11', 'Option 2'].map(
-      label => ({ id: label, label })
-    );
-
-    // Set `selectedItems` to ['Option 11']
-    mockOptions.selectedItems = [mockItems[2]];
-
-    expect(defaultSortItems(mockItems, mockOptions)).toEqual([
-      {
-        id: 'Option 11',
-        label: 'Option 11',
-      },
-      {
-        id: 'Option 1',
-        label: 'Option 1',
-      },
-      {
-        id: 'Option 2',
-        label: 'Option 2',
-      },
-      {
-        id: 'Option 10',
-        label: 'Option 10',
-      },
-    ]);
-  });
-
-  it('should sort selected items and order them before all other options', () => {
-    const mockItems = ['Option 1', 'Option 10', 'Option 11', 'Option 2'].map(
-      label => ({ id: label, label })
-    );
-
-    // Set `selectedItems` to ['Option 11', 'Option 2']
-    mockOptions.selectedItems = [mockItems[2], mockItems[3]];
-
-    expect(defaultSortItems(mockItems, mockOptions)).toEqual([
-      {
-        id: 'Option 2',
-        label: 'Option 2',
-      },
-      {
-        id: 'Option 11',
-        label: 'Option 11',
-      },
-      {
-        id: 'Option 1',
-        label: 'Option 1',
-      },
-      {
-        id: 'Option 10',
-        label: 'Option 10',
-      },
-    ]);
-  });
-
   it('should sort parent and child', () => {
     const mockItems = [
       {
