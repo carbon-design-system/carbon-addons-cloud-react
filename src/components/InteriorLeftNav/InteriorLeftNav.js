@@ -11,6 +11,7 @@ export default class InteriorLeftNav extends Component {
     children: PropTypes.node,
     className: PropTypes.string,
     activeHref: PropTypes.string,
+    defaultActiveHref: PropTypes.string,
     onToggle: PropTypes.func,
   };
 
@@ -20,7 +21,7 @@ export default class InteriorLeftNav extends Component {
 
   state = {
     activeHref:
-      this.props.activeHref || (window.location && window.location.pathname),
+      this.props.activeHref || this.props.defaultActiveHref || (window.location && window.location.pathname),
     open: true,
   };
 
