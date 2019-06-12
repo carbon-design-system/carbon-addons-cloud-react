@@ -5,7 +5,6 @@ import classnames from 'classnames';
 const categoryLabel = {
   color: '#5A6872',
   fontSize: '12px',
-  fontFamily: 'ibm plex Sans',
   fontWeight: '600',
   letterSpacing: '0.2px',
   margin: '8px 16px',
