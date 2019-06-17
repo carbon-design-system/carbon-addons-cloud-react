@@ -21,7 +21,9 @@ export default class InteriorLeftNav extends Component {
 
   state = {
     activeHref:
-      this.props.activeHref || this.props.defaultActiveHref || (window.location && window.location.pathname),
+      this.props.activeHref ||
+      this.props.defaultActiveHref ||
+      (window.location && window.location.pathname),
     open: true,
   };
 
