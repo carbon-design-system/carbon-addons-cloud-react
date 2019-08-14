@@ -8,6 +8,8 @@ export CardStatus from './components/CardStatus';
 export * from './components/CloudHeader';
 export { default as CloudHeader } from './components/CloudHeader';
 
+export ComboBox from './components/ComboBox';
+
 export DetailPageHeader from './components/DetailPageHeader';
 
 export InteriorLeftNav from './components/InteriorLeftNav';
