@@ -24,6 +24,8 @@ export default class TagList extends Component {
       })
     ).isRequired,
     className: PropTypes.string,
+    iconTitle: PropTypes.string.isRequired,
+    iconDescription: PropTypes.string.isRequired,
     isEditable: PropTypes.oneOf(['always', 'never', 'on-hover']),
     onIconClick: PropTypes.func,
     counterTagClassName: PropTypes.string,
@@ -139,6 +141,8 @@ export default class TagList extends Component {
       maxCharacters,
       maxCharactersTooltip,
       maxTagsTooltip,
+      iconTitle,
+      iconDescription,
       ...rest
     } = this.props;
 
@@ -182,8 +186,8 @@ export default class TagList extends Component {
             <Icon
               name="edit--glyph"
               className="bx--tag-list--edit--icon"
-              title="edit icon"
-              description="click to edit tags"
+              title={iconTitle}
+              description={iconDescription}
             />
           </button>
         }
