@@ -24,8 +24,8 @@ export default class TagList extends Component {
       })
     ).isRequired,
     className: PropTypes.string,
-    iconTitle: PropTypes.string,
-    iconDescription: PropTypes.string,
+    iconTitle: PropTypes.string.isRequired,
+    iconDescription: PropTypes.string.isRequired,
     isEditable: PropTypes.oneOf(['always', 'never', 'on-hover']),
     onIconClick: PropTypes.func,
     counterTagClassName: PropTypes.string,
@@ -35,8 +35,6 @@ export default class TagList extends Component {
   };
 
   static defaultProps = {
-    iconTitle: '',
-    iconDescription: '',
     isEditable: 'never',
     numTagsDisplayed: 3,
     maxCharactersTooltip: 15,
