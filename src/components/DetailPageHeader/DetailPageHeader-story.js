@@ -10,6 +10,7 @@ import {
   Tab,
   Icon,
 } from 'carbon-components-react';
+import { iconWatson } from 'carbon-icons';
 import DetailPageHeader from '../DetailPageHeader';
 
 const detailPageHeaderProps = {
@@ -32,7 +33,7 @@ storiesOf('DetailPageHeader', module)
   .addDecorator(story => <div style={{ minWidth: '60em' }}>{story()}</div>)
   .addWithInfo('without tabs', () => (
     <DetailPageHeader {...detailPageHeaderProps}>
-      <Icon name="watson" />
+      <Icon icon={iconWatson} />
       <Breadcrumb>
         <BreadcrumbItem href="www.google.com">Breadcrumb 1</BreadcrumbItem>
         <BreadcrumbItem href="www.google.com">Breadcrumb 2</BreadcrumbItem>
@@ -56,7 +57,7 @@ storiesOf('DetailPageHeader', module)
   ))
   .addWithInfo('with tabs', () => (
     <DetailPageHeader {...detailPageHeaderProps} hasTabs>
-      <Icon name="watson" />
+      <Icon icon={iconWatson} />
       <Breadcrumb>
         <BreadcrumbItem href="www.google.com">Breadcrumb 1</BreadcrumbItem>
         <BreadcrumbItem href="www.google.com">Breadcrumb 2</BreadcrumbItem>

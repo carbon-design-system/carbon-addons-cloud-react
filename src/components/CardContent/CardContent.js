@@ -44,7 +44,7 @@ const CardContent = ({
         <div className="bx--about__icon">
           <Icon
             className="bx--about__icon--img"
-            name={cardIcon}
+            icon={cardIcon}
             description={iconDescription}
           />
         </div>

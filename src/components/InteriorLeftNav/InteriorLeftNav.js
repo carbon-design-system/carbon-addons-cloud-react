@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import window from 'window-or-global';
 import { Icon } from 'carbon-components-react';
+import { iconChevronLeft } from 'carbon-icons';
 import InteriorLeftNavList from '../InteriorLeftNavList';
 import InteriorLeftNavItem from '../InteriorLeftNavItem';
 
@@ -139,7 +140,7 @@ export default class InteriorLeftNav extends Component {
           onClick={this.toggle}
           style={buttonStyles}>
           <Icon
-            name="chevron--left"
+            icon={iconChevronLeft}
             description="close/open iln"
             className="bx--interior-left-nav-collapse__arrow"
           />

@@ -10,6 +10,7 @@ import {
   Button,
   Link,
 } from 'carbon-components-react';
+import { iconAppServices } from 'carbon-icons';
 import CardFooter from '../CardFooter';
 import CardContent from '../CardContent';
 import CardStatus from '../CardStatus';
@@ -97,7 +98,7 @@ class ControlledCard extends Component {
       <Card {...cardProps}>
         <CardContent
           cardTitle="Card Name"
-          cardIcon="app-services"
+          cardIcon={iconAppServices}
           cardInfo={['Secondary Information']}>
           <OverflowMenu {...overflowMenuProps}>
             <OverflowMenuItem {...overflowMenuItemProps} itemText="Stop App" />

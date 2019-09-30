@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Icon } from 'carbon-components-react';
+import { iconClose } from 'carbon-icons';
 
 const TYPES = {
   functional: 'Functional',
@@ -73,7 +74,7 @@ export default class Tag extends Component {
     const closeIcon = (
       <Icon
         className="bx--tag-close"
-        name="close"
+        icon={iconClose}
         tabIndex="0"
         role="button"
         description="detach the tag"

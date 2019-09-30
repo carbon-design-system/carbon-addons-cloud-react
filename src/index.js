@@ -8,8 +8,6 @@ export CardStatus from './components/CardStatus';
 export * from './components/CloudHeader';
 export { default as CloudHeader } from './components/CloudHeader';
 
-export ComboBox from './components/ComboBox';
-
 export DetailPageHeader from './components/DetailPageHeader';
 
 export InteriorLeftNav from './components/InteriorLeftNav';
@@ -35,5 +33,3 @@ export { default as ResourceHeader } from './components/ResourceHeader';
 
 export TagList from './components/TagList';
 export Tag from './components/Tag';
-export NestedFilterableMultiSelect from './components/MultiSelect';
-export MouseOverTooltip from './components/Tooltip';

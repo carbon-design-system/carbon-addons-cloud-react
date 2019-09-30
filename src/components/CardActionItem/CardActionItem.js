@@ -24,7 +24,7 @@ const CardActionItem = ({
       aria-label={ariaLabel}>
       <Icon
         className="bx--app-actions__button--icon"
-        name={iconName}
+        icon={iconName}
         description={description}
       />
     </button>
