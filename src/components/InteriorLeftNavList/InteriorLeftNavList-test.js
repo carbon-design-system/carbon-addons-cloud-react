@@ -23,7 +23,7 @@ describe('InteriorLeftNavList', () => {
     );
 
     const expectedChildrenList = shallow(
-      <InteriorLeftNavList>
+      <InteriorLeftNavList title={<div className="title-node">test-title</div>}>
         <InteriorLeftNavItem href="" className="test-child">
           <a href="http://www.carbondesignsystem.com">test-title</a>
         </InteriorLeftNavItem>
@@ -67,6 +67,13 @@ describe('InteriorLeftNavList', () => {
       expect(icon.props().className).toEqual(
         'left-nav-list__item-icon bx--interior-left-nav__icon'
       );
+    });
+    it('should render title node', () => {
+      expect(
+        expectedChildrenList.containsMatchingElement(
+          <div className="title-node">test-title</div>
+        )
+      ).toBe(true);
     });
     it('should render children as expected', () => {
       expect(
