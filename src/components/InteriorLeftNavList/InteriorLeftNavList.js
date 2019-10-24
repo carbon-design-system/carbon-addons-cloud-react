@@ -9,7 +9,7 @@ export default class InteriorLeftNavList extends Component {
     className: PropTypes.string,
     children: PropTypes.node,
     tabIndex: PropTypes.number,
-    title: PropTypes.string,
+    title: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
     open: PropTypes.bool,
     onListClick: PropTypes.func,
     onItemClick: PropTypes.func,
