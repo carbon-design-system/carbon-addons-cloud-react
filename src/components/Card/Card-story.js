@@ -143,6 +143,7 @@ class ControlledCard extends Component {
           cardIcon={iconAppServices}>
           <OverflowMenu {...overflowMenuProps}>
             <OverflowMenuItem
+              primaryFocus
               {...overflowMenuItemProps}
               itemText="Stop App"
               onClick={this.stopApp}
