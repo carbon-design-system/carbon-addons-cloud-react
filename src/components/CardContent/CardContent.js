@@ -62,7 +62,7 @@ const CardContent = ({
 
 CardContent.propTypes = {
   children: PropTypes.node,
-  cardIcon: PropTypes.string,
+  cardIcon: PropTypes.node.isRequired,
   cardTitle: PropTypes.string,
   cardLink: PropTypes.node,
   cardInfo: PropTypes.array,
@@ -72,7 +72,6 @@ CardContent.propTypes = {
 
 CardContent.defaultProps = {
   iconDescription: 'card icon',
-  cardIcon: 'app-services',
   cardTitle: 'card title',
 };
 

@@ -7,7 +7,7 @@ const CardActionItem = ({
   className,
   id,
   ariaLabel,
-  iconName,
+  icon,
   description,
   ...other
 }) => {
@@ -24,7 +24,7 @@ const CardActionItem = ({
       aria-label={ariaLabel}>
       <Icon
         className="bx--app-actions__button--icon"
-        icon={iconName}
+        icon={icon}
         description={description}
       />
     </button>
@@ -35,7 +35,7 @@ CardActionItem.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string,
   ariaLabel: PropTypes.string,
-  iconName: PropTypes.string.isRequired,
+  icon: PropTypes.node.isRequired,
   description: PropTypes.string.isRequired,
 };
 
