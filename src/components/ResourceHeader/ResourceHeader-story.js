@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import ResourceHeader from './ResourceHeader';
 import { Breadcrumb, BreadcrumbItem } from 'carbon-components-react';
-import { DropdownV2 } from 'carbon-components-react';
+import { Dropdown } from 'carbon-components-react';
 
 const svg = (
   <svg width="40" height="38">
@@ -62,7 +62,7 @@ storiesOf('ResourceHeader', module)
             </Breadcrumb>
           )}
           renderActions={() => (
-            <DropdownV2
+            <Dropdown
               label="Actions"
               type="inline"
               items={items}
@@ -95,7 +95,7 @@ storiesOf('ResourceHeader', module)
             </Breadcrumb>
           )}
           renderActions={() => (
-            <DropdownV2
+            <Dropdown
               label="Actions"
               type="inline"
               items={items}
@@ -126,7 +126,7 @@ storiesOf('ResourceHeader', module)
             </Breadcrumb>
           )}
           renderActions={() => (
-            <DropdownV2
+            <Dropdown
               label="Actions"
               type="inline"
               items={items}
@@ -162,7 +162,7 @@ storiesOf('ResourceHeader', module)
             </Breadcrumb>
           )}
           renderActions={() => (
-            <DropdownV2
+            <Dropdown
               label="Actions"
               type="inline"
               items={items}
@@ -199,7 +199,7 @@ storiesOf('ResourceHeader', module)
             </Breadcrumb>
           )}
           renderActions={() => (
-            <DropdownV2
+            <Dropdown
               label="Actions"
               type="inline"
               items={items}
@@ -237,7 +237,7 @@ storiesOf('ResourceHeader', module)
             </Breadcrumb>
           )}
           renderActions={() => (
-            <DropdownV2
+            <Dropdown
               label="Actions"
               type="inline"
               items={items}

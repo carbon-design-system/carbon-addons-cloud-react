@@ -5,6 +5,7 @@ import InteriorLeftNavHeader from '../InteriorLeftNavHeader';
 import InteriorLeftNavItem from '../InteriorLeftNavItem';
 import InteriorLeftNavList from '../InteriorLeftNavList';
 import { Icon } from 'carbon-components-react';
+import { iconAppServices } from 'carbon-icons';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
@@ -57,7 +58,7 @@ storiesOf('InteriorLeftNav', module)
     () => {
       const icon = (
         <Icon
-          name="icon--services"
+          icon={iconAppServices}
           className="bx--interior-left-nav__header__icon"
         />
       );

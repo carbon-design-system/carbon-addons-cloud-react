@@ -11,12 +11,13 @@ import {
   OverflowMenu,
   OverflowMenuItem,
 } from 'carbon-components-react';
+import { iconWatson } from 'carbon-icons';
 
 describe('DetailPageHeader', () => {
   describe('component is rendered correctly without tabs', () => {
     const wrapper = mount(
       <DetailPageHeader title="test" statusText="Stopped" statusColor="#BADA55">
-        <Icon description="watson" name="watson" />
+        <Icon description="watson" icon={iconWatson} />
         <Breadcrumb>
           <BreadcrumbItem href="www.google.com">Breadcrumb 1</BreadcrumbItem>
           <BreadcrumbItem href="www.google.com">Breadcrumb 2</BreadcrumbItem>
@@ -102,7 +103,7 @@ describe('DetailPageHeader', () => {
   describe('component is rendered correctly with tabs', () => {
     const wrapper = shallow(
       <DetailPageHeader hasTabs title="test">
-        <Icon description="watson" name="watson" />
+        <Icon description="watson" name={iconWatson} />
         <Breadcrumb>
           <BreadcrumbItem href="www.google.com">Breadcrumb 1</BreadcrumbItem>
           <BreadcrumbItem href="www.google.com">Breadcrumb 2</BreadcrumbItem>

@@ -10,6 +10,12 @@ import {
   Button,
   Link,
 } from 'carbon-components-react';
+import {
+  iconAppServices,
+  iconRestart,
+  iconLaunch,
+  iconFavorite,
+} from 'carbon-icons';
 import CardFooter from '../CardFooter';
 import CardContent from '../CardContent';
 import CardStatus from '../CardStatus';
@@ -91,16 +97,20 @@ class ControlledCard extends Component {
   };
 
   render() {
-    const cardLinks = ['http://myapp.mybluemix.net'];
+    const cardLinks = ['http://my.mybluemix.net'];
 
     return this.props.simple ? (
       <Card {...cardProps}>
         <CardContent
           cardTitle="Card Name"
-          cardIcon="app-services"
+          cardIcon={iconAppServices}
           cardInfo={['Secondary Information']}>
           <OverflowMenu {...overflowMenuProps}>
-            <OverflowMenuItem {...overflowMenuItemProps} itemText="Stop App" />
+            <OverflowMenuItem
+              primaryFocus
+              {...overflowMenuItemProps}
+              itemText="Stop App"
+            />
             <OverflowMenuItem
               {...overflowMenuItemProps}
               itemText="Restart App"
@@ -118,7 +128,7 @@ class ControlledCard extends Component {
         </CardContent>
         <CardFooter>
           <Button small kind="primary">
-            View credentials
+            Status
           </Button>
           <Link href="#" className="bx--card-footer__link">
             Link
@@ -127,9 +137,13 @@ class ControlledCard extends Component {
       </Card>
     ) : (
       <Card {...cardProps}>
-        <CardContent cardTitle="App Title 1" cardLink={cardLinks}>
+        <CardContent
+          cardTitle="App Title 1"
+          cardLink={cardLinks}
+          cardIcon={iconAppServices}>
           <OverflowMenu {...overflowMenuProps}>
             <OverflowMenuItem
+              primaryFocus
               {...overflowMenuItemProps}
               itemText="Stop App"
               onClick={this.stopApp}
@@ -156,17 +170,17 @@ class ControlledCard extends Component {
           <CardStatus status={this.state.status} />
           <CardActions>
             <CardActionItem
-              iconName="restart--glyph"
+              icon={iconRestart}
               onClick={this.restartApp}
               description="Restart App"
             />
             <CardActionItem
-              iconName="launch--glyph"
+              icon={iconLaunch}
               onClick={this.goToApp}
               description="Go To App"
             />
             <CardActionItem
-              iconName="favorite"
+              icon={iconFavorite}
               onClick={this.favoriteApp}
               description="Favorite App"
             />

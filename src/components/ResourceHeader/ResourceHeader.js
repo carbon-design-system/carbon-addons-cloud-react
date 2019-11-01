@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Button } from 'carbon-components-react';
+import { iconStopGlyph, iconPowerGlyph } from 'carbon-icons';
 
 function renderActionButtons(type, onClick) {
   const reboot = (
@@ -31,7 +32,7 @@ function renderActionButtons(type, onClick) {
         className="bx--resource-header__button"
         onClick={onClick}
         small
-        icon="stop--glyph"
+        icon={iconStopGlyph}
         kind="ghost">
         {type}
       </Button>
@@ -42,7 +43,7 @@ function renderActionButtons(type, onClick) {
       <Button
         className="bx--resource-header__button"
         onClick={onClick}
-        icon="power--glyph"
+        icon={iconPowerGlyph}
         small
         kind="ghost">
         {type}

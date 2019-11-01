@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import InteriorLeftNavItem from '../InteriorLeftNavItem';
 import { Icon } from 'carbon-components-react';
+import { iconChevronDown } from 'carbon-icons';
 
 export default class InteriorLeftNavList extends Component {
   static propTypes = {
@@ -97,7 +98,7 @@ export default class InteriorLeftNavList extends Component {
           {title}
           <div className="left-nav-list__item-icon">
             <Icon
-              name="chevron--down"
+              icon={iconChevronDown}
               description={iconDescription}
               className="left-nav-list__item-icon bx--interior-left-nav__icon"
             />

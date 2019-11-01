@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { Button, Dropdown, DropdownItem } from 'carbon-components-react';
+import { Button, Dropdown } from 'carbon-components-react';
 import {
   OrderSummary,
   OrderSummaryHeader,
@@ -24,12 +24,26 @@ storiesOf('OrderSummary', module)
         <OrderSummaryHeader title="Order Summary">
           <Dropdown
             onChange={selectedItemInfo => console.log(selectedItemInfo)}
-            defaultText="USD">
-            <DropdownItem itemText="USD" value="usd" />
-            <DropdownItem itemText="GBP" value="gbp" />
-            <DropdownItem itemText="NOK" value="nok" />
-            <DropdownItem itemText="EUR" value="eur" />
-          </Dropdown>
+            initialSelectedItem={{ id: 'usd', label: 'USD' }}
+            items={[
+              {
+                id: 'usd',
+                label: 'USD',
+              },
+              {
+                id: 'gbp',
+                label: 'GBP',
+              },
+              {
+                id: 'nok',
+                label: 'NOK',
+              },
+              {
+                id: 'eur',
+                label: 'EUR',
+              },
+            ]}
+          />
         </OrderSummaryHeader>
         <OrderSummaryList>
           <OrderSummaryListItem />
@@ -61,12 +75,26 @@ storiesOf('OrderSummary', module)
         <OrderSummaryHeader title="Order Summary">
           <Dropdown
             onChange={selectedItemInfo => console.log(selectedItemInfo)}
-            defaultText="USD">
-            <DropdownItem itemText="USD" value="usd" />
-            <DropdownItem itemText="GBP" value="gbp" />
-            <DropdownItem itemText="NOK" value="nok" />
-            <DropdownItem itemText="EUR" value="eur" />
-          </Dropdown>
+            initialSelectedItem={{ id: 'usd', label: 'USD' }}
+            items={[
+              {
+                id: 'usd',
+                label: 'USD',
+              },
+              {
+                id: 'gbp',
+                label: 'GBP',
+              },
+              {
+                id: 'nok',
+                label: 'NOK',
+              },
+              {
+                id: 'eur',
+                label: 'EUR',
+              },
+            ]}
+          />
         </OrderSummaryHeader>
 
         <OrderSummaryList>

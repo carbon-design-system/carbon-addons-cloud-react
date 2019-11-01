@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import { Icon, Tooltip } from 'carbon-components-react';
+import { iconEditGlyph } from 'carbon-icons';
 import Tag from '../Tag';
 
 export default class TagList extends Component {
@@ -184,7 +185,7 @@ export default class TagList extends Component {
         {
           <button className={editButtonClasses}>
             <Icon
-              name="edit--glyph"
+              icon={iconEditGlyph}
               className="bx--tag-list--edit--icon"
               title={iconTitle}
               description={iconDescription}
