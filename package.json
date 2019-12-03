@@ -162,5 +162,6 @@
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ]
-  }
+  },
+  "version": "1.12.4"
 }
