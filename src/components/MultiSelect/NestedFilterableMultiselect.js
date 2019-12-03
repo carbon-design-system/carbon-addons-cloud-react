@@ -369,7 +369,7 @@ export default class NestedFilterableMultiselect extends React.Component {
       case Downshift.stateChangeTypes.keyDownSpaceButton:
         this.setState(() => {
           let nextIsOpen = changes.isOpen || false;
-          if (changes.isOpen === false) {
+          if (!changes.isOpen) {
             // If Downshift is trying to close the menu, but we know the input
             // is the active element in thedocument, then keep the menu open
             if (this.inputNode === document.activeElement) {
@@ -729,7 +729,7 @@ export default class NestedFilterableMultiselect extends React.Component {
                                     }
                                   }}>
                                   <Checkbox
-                                    id={itemProps.id}
+                                    id={`cb-${itemProps.id}`}
                                     name={itemText}
                                     checked={isChecked}
                                     indeterminate={
