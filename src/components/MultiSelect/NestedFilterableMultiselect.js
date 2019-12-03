@@ -346,7 +346,10 @@ export default class NestedFilterableMultiselect extends React.Component {
     const { type } = changes;
     switch (type) {
       case Downshift.stateChangeTypes.changeInput:
-        this.setState({ inputValue: changes.inputValue });
+        this.setState({
+          inputValue: changes.inputValue,
+          isOpen: true,
+        });
         break;
       case Downshift.stateChangeTypes.keyDownArrowUp:
       case Downshift.stateChangeTypes.itemMouseEnter:
