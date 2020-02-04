@@ -61,6 +61,7 @@ export default class Tag extends Component {
     }
     const tagClasses = classNames({
       'bx--tag': true,
+      'cac--tag': true,
       [`bx--tag--${type}`]: true,
       'bx--tag__removed': this.state.removed,
       [className]: className,
@@ -73,7 +74,7 @@ export default class Tag extends Component {
 
     const closeIcon = (
       <Icon
-        className="bx--tag-close"
+        className="bx--tag-close cac--tag-close"
         icon={iconClose}
         tabIndex="0"
         role="button"
