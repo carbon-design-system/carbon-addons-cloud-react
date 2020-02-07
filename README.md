@@ -1,4 +1,4 @@
-# carbon-addons-cloud-react
+# carbon-addons-cloud-react [DEPRECATED]
 
 [![Build Status](https://travis-ci.org/carbon-design-system/carbon-addons-cloud-react.svg?branch=master)](https://travis-ci.org/carbon-design-system/carbon-addons-cloud-react)
 
