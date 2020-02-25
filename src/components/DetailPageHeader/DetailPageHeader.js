@@ -8,7 +8,7 @@ import { Breadcrumb, Tabs, Icon, OverflowMenu } from 'carbon-components-react';
 export default class DetailPageHeader extends Component {
   static propTypes = {
     children: PropTypes.node,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.node.isRequired,
     role: PropTypes.string,
     statusColor: PropTypes.string,
     statusContent: PropTypes.node,

@@ -8,6 +8,7 @@ $css--plex: true !default;
 
 @import '~carbon-components/scss/globals/scss/styles';
 @import '~carbon-addons-cloud/scss/styles';
+@import '../src/components/DetailPageHeader/detail-page-header-story';
 
 .storybook-container > div {
   width: 100%;

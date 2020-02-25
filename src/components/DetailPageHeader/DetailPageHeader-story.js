@@ -84,4 +84,19 @@ storiesOf('DetailPageHeader', module)
         <Tab label="Orange" />
       </Tabs>
     </DetailPageHeader>
-  ));
+  ))
+  .addWithInfo('with sub-header', () => {
+    const title = (
+      <div>
+        <div>Title</div>
+        <div className="bx-cloud-example--detail-page-header__subtitle">
+          Location
+        </div>
+      </div>
+    );
+    return (
+      <DetailPageHeader title={title} statusText="Running">
+        <Icon name="watson" />
+      </DetailPageHeader>
+    );
+  });
