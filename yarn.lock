@@ -2649,10 +2649,10 @@ capture-stack-trace@^1.0.0:
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
   integrity sha512-mYQLZnx5Qt1JgB1WEiMCf2647plpGeQ2NMR/5L0HNZzGQo4fuSPnK+wjfPnKZV0aiJDgzmWqqkV/g7JD+DW0qw==
 
-carbon-addons-cloud@^4.0.0-alpha.0:
-  version "4.0.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/carbon-addons-cloud/-/carbon-addons-cloud-4.0.0-alpha.0.tgz#d0e126dc57680a10f51105eba810d2322a4dac36"
-  integrity sha512-dLZ3IOFeO2NsoRtoxMHHWNylS2bLibAwbjRcYgmDgzi8QQ785okNYNxeFefId9Ir9t5NmfEl5m75EsrmFnqc4g==
+carbon-addons-cloud@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/carbon-addons-cloud/-/carbon-addons-cloud-4.0.0.tgz#338c0775be57c412d44dd44b79c7b02dbdf18a9d"
+  integrity sha512-+hs1P0MR5Bl5yg5kGEPo4rlo+B9wCX8Wcw/cS3E65/5s+/ClbdFX1h14Tr3+A44r7KAvk+OgR1XggoOjEn5lyw==
 
 carbon-components-react@^7.6.4:
   version "7.6.4"
@@ -7726,9 +7726,9 @@ mississippi@^3.0.0:
     through2 "^2.0.0"
 
 mixin-deep@^1.2.0:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.1.tgz#a49e7268dce1a0d9698e45326c5626df3543d0fe"
-  integrity sha512-8ZItLHeEgaqEvd5lYBXfm4EZSFCX29Jb9K+lAHhDKzReKBQKj3R+7NOF6tjqYi9t4oI8VUfaWITJQm86wnXGNQ==
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.2.tgz#1120b43dc359a785dce65b55b82e257ccf479566"
+  integrity sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==
   dependencies:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
